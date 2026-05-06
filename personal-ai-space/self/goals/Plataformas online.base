@@ -1,0 +1,7 @@
+filters:
+  and:
+    - file.folder == "PERSONAL/Life Plans/Clinical Sexology/Carreer/Atendimentos Online"
+    - file.ext == "md"
+views:
+  - type: table
+    name: Table

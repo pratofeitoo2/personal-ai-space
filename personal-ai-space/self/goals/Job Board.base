@@ -1,0 +1,25 @@
+filters:
+  and:
+    - file.folder == "PERSONAL/Life Plans/Job Application Board"
+    - file.ext == "md"
+views:
+  - type: table
+    name: Table
+    order:
+      - file.name
+      - Position
+      - Application Progress
+      - Company
+      - Location
+      - Modality
+      - URL
+      - How Fit
+    sort:
+      - property: Company
+        direction: ASC
+      - property: file.name
+        direction: ASC
+    columnSize:
+      file.name: 334
+      note.Position: 287
+      note.Location: 223

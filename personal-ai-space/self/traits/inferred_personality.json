@@ -1,0 +1,24 @@
+{
+  "personality_type": "INTJ",
+  "core_traits": [
+    "systems_thinker",
+    "independent",
+    "knowledge_driven",
+    "perfectionist_tendency",
+    "fast_learner"
+  ],
+  "work_traits": {
+    "focus_level": "high",
+    "attention_span": "extended_deep_work",
+    "context_switching": "low_tolerance",
+    "collaboration": "async_preferred"
+  },
+  "decision_patterns": {
+    "style": "analytical",
+    "speed": "slow_deliberate",
+    "risk_tolerance": "calculated",
+    "regret_tendency": "low"
+  },
+  "inferred_from": ["habits", "behavior_logs", "project_history"],
+  "last_updated": "2026-05-01"
+}

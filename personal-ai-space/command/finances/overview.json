@@ -1,0 +1,24 @@
+{
+  "month": "2026-05",
+  "accounts": [
+    {
+      "name": "Checking Account",
+      "balance": 3500,
+      "currency": "BRL",
+      "type": "primary"
+    }
+  ],
+  "budget": {
+    "essentials": 2000,
+    "learning": 300,
+    "discretionary": 500
+  },
+  "expenses_ytd": 8450,
+  "income_ytd": 12000,
+  "savings_rate": 0.29,
+  "goals": [
+    "Build 6 months emergency fund",
+    "Invest in learning tools",
+    "Reduce discretionary spending by 10%"
+  ]
+}

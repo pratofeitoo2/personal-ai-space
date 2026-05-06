@@ -1,0 +1,30 @@
+{
+  "id": "self_profile_001",
+  "created": "2026-05-06",
+  "updated": "2026-05-06",
+  "name": "Paulo",
+  "age": 28,
+  "timezone": "America/Sao_Paulo",
+  "core_values": [
+    "autonomy",
+    "learning",
+    "simplicity",
+    "effectiveness"
+  ],
+  "work_style": "deep_work_preferred",
+  "energy_peak_hours": ["09:00-12:00", "14:00-17:00"],
+  "preferences": {
+    "communication": "written_async",
+    "decision_making": "data_driven",
+    "feedback": "direct_constructive"
+  },
+  "goals_current_year": [
+    "Build functioning personal AI system",
+    "Improve deep work capacity",
+    "Master multi-agent orchestration"
+  ],
+  "constraints": [
+    "Limited hours outside day job",
+    "Knowledge accumulation faster than application"
+  ]
+}

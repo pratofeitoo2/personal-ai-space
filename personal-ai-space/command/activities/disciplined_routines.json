@@ -1,0 +1,29 @@
+[
+  {
+    "id": "activity_001",
+    "name": "Daily standup",
+    "frequency": "daily",
+    "time": "08:30",
+    "duration_minutes": 15,
+    "discipline_level": "critical",
+    "status": "active"
+  },
+  {
+    "id": "activity_002",
+    "name": "Weekly review",
+    "frequency": "weekly",
+    "time": "friday_18:00",
+    "duration_minutes": 60,
+    "discipline_level": "high",
+    "status": "active"
+  },
+  {
+    "id": "activity_003",
+    "name": "Exercise session",
+    "frequency": "4x_weekly",
+    "time": "variable",
+    "duration_minutes": 45,
+    "discipline_level": "high",
+    "status": "tracking"
+  }
+]

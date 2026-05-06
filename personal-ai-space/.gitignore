@@ -1,0 +1,16 @@
+# Vault - Sensitive data, never commit
+vault/
+
+# Logs
+logs/
+*.log
+
+# System files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
