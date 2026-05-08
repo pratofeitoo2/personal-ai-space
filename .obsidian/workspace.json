@@ -173,9 +173,13 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "obsidian42-brat:BRAT": false
     }
   },
   "active": "7799f84b2536a6b2",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "personal-ai-space/engine/db/tasks.db-shm",
+    "personal-ai-space/engine/db/tasks.db-wal"
+  ]
 }
