@@ -82,6 +82,43 @@ python3 cli.py <command> [options]
 
 ---
 
+---
+
+## Natural Language (LLM Bridge)
+
+*Available on `feature/llm-integration` branch only.*
+
+| Command | Description |
+|---------|-------------|
+| `nl <text>` | Free-text query — routes to the right agent automatically |
+| `nl <text> --enhance` | Same, with LLM-generated narrative on top of structured data |
+| `llm status` | Check Ollama availability and list pulled models |
+| `llm classify <text>` | Test intent classification accuracy without executing |
+
+### How `nl` works
+
+1. **IntentClassifier** embeds your text via `nomic-embed-text` (Ollama) and finds the best-matching agent command by cosine similarity
+2. The matched agent command executes normally (rule-based, ~50ms)
+3. With `--enhance`, a `TextGenerator` (e.g. `llama3.2:3b`) rephrases the structured response into natural language
+
+**Zero persistent RAM** — both the embedding and text models stay in Ollama's process, not in Python. The text model loads on first `--enhance` call and stays warm for the session.
+
+**Graceful degradation** — if Ollama is not running, the classifier falls back to fuzzy keyword matching. All existing CLI commands continue to work as before.
+
+```bash
+# Natural language queries
+python3 cli.py nl "what should I do today"
+python3 cli.py nl "how are my habits" --enhance
+python3 cli.py nl "add a task to review the budget"
+python3 cli.py nl "what's overdue"
+
+# LLM diagnostics
+python3 cli.py llm status
+python3 cli.py llm classify "find something about sexology"
+```
+
+---
+
 ## Quick Reference
 
 ```bash
@@ -107,4 +144,8 @@ python3 cli.py memory add-fact user.language Portuguese --confidence 0.95
 python3 cli.py memory add-lesson "Always back up before updates" --negative
 python3 cli.py learning observations --limit 20
 python3 cli.py learning infer
+
+# Natural language (LLM bridge — feature/llm-integration)
+python3 cli.py nl "what's on my plate today" --enhance
+python3 cli.py nl "how are my habits this week"
 ```
