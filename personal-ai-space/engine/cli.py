@@ -3,6 +3,7 @@
 Personal AI Space — Command Line Interface
 Usage: python cli.py [COMMAND] [OPTIONS]
 """
+import os
 import sys
 import json
 from pathlib import Path
@@ -294,6 +295,147 @@ if HAS_RICH:
             console.print(f"\n[bold]🧠 MCP memory facts:[/bold] {len(mcp_facts)}")
             for k, v in list(mcp_facts.items())[:8]:
                 console.print(f"  {k} = {v}")
+
+    # ── serve / daemon ─────────────────────────────────────────────────────
+
+    @cli.command()
+    @click.option("--host", default="127.0.0.1", help="Bind address")
+    @click.option("--port", default=19876, type=int, help="Port number")
+    def serve(host, port):
+        """Run engine as a persistent HTTP server (foreground)."""
+        from http.server import HTTPServer, BaseHTTPRequestHandler
+        import json
+
+        engine = get_engine()
+        h = engine.health()
+        console.print(f"[green]✓ Engine v{h['version']} started[/green]")
+        console.print(f"[dim]  {len(h['agents'])} agents, {len(h['databases'])} databases[/dim]")
+        console.print(f"[dim]  Listening on http://{host}:{port}[/dim]")
+
+        class EngineHandler(BaseHTTPRequestHandler):
+            def _json(self, code, data):
+                self.send_response(code)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps(data, default=str).encode())
+
+            def do_GET(self):
+                if self.path == "/health":
+                    self._json(200, engine.health())
+                elif self.path == "/stats":
+                    self._json(200, {
+                        "uptime_seconds": engine.health()["uptime_seconds"],
+                        "agent_count": len(engine._agents),
+                        "agent_states": {a: s.state for a, s in engine._agents.items()},
+                    })
+                else:
+                    self._json(404, {"error": "not found"})
+
+            def do_POST(self):
+                if self.path == "/execute":
+                    length = int(self.headers.get("Content-Length", 0))
+                    body = json.loads(self.rfile.read(length).decode() if length else "{}")
+                    result = engine.send(
+                        body.get("agent", ""),
+                        body.get("command", ""),
+                        body.get("data", {}),
+                    )
+                    self._json(200, result)
+                else:
+                    self._json(404, {"error": "not found"})
+
+            def log_message(self, fmt, *args):
+                engine.logger.debug(f"HTTP: {fmt % args}")
+
+        try:
+            HTTPServer((host, port), EngineHandler).serve_forever()
+        except KeyboardInterrupt:
+            engine.stop()
+            console.print("\n[yellow]Engine stopped[/yellow]")
+
+    @cli.group()
+    def daemon():
+        """Manage the background engine daemon."""
+
+    @daemon.command("start")
+    @click.option("--host", default="127.0.0.1")
+    @click.option("--port", default=19876, type=int)
+    def daemon_start(host, port):
+        """Start the engine daemon in background."""
+        import subprocess
+        pid_file = Path("/tmp/pai-engine.pid")
+
+        if pid_file.exists():
+            try:
+                pid = int(pid_file.read_text().strip())
+                os.kill(pid, 0)
+                console.print("[red]Engine is already running[/red]")
+                return
+            except (OSError, ValueError):
+                pid_file.unlink(missing_ok=True)
+
+        log_file = ROOT / "logs" / "daemon.log"
+        log_file.parent.mkdir(exist_ok=True)
+
+        proc = subprocess.Popen(
+            [sys.executable, str(ROOT / "cli.py"), "serve", "--host", host, "--port", str(port)],
+            stdout=log_file.open("a"),
+            stderr=subprocess.STDOUT,
+            start_new_session=True,
+        )
+        pid_file.write_text(str(proc.pid))
+        console.print(f"[green]✓ Engine daemon started (PID {proc.pid})[/green]")
+        console.print(f"[dim]  Log: {log_file}[/dim]")
+
+    @daemon.command("stop")
+    def daemon_stop():
+        """Stop the engine daemon."""
+        pid_file = Path("/tmp/pai-engine.pid")
+        if not pid_file.exists():
+            console.print("[yellow]No engine daemon running[/yellow]")
+            return
+        try:
+            pid = int(pid_file.read_text().strip())
+            os.kill(pid, 15)
+            pid_file.unlink(missing_ok=True)
+            console.print(f"[green]✓ Engine daemon stopped (PID {pid})[/green]")
+        except ProcessLookupError:
+            console.print("[yellow]Process not found — removing stale PID file[/yellow]")
+            pid_file.unlink(missing_ok=True)
+        except OSError as e:
+            console.print(f"[red]Failed to stop: {e}[/red]")
+
+    @daemon.command("status")
+    def daemon_status():
+        """Show whether the engine daemon is running."""
+        pid_file = Path("/tmp/pai-engine.pid")
+        if not pid_file.exists():
+            console.print("[yellow]Engine daemon is not running[/yellow]")
+            return
+        try:
+            pid = int(pid_file.read_text().strip())
+            os.kill(pid, 0)
+            import urllib.request
+            try:
+                resp = urllib.request.urlopen("http://127.0.0.1:19876/health", timeout=2)
+                data = json.loads(resp.read())
+                t = Table(title=f"Engine Daemon (PID {pid})", show_header=True)
+                t.add_column("Component")
+                t.add_column("Status")
+                t.add_column("Detail")
+                t.add_row("Engine", "✅", f"v{data['version']}  up {data['uptime_seconds']}s")
+                for agent_id, state in data["agents"].items():
+                    t.add_row(f"  {agent_id}", "✅" if state != "stopped" else "❌", state)
+                for db_name, result in data["databases"].items():
+                    ok = "✅" if result["ok"] else "❌"
+                    detail = f"{result.get('tables', '?')} tables" if result["ok"] else result.get("error", "")
+                    t.add_row(f"  {db_name}.db", ok, detail)
+                console.print(t)
+            except Exception:
+                console.print(f"[yellow]Daemon process exists (PID {pid}) but not responding on HTTP[/yellow]")
+        except (OSError, ValueError):
+            console.print("[yellow]Stale PID file — daemon is not running[/yellow]")
+            pid_file.unlink(missing_ok=True)
 
     @cli.group()
     def memory():
