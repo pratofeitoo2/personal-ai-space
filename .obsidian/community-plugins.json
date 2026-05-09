@@ -1,5 +1,21 @@
 [
+  "advanced-canvas",
+  "code-styler",
+  "data-files-editor",
   "dataview",
+  "editing-toolbar",
+  "editor-width-slider",
+  "obsidian-charts",
+  "obsidian-enhancing-mindmap",
   "obsidian42-brat",
-  "pai-runsh"
+  "oz-image-plugin",
+  "pai-runsh",
+  "pretty-properties",
+  "runsh",
+  "sqlite-db",
+  "tasknotes",
+  "terminal",
+  "text-extractor",
+  "univer",
+  "update-time-on-edit"
 ]
