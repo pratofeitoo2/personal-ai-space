@@ -1,3 +1,8 @@
+> **⚠️ Aspirational Design Document**
+> The ingestion, processing, and routing pipelines described below are **not yet fully implemented**.
+> Current capabilities: file intake via watcher → process_intake.py, basic agent routing via engine.
+> This document serves as a specification for future development.
+
 # Data Flow Architecture
 
 ## 1. Ingestion Flow

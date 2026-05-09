@@ -1,3 +1,8 @@
+> **⚠️ Aspirational Design Document**
+> The integrations described below (Google Calendar, Gmail, Todoist, GitHub) are **not yet implemented**.
+> This document serves as a specification for future development.
+> Currently active integrations: mail-mcp (email), mcp-whatsapp (messaging).
+
 # Integration Architecture
 
 ## Supported Integrations

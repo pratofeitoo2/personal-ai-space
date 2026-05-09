@@ -1,3 +1,8 @@
+> **⚠️ Aspirational Design Document**
+> The 3-tier memory model with TTL-based caching described below is **not yet fully implemented**.
+> The current implementation is simpler: SQLite-persisted facts and lessons with MCP bridge.
+> This document serves as a specification for future development.
+
 # Memory Systems Architecture
 
 ## Three-Tier Memory Model
