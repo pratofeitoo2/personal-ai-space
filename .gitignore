@@ -21,6 +21,9 @@ vault/
 
 # System files
 .DS_Store
+
+# SQLite databases (runtime data, not source)
+*.db
 *.swp
 *.swo
 *~
