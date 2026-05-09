@@ -462,6 +462,159 @@ if HAS_RICH:
         rec = e._pattern_learner.get_workflow_recommendation()
         console.print(Panel(rec, title="💡 Workflow Recommendation"))
 
+    # ── natural language ────────────────────────────────────────────────────
+
+    @cli.command()
+    @click.argument("text", nargs=-1, required=True)
+    @click.option("--enhance", is_flag=True, help="Add LLM-generated narrative (requires Ollama + model)")
+    def nl(text, enhance):
+        """Speak naturally — 'what should I do today?'"""
+        e = get_engine()
+        text = " ".join(text)
+        result = e.process_natural(text)
+
+        if result["status"] == "unknown":
+            console.print(f"[yellow]🤷 {result['message']}[/yellow]")
+            if result.get("suggestions"):
+                console.print("\n[bold]Did you mean:[/bold]")
+                for s in result["suggestions"]:
+                    console.print(f"  • {s}")
+            return
+
+        label = result.get("intent_label", result["intent"])
+        conf = result.get("confidence", 0)
+        console.print(f"[dim]→ {label} ({conf:.0%} confidence)[/dim]\n")
+
+        agent_resp = result.get("agent_response", {})
+
+        if result["intent"] == "report-generator.daily_digest":
+            report = agent_resp.get("payload", {}).get("report", "")
+            if enhance:
+                from llm_bridge import enrich_digest_opener
+                opener = enrich_digest_opener(
+                    due_today=report.count("Due today"),
+                    overdue=report.count("Overdue"),
+                    at_risk_habits=report.count("at risk"),
+                    habit_count=len([l for l in report.split("\n") if l.startswith("- ✅") or l.startswith("- ⚠") or l.startswith("- ❌") or l.startswith("- ✅")]),
+                )
+                if opener:
+                    console.print(f"[bold]📝 {opener}[/bold]\n")
+            out(report)
+        elif result["intent"] == "report-generator.weekly_review":
+            out(agent_resp.get("payload", {}).get("report", ""))
+        elif result["intent"] == "task-coordinator.get_today":
+            tasks = agent_resp.get("payload", [])
+            if not tasks:
+                console.print("[green]✓ Nothing due today — you're clear![/green]")
+                if enhance:
+                    from llm_bridge import TextGenerator
+                    gen = TextGenerator()
+                    r = gen.generate(
+                        "Given that Paulo has no tasks due today, write a short encouraging "
+                        "sentence suggesting he could use the free time for deep work or planning.",
+                        system="Warm, concise, encouraging. One sentence.",
+                        temperature=0.7, max_tokens=80,
+                    )
+                    if r.success:
+                        console.print(f"   [dim]{r.text}[/dim]")
+            else:
+                t = Table(title="Today's Tasks", show_header=True)
+                t.add_column("#", justify="right")
+                t.add_column("Title")
+                t.add_column("Priority")
+                t.add_column("Due")
+                PCOLOR = {"critical": "red", "high": "orange3", "normal": "yellow", "low": "dim"}
+                for i, task in enumerate(tasks, 1):
+                    p = task.get("priority", "normal")
+                    t.add_row(str(i), task["title"], f"[{PCOLOR.get(p, 'white')}]{p}[/]",
+                              str(task.get("due_date", "—"))[:10])
+                console.print(t)
+        elif result["intent"] == "task-coordinator.summary":
+            out_json(agent_resp.get("payload", {}))
+        elif result["intent"] == "insight-generator.analyse_habits":
+            data = agent_resp.get("payload", {})
+            if enhance:
+                from llm_bridge import enrich_habit_insights
+                narration = enrich_habit_insights(data)
+                if narration:
+                    console.print(f"[bold]📝 {narration}[/bold]\n")
+            for h in data.get("insights", []):
+                icon = {"excellent": "✅", "good": "✅", "fair": "⚠️", "poor": "❌"}.get(h["rating"], "⚪")
+                console.print(f"{icon} [bold]{h['habit']}[/bold] — {h['completion_pct']}% | streak: {h.get('streak', 0)}d")
+                if h.get("recommendation"):
+                    console.print(f"   [dim]{h['recommendation']}[/dim]")
+        elif result["intent"] == "task-coordinator.create_task":
+            task_id = agent_resp.get("payload", {}).get("task_id", "")
+            title = result.get("params", {}).get("title", "")
+            console.print(f"[green]✓ Added:[/green] {title} [dim]({task_id})[/dim]")
+        elif result["intent"] == "knowledge-indexer.search":
+            results = agent_resp.get("payload", [])
+            if not results:
+                console.print("[dim]No results found.[/dim]")
+            else:
+                for n in results:
+                    console.print(f"[bold]{n['title']}[/bold] [{n.get('category','')}] — {n.get('tags','')}")
+        elif result["intent"] == "context-manager.get_context":
+            ctx = agent_resp.get("payload", {})
+            profile = ctx.get("profile") or {}
+            if profile:
+                console.print(f"👤 [bold]{profile.get('name','?')}[/bold] — {profile.get('work_style','?')} — {profile.get('timezone','?')}")
+            habits = ctx.get("habits", [])
+            if habits:
+                console.print(f"💪 {len(habits)} active habits")
+            needs = ctx.get("needs", [])
+            if needs:
+                console.print(f"📋 {len(needs)} active needs")
+        else:
+            out_json(agent_resp)
+
+    # ── llm health ──────────────────────────────────────────────────────────
+
+    @cli.group()
+    def llm():
+        """LLM integration status and model management."""
+        pass
+
+    @llm.command("status")
+    def llm_status():
+        """Check if Ollama is running and what models are available."""
+        from llm_bridge import check_ollama
+        status = check_ollama()
+        if status["available"]:
+            console.print(f"[green]✓ Ollama is running[/green]")
+            if status["models"]:
+                t = Table("Available Models", title="📦 Ollama Models")
+                for m in status["models"]:
+                    t.add_row(m)
+                console.print(t)
+            else:
+                console.print("[yellow]No models pulled yet. Run: ollama pull <model>[/yellow]")
+        else:
+            console.print(f"[red]✗ Ollama not reachable[/red]")
+            console.print(f"[dim]{status['error']}[/dim]")
+            console.print("\nInstall: [bold]brew install ollama[/bold] then [bold]ollama serve[/bold]")
+
+    @llm.command("classify")
+    @click.argument("text", nargs=-1, required=True)
+    def llm_classify(text):
+        """Test intent classification without executing."""
+        from llm_bridge import IntentClassifier
+        text = " ".join(text)
+        classifier = IntentClassifier()
+        result = classifier.classify(text)
+        if result.intent:
+            console.print(f"[bold]Intent:[/bold] {result.intent.agent}.{result.intent.command}")
+            console.print(f"[bold]Label:[/bold] {result.intent.description}")
+            console.print(f"[bold]Confidence:[/bold] {result.confidence:.1%}")
+            if result.extracted_params:
+                console.print(f"[bold]Params:[/bold] {result.extracted_params}")
+        else:
+            console.print(f"[yellow]No intent matched[/yellow]")
+        if result.alternatives:
+            console.print("\n[dim]Alternatives:[/dim]")
+            for desc, conf in result.alternatives[:3]:
+                console.print(f"  {desc} ({conf:.0%})")
+
 else:
     # Plain fallback if rich/click not installed
     def cli():

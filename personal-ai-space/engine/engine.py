@@ -175,6 +175,62 @@ class Engine:
         })
         return r.get("payload", {}).get("note_id", "")
 
+    def process_natural(self, text: str) -> dict:
+        """Route natural language input through the intent classifier.
+
+        Returns a dict with:
+          - intent: matched IntentDef or None
+          - confidence: float
+          - command: executable agent command (or None if unclear)
+          - params: extracted parameters
+          - alternatives: list of other possible intents
+          - text: the original input
+        """
+        from llm_bridge import IntentClassifier
+        classifier = IntentClassifier()
+        result = classifier.classify(text)
+
+        if result.intent is None or result.confidence < 0.4:
+            return {
+                "status": "unknown",
+                "text": text,
+                "confidence": result.confidence,
+                "suggestions": [alt for alt, _ in result.alternatives[:5]],
+                "message": "I'm not sure what you mean. Try being more specific.",
+            }
+
+        # Execute the matched command
+        agent = result.intent.agent
+        cmd = result.intent.command
+        params = result.extracted_params
+
+        if agent == "memory":
+            from llm_bridge import check_ollama
+            agent_resp = check_ollama()
+        elif agent == "learning":
+            agent_resp = {"status": "success", "payload": "learning.infer"}
+        elif agent == "knowledge-indexer" and cmd == "search":
+            query = params.get("query", text)
+            agent_resp = self.send(agent, cmd, extra={"query": query})
+        elif cmd == "create_task":
+            title = params.get("title", text)
+            priority = params.get("priority", "normal")
+            agent_resp = self.send(agent, cmd, {
+                "title": title, "priority": priority,
+            })
+        else:
+            agent_resp = self.send(agent, cmd)
+
+        return {
+            "status": "success",
+            "text": text,
+            "intent": f"{agent}.{cmd}",
+            "intent_label": result.intent.description,
+            "confidence": result.confidence,
+            "params": params,
+            "agent_response": agent_resp,
+        }
+
     def health(self) -> dict:
         uptime = (datetime.now() - self._start_time).seconds
         dbs    = db.health_check()
