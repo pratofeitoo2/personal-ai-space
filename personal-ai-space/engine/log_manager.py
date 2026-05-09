@@ -60,9 +60,9 @@ def setup_logging(level: str = "INFO") -> None:
     perf_logger.addHandler(perf_handler)
     perf_logger.propagate = False
 
-    # Console output
+    # Console output – only WARNING+ on stdout (file logs capture everything)
     console = logging.StreamHandler()
-    console.setLevel(getattr(logging, level.upper(), logging.INFO))
+    console.setLevel(logging.WARNING)
     console.setFormatter(fmt_standard)
     root.addHandler(console)
 
