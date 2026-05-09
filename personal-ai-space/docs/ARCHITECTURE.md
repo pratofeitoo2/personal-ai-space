@@ -1,3 +1,7 @@
+---
+created: 2026-05-06T00:48
+updated: 2026-05-09T08:42
+---
 # Engine Architecture
 
 ## System Overview
@@ -6,13 +10,13 @@ The engine is the AI nervous system. It orchestrates agents, manages memory, coo
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      COMMAND LAYER                           │
-│  (User interactions: tasks, calendar, activities)            │
+│                      COMMAND LAYER                          │
+│  (User interactions: tasks, calendar, activities)           │
 └─────────────────┬───────────────────────────────────────────┘
                   │
 ┌─────────────────▼───────────────────────────────────────────┐
-│                   ORCHESTRATION LAYER                        │
-│  (Agent coordination, request routing, state management)     │
+│                   ORCHESTRATION LAYER                       │
+│  (Agent coordination, request routing, state management)    │
 └─────────────────┬───────────────────────────────────────────┘
                   │
         ┌─────────┴──────────┬──────────────┬──────────────┐
@@ -24,7 +28,7 @@ The engine is the AI nervous system. It orchestrates agents, manages memory, coo
         │              │                  │               │
         └──────────────┼──────────────────┼───────────────┘
                        │
-        ┌──────────────▼────────────────┐
+        ┌──────────────▼───────────────┐
         │   STORAGE LAYER              │
         │  (SQLite, File, Vector DB)   │
         └──────────────────────────────┘
@@ -110,7 +114,7 @@ External System → Transform → Upsert to DB → Sync to Self
 ```
 IDLE → ACTIVE → PROCESSING → REPORTING → IDLE
   ↑       ↓           ↓           ↓
-  └───────ERROR ← ─────────────────┘
+  └───────ERROR ← ────────────────┘
 ```
 
 ## Integration Points
