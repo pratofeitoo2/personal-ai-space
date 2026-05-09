@@ -36,6 +36,18 @@ CREATE TABLE IF NOT EXISTS refs (
   used_in_projects TEXT
 );
 
+CREATE TABLE IF NOT EXISTS "references" (
+  id TEXT PRIMARY KEY,
+  title TEXT,
+  url TEXT,
+  source TEXT,
+  reference_type TEXT,
+  category TEXT,
+  tags TEXT,
+  notes TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS projects_knowledge (
   id TEXT PRIMARY KEY,
   name TEXT,
