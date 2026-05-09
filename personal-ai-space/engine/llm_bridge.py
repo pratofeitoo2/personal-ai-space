@@ -30,7 +30,7 @@ import requests
 logger = logging.getLogger("engine.llm_bridge")
 
 OLLAMA_BASE = "http://localhost:11434"
-OLLAMA_TIMEOUT = 30  # seconds per request
+OLLAMA_TIMEOUT = 120  # seconds per request (M1 8GB: first load of 3B can take 30-60s)
 
 
 # ── intent catalogue ──────────────────────────────────────────────────────────
@@ -108,6 +108,12 @@ INTENT_CATALOGUE: list[IntentDef] = [
               "Re-discover MCP server tools",
               ["discover tools", "refresh mcp", "scan services",
                "reconnect servers", "reload mcp"]),
+    IntentDef("mcp-agent", "mcp_route",
+              "Use an external service or tool via MCP",
+              ["send an email", "send a message", "create a calendar event",
+               "look up a contact", "call a tool", "use a service",
+               "post a message", "check my mail", "read my inbox",
+               "send a whatsapp", "schedule a meeting"]),
 ]
 
 
@@ -328,21 +334,89 @@ class IntentClassifier:
         return self._classify_fuzzy(text)
 
 
+# ── model hints ──────────────────────────────────────────────────────────────
+
+MODEL_HINTS = {
+    "phrasing":     ["smollm2:1.7b-instruct-q4_K_M", "smollm2:1.7b",
+                     "llama3.2:3b", "qwen2.5:3b"],
+    "tool_routing": ["llama3.2:3b", "qwen2.5:3b",
+                     "phi4-mini:3.8b", "smollm2:1.7b"],
+    "writing":      ["llama3.2:3b", "qwen2.5:3b",
+                     "phi4-mini:3.8b", "smollm2:1.7b"],
+}
+"""Task-specific model preferences.
+
+Each key maps to a list of preferred model prefixes, in order of preference.
+The first model actually installed on the user's machine is selected.
+
+  phrasing     — rephrasing structured data into natural language.
+                 Fastest acceptable model (1.7B tier).
+  tool_routing — understanding tool schemas and extracting parameters.
+                 Needs better reasoning (3B tier).
+  writing      — longer creative text (digests, drafts).
+                 Best available quality (3B+ tier).
+"""
+
+
+def _detect_best_model(hint: str = None) -> str:
+    """Auto-detect the best available model in Ollama.
+
+    Args:
+        hint: Optional task type key from MODEL_HINTS.
+              If None, prefers the smallest capable model (default).
+    """
+    try:
+        r = requests.get(f"{OLLAMA_BASE}/api/tags", timeout=3)
+        if r.ok:
+            names = [m["name"] for m in r.json().get("models", [])]
+
+            candidates = MODEL_HINTS.get(hint, []) if hint else []
+            # Default preference when no hint: smallest capable
+            if not candidates:
+                candidates = [
+                    "smollm2:1.7b-instruct-q4_K_M",
+                    "smollm2:1.7b",
+                    "llama3.2:3b",
+                    "qwen2.5:3b",
+                    "phi4-mini:3.8b",
+                ]
+
+            for preferred in candidates:
+                for n in names:
+                    if n.startswith(preferred):
+                        return n
+
+            # Fall back to first available instruct model
+            instruct_models = [n for n in names if "instruct" in n or "chat" in n]
+            if instruct_models:
+                return instruct_models[0]
+            if names:
+                return names[0]
+    except (requests.ConnectionError, json.JSONDecodeError):
+        pass
+    return "smollm2:1.7b"  # fallback default
+
+
 # ── text generator ───────────────────────────────────────────────────────────
 
 class TextGenerator:
     """Generates text via Ollama. Loaded on demand, kept warm for the session.
 
     Usage:
+        gen = TextGenerator(model_hint="phrasing")
         gen = TextGenerator(model="smollm2:1.7b-instruct-q4_K_M")
         result = gen.generate("Summarize: ...")
         print(result.text)
     """
 
-    def __init__(self, model: str = ""):
-        self.model = model or _detect_best_model()
+    def __init__(self, model: str = "", model_hint: str = None):
+        if model:
+            self.model = model
+        else:
+            self.model = _detect_best_model(hint=model_hint)
+        self._model_hint = model_hint
         self._warm = False
-        logger.info(f"TextGenerator initialized (model={self.model})")
+        logger.info("TextGenerator initialized (model=%s, hint=%s)", self.model, model_hint)
 
     def warm(self) -> bool:
         """Pre-load model into Ollama's memory. Optional — happens on first generate anyway."""
@@ -486,35 +560,6 @@ def _detect_embedding_model() -> str:
     return "nomic-embed-text"
 
 
-def _detect_best_model() -> str:
-    """Auto-detect the best available model in Ollama."""
-    try:
-        r = requests.get(f"{OLLAMA_BASE}/api/tags", timeout=3)
-        if r.ok:
-            models = r.json().get("models", [])
-            names = [m["name"] for m in models]
-            # Prefer smallest capable model
-            for preferred in [
-                "smollm2:1.7b-instruct-q4_K_M",
-                "smollm2:1.7b",
-                "llama3.2:3b",
-                "qwen2.5:3b",
-                "phi4-mini:3.8b",
-            ]:
-                for n in names:
-                    if n.startswith(preferred) or n == preferred.replace(":", ":"):
-                        return n
-            # Fall back to first available instruct model
-            instruct_models = [n for n in names if "instruct" in n or "chat" in n]
-            if instruct_models:
-                return instruct_models[0]
-            if names:
-                return names[0]
-    except (requests.ConnectionError, json.JSONDecodeError):
-        pass
-    return "smollm2:1.7b"  # fallback default
-
-
 # ── enrichment prompts ───────────────────────────────────────────────────────
 
 HABIT_INSIGHTS_SYSTEM = """You are a personal insight assistant. You are given structured data about someone's habits and you summarize it in 2-3 natural sentences.
@@ -558,7 +603,7 @@ def enrich_habit_insights(structured_data: dict, generator: Optional[TextGenerat
     """
     close = False
     if generator is None:
-        gen = TextGenerator()
+        gen = TextGenerator(model_hint="phrasing")
         close = True
     else:
         gen = generator
@@ -583,7 +628,7 @@ def enrich_digest_opener(
     """Generate a narrative opener for the daily digest."""
     close = False
     if generator is None:
-        gen = TextGenerator()
+        gen = TextGenerator(model_hint="writing")
         close = True
     else:
         gen = generator
@@ -598,6 +643,128 @@ def enrich_digest_opener(
         pass
 
     return result.text if result.success else None
+
+
+# ── MCP tool routing ──────────────────────────────────────────────────────────
+
+MCP_TOOL_ROUTER_SYSTEM = """You are a tool router. Given available MCP tools and a user request:
+
+1. Select the best matching tool
+2. Extract parameters from the user text
+3. Return ONLY valid JSON (no extra text)
+
+Example response for "send email to bob":
+{"tool_name": "send_email", "server_id": "mail", "arguments": {"to": "bob", "subject": "Hello"}}
+
+If no tool matches:
+{"tool_name": null, "server_id": null, "arguments": {}, "reason": "Why no tool matches"}
+
+Rules:
+- tool_name and server_id MUST match EXACTLY from the tool list (case-sensitive)
+- Include ALL required parameters from the input_schema
+- ONLY valid JSON, no explanation"""  # noqa: E501
+
+MCP_TOOL_ROUTER_PROMPT = """Available tools:
+{tool_list}
+
+User request: {user_text}
+
+Select the best matching tool and extract parameters. Return ONLY valid JSON."""
+
+
+@dataclass
+class MCPToolRoute:
+    """Result of LLM-based MCP tool routing."""
+    tool_name: Optional[str]
+    server_id: Optional[str]
+    arguments: dict = field(default_factory=dict)
+    reason: str = ""
+    success: bool = True
+
+
+def llm_route_mcp_tool(
+    user_text: str,
+    tools: list[dict],
+    generator: Optional[TextGenerator] = None,
+) -> MCPToolRoute:
+    """Use LLM to select an MCP tool and extract parameters from user text.
+
+    Args:
+        user_text: The user's natural language request.
+        tools: List of tool dicts with keys: server_id, name, description, input_schema.
+        generator: Optional shared TextGenerator instance.
+
+    Returns:
+        MCPToolRoute with tool selection and extracted parameters.
+        Returns error route if parsing fails or no tool matches.
+    """
+    close = False
+    if generator is None:
+        gen = TextGenerator(model_hint="tool_routing")
+        close = True
+    else:
+        gen = generator
+
+    # Build a compact tool list for the prompt
+    tool_lines = []
+    for t in tools:
+        schema_str = json.dumps(t.get("input_schema", {}), ensure_ascii=False)
+        tool_lines.append(
+            f"- [{t['server_id']}] {t['name']}: {t.get('description', '')} "
+            f"Schema: {schema_str}"
+        )
+    tool_list_str = "\n".join(tool_lines)
+
+    prompt = MCP_TOOL_ROUTER_PROMPT.format(
+        tool_list=tool_list_str,
+        user_text=user_text,
+    )
+    result = gen.generate(
+        prompt,
+        system=MCP_TOOL_ROUTER_SYSTEM,
+        temperature=0.1,
+        max_tokens=300,
+    )
+
+    if close:
+        pass
+
+    if not result.success or not result.text:
+        return MCPToolRoute(
+            tool_name=None, server_id=None,
+            reason=result.error or "LLM returned empty response",
+            success=False,
+        )
+
+    # Parse JSON from response
+    try:
+        # Find JSON in the response (handle extra text before/after)
+        text = result.text.strip()
+        start = text.index("{")
+        end = text.rindex("}") + 1
+        data = json.loads(text[start:end])
+
+        tool_name = data.get("tool_name")
+        if not tool_name:
+            return MCPToolRoute(
+                tool_name=None, server_id=None,
+                reason=data.get("reason", "No tool selected"),
+                success=True,  # successful routing decision, just no match
+            )
+
+        return MCPToolRoute(
+            tool_name=tool_name,
+            server_id=data.get("server_id", ""),
+            arguments=data.get("arguments", {}),
+            reason="",
+            success=True,
+        )
+    except (ValueError, json.JSONDecodeError) as e:
+        return MCPToolRoute(
+            tool_name=None, server_id=None,
+            reason=f"Failed to parse LLM response: {e}",
+            success=False,
+        )
 
 
 def check_ollama() -> dict:

@@ -93,15 +93,35 @@ python3 cli.py <command> [options]
 | `mcp call <server> <tool>` | Call a tool on an MCP server. Option: `--args` (JSON) |
 | `mcp discover` | Re-discover tools from all enabled servers |
 
-### Architecture
+### LLM-powered tool routing
+
+`nl` now auto-routes to MCP tools when it detects you want to use an external service. The LLM (with `model_hint="tool_routing"`, preferring the 3B tier) selects the right tool and extracts parameters from natural language:
 
 ```
-nl "send an email to Maria"
-  → IntentClassifier → mcp-agent.tool_call
-  → LLM extracts: server=mail, tool=send_email, params={to, subject}
+nl "send an email to Maria saying I'm running late"
+  → IntentClassifier → mcp-agent.mcp_route
+  → TextGenerator(model_hint="tool_routing") selects tool + params
   → MCPAgent routes to the mail-mcp server via JSON-RPC
-  → Result returned as structured content
+  → Result returned to you
 ```
+
+```
+nl "check my Gmail inbox"
+  → IntentClassifier → mcp-agent.mcp_route
+  → TextGenerator picks tools/list_inbox or similar
+```
+
+### Model-per-task routing
+
+The `TextGenerator` now automatically selects the best model for each task type:
+
+| Task | Model hint | Preferred model | When |
+|------|-----------|----------------|------|
+| Phrasing (habit insights) | `phrasing` | smollm2:1.7b | Fastest acceptable, 1.7B tier |
+| Tool routing (MCP selection) | `tool_routing` | llama3.2:3b | Needs better reasoning, 3B tier |
+| Writing (digest opener) | `writing` | llama3.2:3b | Best available quality, 3B tier |
+
+Defined in `MODEL_HINTS` in `llm_bridge.py`. Falls back gracefully if the preferred model isn't installed.
 
 ### Supported transports
 
@@ -188,4 +208,9 @@ python3 cli.py nl "how are my habits this week"
 python3 cli.py mcp status
 python3 cli.py mcp tools
 python3 cli.py mcp discover
+
+# LLM-powered MCP tool routing
+python3 cli.py nl "send an email to Maria saying I'm running late"
+python3 cli.py nl "check my Gmail inbox"
+python3 cli.py nl "look up John's contact"
 ```

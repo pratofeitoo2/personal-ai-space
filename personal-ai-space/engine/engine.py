@@ -220,6 +220,39 @@ class Engine:
             agent_resp = self.send(agent, cmd, {
                 "title": title, "priority": priority,
             })
+        elif cmd == "mcp_route":
+            from llm_bridge import llm_route_mcp_tool
+            # Fetch available tools from MCP agent
+            tools_resp = self.send("mcp-agent", "mcp_tools")
+            tools = tools_resp.get("payload", {}).get("tools", [])
+            if not tools:
+                agent_resp = {
+                    "status": "error",
+                    "error": "No MCP tools available — no servers connected or enabled.",
+                }
+            else:
+                route = llm_route_mcp_tool(text, tools)
+                if route.success and route.tool_name:
+                    agent_resp = self.send(
+                        "mcp-agent", "mcp_call", {
+                            "server_id": route.server_id,
+                            "tool_name": route.tool_name,
+                            "arguments": route.arguments,
+                        }
+                    )
+                    # Attach routing info for transparency
+                    if isinstance(agent_resp, dict):
+                        agent_resp["_route"] = {
+                            "tool": route.tool_name,
+                            "server": route.server_id,
+                            "args": route.arguments,
+                        }
+                else:
+                    agent_resp = {
+                        "status": "error",
+                        "error": route.reason or "Could not determine which tool to use.",
+                        "_route": {"tool": None, "reason": route.reason},
+                    }
         else:
             agent_resp = self.send(agent, cmd)
 
