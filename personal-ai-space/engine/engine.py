@@ -24,6 +24,7 @@ from agents.report_generator  import ReportGenerator
 from agents.knowledge_indexer import KnowledgeIndexer
 from agents.behavior_observer import BehaviorObserver
 from agents.pattern_learner import PatternLearner
+from agents.mcp_agent import MCPAgent
 
 
 class Engine:
@@ -57,6 +58,7 @@ class Engine:
             ReminderSystem,
             ReportGenerator,
             KnowledgeIndexer,
+            MCPAgent,
         ]
         # Initialize observer (autonomous learning)
         from memory.mcp_bridge import MCPMemoryBridge

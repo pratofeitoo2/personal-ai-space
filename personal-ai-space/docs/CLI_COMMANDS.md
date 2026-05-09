@@ -82,6 +82,41 @@ python3 cli.py <command> [options]
 
 ---
 
+## MCP Tools (External Service Integration)
+
+*Available on `feature/llm-integration` branch only.*
+
+| Command | Description |
+|---------|-------------|
+| `mcp status` | Show configured MCP servers and connection status |
+| `mcp tools` | List all available tools from connected servers |
+| `mcp call <server> <tool>` | Call a tool on an MCP server. Option: `--args` (JSON) |
+| `mcp discover` | Re-discover tools from all enabled servers |
+
+### Architecture
+
+```
+nl "send an email to Maria"
+  → IntentClassifier → mcp-agent.tool_call
+  → LLM extracts: server=mail, tool=send_email, params={to, subject}
+  → MCPAgent routes to the mail-mcp server via JSON-RPC
+  → Result returned as structured content
+```
+
+### Supported transports
+
+- **stdio** — spawns subprocess, communicates via JSON-RPC 2.0 with Content-Length framing
+- **http** — POST JSON-RPC to a remote endpoint (e.g. whatsapp-mcp daemon)
+
+Server configurations live in `engine/mcp_tools/registry.json`. Enable a server by setting `"enabled": true`.
+
+```bash
+python3 cli.py mcp status
+python3 cli.py mcp tools
+python3 cli.py mcp discover
+python3 cli.py mcp call mail send_email --args '{"to": "maria@...", "subject": "Hi"}'
+```
+
 ---
 
 ## Natural Language (LLM Bridge)
@@ -148,4 +183,9 @@ python3 cli.py learning infer
 # Natural language (LLM bridge — feature/llm-integration)
 python3 cli.py nl "what's on my plate today" --enhance
 python3 cli.py nl "how are my habits this week"
+
+# MCP tools (feature/llm-integration)
+python3 cli.py mcp status
+python3 cli.py mcp tools
+python3 cli.py mcp discover
 ```

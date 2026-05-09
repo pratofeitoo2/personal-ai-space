@@ -462,6 +462,87 @@ if HAS_RICH:
         rec = e._pattern_learner.get_workflow_recommendation()
         console.print(Panel(rec, title="💡 Workflow Recommendation"))
 
+    # ── MCP servers ─────────────────────────────────────────────────────────
+
+    @cli.group()
+    def mcp():
+        """External MCP server tools (mail, WhatsApp, etc.)."""
+        pass
+
+    @mcp.command("status")
+    def mcp_status():
+        """Show MCP server connections and tool counts."""
+        e = get_engine()
+        r = e.send("mcp-agent", "mcp_status")
+        data = r.get("payload", {})
+        servers = data.get("servers", [])
+        if not servers:
+            console.print("[dim]No MCP servers configured.[/dim]")
+            return
+        t = Table(title="MCP Servers", show_header=True)
+        t.add_column("Server")
+        t.add_column("Status")
+        t.add_column("Transport")
+        t.add_column("Tools")
+        for s in servers:
+            status = "✅ Connected" if s["connected"] else "⚪ Disabled/Off"
+            t.add_row(s["name"], status, s["transport"], str(s["tools_count"]))
+        console.print(t)
+        tot = data.get("tools_total", 0)
+        console.print(f"\n[dim]Total tools available: {tot}[/dim]")
+
+    @mcp.command("tools")
+    def mcp_tools():
+        """List all available tools from connected MCP servers."""
+        e = get_engine()
+        r = e.send("mcp-agent", "mcp_tools")
+        data = r.get("payload", {})
+        tools = data.get("tools", [])
+        if not tools:
+            console.print("[yellow]No tools discovered. Run: mcp discover[/yellow]")
+            return
+        t = Table(title="Available MCP Tools", show_header=True)
+        t.add_column("Server")
+        t.add_column("Tool")
+        t.add_column("Description")
+        for tool in tools:
+            desc = tool.get("description", "")[:60]
+            t.add_row(tool["server_id"], tool["name"], desc)
+        console.print(t)
+
+    @mcp.command("call")
+    @click.argument("server_id")
+    @click.argument("tool_name")
+    @click.option("--args", "-a", default="{}", help="JSON arguments")
+    def mcp_call(server_id, tool_name, args):
+        """Call a tool on an MCP server (experimental)."""
+        e = get_engine()
+        try:
+            arguments = json.loads(args)
+        except json.JSONDecodeError:
+            console.print("[red]Invalid JSON in --args[/red]")
+            return
+        r = e.send("mcp-agent", "mcp_call", {
+            "server_id": server_id, "tool_name": tool_name, "arguments": arguments,
+        })
+        payload = r.get("payload", {}) if r["status"] == "success" else r
+        if payload.get("status") == "error":
+            console.print(f"[red]✗ {payload.get('error', 'Unknown error')}[/red]")
+            return
+        for text in payload.get("content", []):
+            console.print(text)
+
+    @mcp.command("discover")
+    def mcp_discover():
+        """Re-discover tools from all enabled MCP servers."""
+        e = get_engine()
+        r = e.send("mcp-agent", "mcp_discover")
+        data = r.get("payload", {})
+        console.print(f"[green]✓[/green] {data.get('servers_connected', 0)} servers connected")
+        console.print(f"[green]✓[/green] {data.get('tools_total', 0)} tools discovered")
+        for sid, tools in data.get("tools_by_server", {}).items():
+            console.print(f"  [bold]{sid}[/bold]: {', '.join(tools)}")
+
     # ── natural language ────────────────────────────────────────────────────
 
     @cli.command()

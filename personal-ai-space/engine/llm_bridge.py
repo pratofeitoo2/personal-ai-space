@@ -96,6 +96,18 @@ INTENT_CATALOGUE: list[IntentDef] = [
               "Run pattern inference",
               ["learn about me", "find patterns", "infer patterns",
                "what patterns do you see", "analyze my behavior"]),
+    IntentDef("mcp-agent", "mcp_status",
+              "Show connected MCP server status",
+              ["mcp status", "what servers are connected", "show mcp servers",
+               "external services status", "connected services"]),
+    IntentDef("mcp-agent", "mcp_tools",
+              "List available MCP tools",
+              ["mcp tools", "what can you do", "list tools", "available actions",
+               "what services are available"]),
+    IntentDef("mcp-agent", "mcp_discover",
+              "Re-discover MCP server tools",
+              ["discover tools", "refresh mcp", "scan services",
+               "reconnect servers", "reload mcp"]),
 ]
 
 
