@@ -312,6 +312,14 @@ cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine
 
 ---
 
+## 🚀 Daemon Management
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py daemon status
+%%%
+🔄 Daemon Status
+```
+
 *Powered by PAI RunSH v1.2 · Commands run from `personal-ai-space/engine/`*
 *Click the button → output appears inline. Use ✕ to clear. Hover to see full command.*
 *Edit this note to change preset values, or copy a block into any other note.*

@@ -68,6 +68,7 @@ def main():
     
     last_change_time = time.time()
     current_files = get_staging_files()
+    last_processed_files: set = set()
     
     while True:
         try:
@@ -78,11 +79,18 @@ def main():
                 log(f"📁 Change detected: {len(new_files)} files in staging")
                 current_files = new_files
                 last_change_time = time.time()
+            elif not new_files:
+                # Nothing to do — skip processing
+                time.sleep(10)
+                continue
             
-            # If debounce expired and files exist, process
-            if current_files and (time.time() - last_change_time) >= DEBOUNCE_SECONDS:
+            # If debounce expired and files exist and are new, process
+            if (current_files
+                and current_files != last_processed_files
+                and (time.time() - last_change_time) >= DEBOUNCE_SECONDS):
                 process_intake()
                 last_change_time = time.time()
+                last_processed_files = current_files.copy()
                 current_files = get_staging_files()  # Refresh after processing
             
             time.sleep(10)  # Check every 10 seconds

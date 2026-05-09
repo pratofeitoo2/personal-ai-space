@@ -23,7 +23,7 @@
         "Authorization": "Bearer ${WHATSAPP_MCP_TOKEN}",
         "Content-Type": "application/json"
       },
-      "enabled": false,
+      "enabled": true,
       "tools": []
     }
   ],

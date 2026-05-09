@@ -10,7 +10,7 @@ Quick reference for operating the engine.
 
 ```bash
 # 1. Initialize databases
-python engine/init_databases.py
+python engine/init_engine.py
 
 # 2. Load vault credentials
 # Manually add to vault/ folder:
@@ -22,25 +22,26 @@ python engine/init_databases.py
 # Edit engine/config/system.config.json
 # Set enabled: true for desired integrations
 
-# 4. Start engine
+# 4. Start engine daemon
 python engine/start_engine.py
 
 # Expected output:
-# [2026-05-06 08:00:01] INFO: Engine started
-# [2026-05-06 08:00:02] INFO: 6/6 agents loaded
-# [2026-05-06 08:00:03] INFO: Connections verified
-# [2026-05-06 08:00:04] INFO: Ready for requests
+# [2026-05-09 19:23:52] INFO: Engine v0.1.0 starting…
+# [2026-05-09 19:23:52] INFO: ✓ self.db (9 tables)
+# [2026-05-09 19:23:53] INFO: Engine ready — 6/7 agents active
 ```
 
 ### Daily Startup
 
 ```bash
-# Start engine (runs in background)
-python engine/start_engine.py &
+# Start engine daemon (background)
+python engine/start_engine.py
 
-# Verify running
-curl http://localhost:8000/health
-# Expected: { "status": "healthy", "agents": 6 }
+# Or manually:
+python engine/cli.py daemon start
+
+# Check status
+python engine/cli.py daemon status
 
 # Check yesterday's report
 tail -50 logs/system.log
@@ -130,16 +131,16 @@ python engine/cli.py analyze \
 Error: "Database connection failed"
   ↓
 1. Check database files exist:
-   ls -la engine/db/
+   ls -la personal-ai-space/engine/db/
 
 2. If missing, reinitialize:
-   python engine/init_databases.py
+   python engine/init_engine.py
 
 3. Verify permissions:
-   chmod 644 engine/db/*.db
+   chmod 644 personal-ai-space/engine/db/*.db
 
 4. Check logs:
-   tail -20 logs/errors.log
+   tail -20 personal-ai-space/engine/logs/errors.log
 ```
 
 ### Slow Queries
@@ -221,15 +222,15 @@ Error: "Duplicate entry detected"
 Friday 17:00 - Before weekly review:
   1. Back up databases
      python engine/backup.py
-  
-  2. Check integrity
-     python engine/check_integrity.py
-  
+   
+  2. Check engine health
+     python engine/cli.py daemon status
+   
   3. Review logs
      grep "ERROR" logs/errors.log | wc -l
-  
-  4. Monitor performance
-     python engine/performance_report.py
+   
+  4. Run diagnostic
+     python engine/diagnose.py
 ```
 
 ### Monthly (Manual)
@@ -238,17 +239,11 @@ Friday 17:00 - Before weekly review:
 1st of month 02:00 - Monthly maintenance:
   1. Full system backup
      python engine/backup.py --full
-  
-  2. Archive old data
-     python engine/archive_old_data.py
-  
-  3. Optimize databases
-     python engine/optimize_databases.py
-  
-  4. Generate health report
-     python engine/system_health_report.py
-  
-  5. Review and approve archival
+   
+  2. Run diagnostic
+     python engine/diagnose.py > diagnostic_report.txt
+   
+  3. Review and approve archival
      Review command/archive/ folder
 ```
 
@@ -277,16 +272,16 @@ python engine/backup.py --full --encrypt
 
 ```bash
 # Stop engine first
-pkill -f "python engine/start_engine.py"
+python engine/cli.py daemon stop
 
-# Restore from backup
-python engine/restore_backup.py backup_2026-05-06_full.tar.gz
+# Extract backup to engine/db/
+tar -xzf engine/backups/backup_2026-05-06_full.tar.gz -C engine/
 
-# Verify integrity
-python engine/check_integrity.py
+# Verify
+python engine/diagnose.py
 
 # Restart engine
-python engine/start_engine.py &
+python engine/start_engine.py
 ```
 
 ---
@@ -338,34 +333,30 @@ python engine/performance_report.py
 ### Daily Health Check
 
 ```bash
-# Run diagnostic
+# Quick status
+python engine/cli.py daemon status
+
+# Run full diagnostic
 python engine/diagnose.py
 
 # Output:
-# ✓ Engine: Running (2h 34m uptime)
-# ✓ Agents: 6/6 healthy
-# ✓ Databases: All responsive
-# ✓ Integrations: 3/3 synced
-# ✓ Memory: 345MB / 512MB (67%)
-# ✓ Disk: 127MB / 1000MB (12%)
-# ✓ Last request: 2m ago
-# ✓ Error rate: 0.2% (acceptable)
-# ✗ Warning: Meditation habit at risk (0 days)
+# 🔍 Engine Diagnostic Report
+# ✓ Engine: Running (v0.1.0 up 2h 34m)
+# ✓ Agent: task-coordinator (ready)
+# ✓ Agent: knowledge-indexer (ready)
+# ...
+# ✓ DB: self.db (9 tables)
+# ✓ DB: tasks.db (5 tables)
 ```
 
 ### Weekly Health Report
 
 ```bash
-# Generate weekly report
-python engine/health_report.py --period week
+# Run diagnostic with output to file
+python engine/diagnose.py > diagnostic_report.txt
 
-# Saved to: reports/health_2026-05-06.json
-# Contains:
-#   - System uptime
-#   - Agent performance
-#   - Error analysis
-#   - Resource usage
-#   - Recommendations
+# Check error log
+tail -20 engine/logs/errors.log
 ```
 
 ---
@@ -420,26 +411,30 @@ python engine/analyze_logs.py
 ### Normal Shutdown
 
 ```bash
-# Stop engine gracefully
+# Stop engine daemon
 python engine/stop_engine.py
+
+# Or manually:
+python engine/cli.py daemon stop
 
 # Waits for in-flight requests to complete
 # Logs shutdown event
-# Expected: < 30 seconds
 
 # Verify stopped
-curl http://localhost:8000/health 2>/dev/null
-# Should fail: Connection refused
+python engine/cli.py daemon status
+# Should show: Engine daemon is not running
 ```
 
 ### Emergency Shutdown
 
 ```bash
 # Force stop immediately
-pkill -9 -f "python engine"
+python engine/cli.py daemon stop
+# or
+pkill -f "python cli.py serve"
 
 # Check if processes remain
-ps aux | grep engine
+ps aux | grep cli.py
 
 # Only use if normal shutdown hangs
 ```
@@ -450,12 +445,12 @@ ps aux | grep engine
 
 ### Check Status
 ```
-curl http://localhost:8000/status | jq .
+python engine/cli.py daemon status
 ```
 
 ### Read Recent Errors
 ```
-tail -20 logs/errors.log
+tail -20 engine/logs/errors.log
 ```
 
 ### Generate Diagnostic Report
@@ -467,5 +462,5 @@ python engine/diagnose.py > diagnostic_report.txt
 - Main docs: `docs/ARCHITECTURE.md`
 - Data flows: `docs/DATA_FLOWS.md`
 - Troubleshooting: This file
-- All logs: `logs/` directory
+- All logs: `engine/logs/` directory
 

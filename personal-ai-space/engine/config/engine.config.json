@@ -2,10 +2,13 @@
   "engine_version": "0.1.0",
   "mode": "development",
   "agents_enabled": [
-    "context_manager",
-    "task_coordinator",
-    "insight_generator",
-    "reminder_system"
+    "context-manager",
+    "task-coordinator",
+    "insight-generator",
+    "reminder-system",
+    "report-generator",
+    "knowledge-indexer",
+    "mcp-agent"
   ],
   "memory": {
     "type": "sqlite",

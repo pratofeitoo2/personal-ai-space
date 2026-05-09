@@ -11,8 +11,9 @@
       "task-coordinator",
       "insight-generator",
       "reminder-system",
+      "report-generator",
       "knowledge-indexer",
-      "report-generator"
+      "mcp-agent"
     ],
     "defaults": {
       "timeout_seconds": 30,
