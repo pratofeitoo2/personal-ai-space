@@ -193,7 +193,7 @@ class ComprehensiveExtractor:
             try:
                 execute("self", """
                     INSERT INTO behaviors 
-                    (category, description, date_observed, frequency)
+                    (behavior_type, response, observed_date, frequency)
                     VALUES (?, ?, ?, ?)
                 """, ('emotion', emotion, datetime.now().isoformat(), 1))
                 self.stats['behaviors_emotions'] += 1
@@ -204,7 +204,7 @@ class ComprehensiveExtractor:
             try:
                 execute("self", """
                     INSERT INTO behaviors 
-                    (category, description, date_observed, frequency)
+                    (behavior_type, response, observed_date, frequency)
                     VALUES (?, ?, ?, ?)
                 """, ('activity', activity, datetime.now().isoformat(), 1))
                 self.stats['behaviors_activities'] += 1

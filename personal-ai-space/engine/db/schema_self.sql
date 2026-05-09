@@ -67,4 +67,26 @@ CREATE TABLE IF NOT EXISTS behaviors (
 CREATE INDEX IF NOT EXISTS idx_habits_category ON habits(category);
 CREATE INDEX IF NOT EXISTS idx_habits_status ON habits(status);
 CREATE INDEX IF NOT EXISTS idx_habit_logs_habit ON habit_logs(habit_id);
+CREATE TABLE IF NOT EXISTS relationships (
+  id TEXT PRIMARY KEY,
+  name TEXT,
+  relationship_type TEXT,
+  metadata TEXT,
+  notes TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS goals (
+  id TEXT PRIMARY KEY,
+  title TEXT,
+  description TEXT,
+  category TEXT,
+  status TEXT,
+  target_date DATE,
+  progress FLOAT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME
+);
+
 CREATE INDEX IF NOT EXISTS idx_traits_confidence ON traits(confidence_score DESC);

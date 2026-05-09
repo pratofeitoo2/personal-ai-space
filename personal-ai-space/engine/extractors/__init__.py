@@ -182,7 +182,7 @@ class DailyNoteExtractor:
                 try:
                     execute("self", """
                         INSERT INTO behaviors 
-                        (category, description, date_observed, frequency)
+                        (behavior_type, response, observed_date, frequency)
                         VALUES (?, ?, ?, ?)
                     """, ('emotion', emotion, datetime.now().isoformat(), 1))
                     count += 1
@@ -195,7 +195,7 @@ class DailyNoteExtractor:
                 try:
                     execute("self", """
                         INSERT INTO behaviors 
-                        (category, description, date_observed, frequency)
+                        (behavior_type, response, observed_date, frequency)
                         VALUES (?, ?, ?, ?)
                     """, ('activity', activity, datetime.now().isoformat(), 1))
                     count += 1

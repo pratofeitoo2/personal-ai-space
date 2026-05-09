@@ -77,7 +77,7 @@ class PatternLearner:
         try:
             # Count tasks by category
             tasks = db.query("tasks", """
-                SELECT category, COUNT(*) as count FROM tasks
+                SELECT COALESCE(category, 'uncategorized') as category, COUNT(*) as count FROM tasks
                 GROUP BY category
                 ORDER BY count DESC
                 LIMIT 5
@@ -110,20 +110,20 @@ class PatternLearner:
             # Query completion rates
             tasks = db.query("tasks", """
                 SELECT 
-                    category,
-                    priority_level,
+                    COALESCE(category, 'uncategorized') as category,
+                    COALESCE(priority, 'normal') as priority,
                     COUNT(*) as total,
                     SUM(CASE WHEN status='completed' THEN 1 ELSE 0 END) as completed
                 FROM tasks
                 WHERE created_at > datetime('now', '-60 days')
-                GROUP BY category, priority_level
+                GROUP BY category, priority
             """)
             
             if tasks:
                 for t in tasks:
                     rate = t['completed'] / t['total'] if t['total'] > 0 else 0
                     cat = t['category']
-                    pri = t['priority_level']
+                    pri = t['priority']
                     
                     key = f"completion_rate_{cat}_{pri}"
                     patterns[key] = rate

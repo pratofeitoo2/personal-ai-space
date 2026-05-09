@@ -27,7 +27,7 @@ class KnowledgeIndexer(BaseAgent):
     def stats(self) -> dict:
         articles = db.query("knowledge", "SELECT count(*) as n FROM articles")
         notes    = db.query("knowledge", "SELECT count(*) as n FROM notes")
-        refs     = db.query("knowledge", 'SELECT count(*) as n FROM "references"')
+        refs     = self._safe_ref_count()
         pending  = db.query(
             "knowledge",
             "SELECT count(*) as n FROM articles WHERE status='pending'"
@@ -35,9 +35,16 @@ class KnowledgeIndexer(BaseAgent):
         return {
             "articles": (articles[0]["n"] if articles else 0),
             "notes":    (notes[0]["n"]    if notes    else 0),
-            "references": (refs[0]["n"]   if refs     else 0),
+            "references": refs,
             "pending_curation": (pending[0]["n"] if pending else 0),
         }
+
+    def _safe_ref_count(self) -> int:
+        try:
+            rows = db.query("knowledge", 'SELECT count(*) as n FROM "references"')
+            return rows[0]["n"] if rows else 0
+        except Exception:
+            return 0
 
     def search_notes(self, query: str, limit: int = 10) -> list[dict]:
         return db.query(

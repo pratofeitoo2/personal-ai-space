@@ -47,7 +47,7 @@ class BehaviorObserver:
             "task_id": task.get("id", "?"),
             "category": task.get("category", "unknown"),
             "title": task.get("title", "")[:60],  # First 60 chars
-            "priority": task.get("priority_level", "normal"),
+            "priority": task.get("priority", "normal"),
         }
         self._buffer_and_learn(obs)
         logger.debug(f"Observed: task created in {obs['category']}")
@@ -60,7 +60,7 @@ class BehaviorObserver:
             "task_id": task.get("id", "?"),
             "category": task.get("category", "unknown"),
             "duration_seconds": duration_seconds,
-            "priority": task.get("priority_level", "normal"),
+            "priority": task.get("priority", "normal"),
         }
         self._buffer_and_learn(obs)
         logger.debug(f"Observed: task completed in {duration_seconds}s")
