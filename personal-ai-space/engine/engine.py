@@ -277,3 +277,23 @@ class Engine:
             "databases": dbs,
             "checked_at": datetime.now().isoformat(),
         }
+
+    def observer_buffer(self) -> dict:
+        if not hasattr(self, '_observer') or not self._observer:
+            return {"buffer_size": 0, "observation_types": {}, "session_age_seconds": 0}
+        return self._observer.get_buffer_stats()
+
+    def observer_observations(self, limit: int = 10) -> list:
+        if not hasattr(self, '_observer') or not self._observer:
+            return []
+        return self._observer.dump_observations(limit)
+
+    def pattern_infer(self) -> dict:
+        if not hasattr(self, '_pattern_learner') or not self._pattern_learner:
+            return {}
+        return self._pattern_learner.infer_all_patterns()
+
+    def pattern_workflow(self) -> str:
+        if not hasattr(self, '_pattern_learner') or not self._pattern_learner:
+            return "No workflow recommendation available yet"
+        return self._pattern_learner.get_workflow_recommendation()

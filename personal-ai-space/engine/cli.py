@@ -26,13 +26,66 @@ from engine import Engine
 
 console = Console() if HAS_RICH else None
 _engine: Engine = None
+DAEMON_BASE = "http://127.0.0.1:19876"
 
 
-def get_engine() -> Engine:
+class DaemonProxy:
+    """Thin proxy that forwards Engine method calls to the running daemon via HTTP.
+
+    Each attribute access returns a callable that POSTs to /engine with the
+    method name and arguments.  Sub-attributes (e.g. _observer) are resolved
+    by the server-side Engine helpers (observer_buffer, etc.).
+    """
+
+    def __init__(self, base_url: str = DAEMON_BASE):
+        self._base = base_url
+
+    def __getattr__(self, name):
+        import urllib.request
+        import json
+
+        def _call(*args, **kwargs):
+            payload = json.dumps({"method": name, "args": args, "kwargs": kwargs}).encode()
+            req = urllib.request.Request(
+                f"{self._base}/engine",
+                data=payload,
+                headers={"Content-Type": "application/json"},
+            )
+            try:
+                resp = urllib.request.urlopen(req, timeout=15)
+                return json.loads(resp.read())
+            except Exception as e:
+                return {"error": str(e)}
+
+        return _call
+
+
+def _try_daemon() -> DaemonProxy | None:
+    """Return a DaemonProxy if the daemon is running, else None."""
+    pid_file = Path("/tmp/pai-engine.pid")
+    if not pid_file.exists():
+        return None
+    try:
+        import urllib.request
+        pid = int(pid_file.read_text().strip())
+        os.kill(pid, 0)  # process exists?
+        resp = urllib.request.urlopen(f"{DAEMON_BASE}/health", timeout=2)
+        if resp.status == 200:
+            return DaemonProxy()
+    except Exception:
+        pass
+    return None
+
+
+def get_engine() -> Engine | DaemonProxy:
     global _engine
-    if _engine is None:
-        _engine = Engine()
-        _engine.start()
+    if _engine is not None:
+        return _engine
+    proxy = _try_daemon()
+    if proxy is not None:
+        return proxy
+    _engine = Engine()
+    _engine.start()
     return _engine
 
 
@@ -332,15 +385,29 @@ if HAS_RICH:
                     self._json(404, {"error": "not found"})
 
             def do_POST(self):
+                length = int(self.headers.get("Content-Length", 0))
+                body = json.loads(self.rfile.read(length).decode() if length else "{}")
+
                 if self.path == "/execute":
-                    length = int(self.headers.get("Content-Length", 0))
-                    body = json.loads(self.rfile.read(length).decode() if length else "{}")
                     result = engine.send(
                         body.get("agent", ""),
                         body.get("command", ""),
                         body.get("data", {}),
                     )
                     self._json(200, result)
+                elif self.path == "/engine":
+                    method = body.get("method", "")
+                    args   = body.get("args", [])
+                    kwargs = body.get("kwargs", {})
+                    fn     = getattr(engine, method, None)
+                    if fn is None:
+                        self._json(404, {"error": f"Unknown method: {method}"})
+                    else:
+                        try:
+                            result = fn(*args, **kwargs)
+                            self._json(200, result)
+                        except Exception as e:
+                            self._json(500, {"error": str(e)})
                 else:
                     self._json(404, {"error": "not found"})
 
@@ -546,10 +613,13 @@ if HAS_RICH:
     def learning_buffer():
         """Show current observation buffer."""
         e = get_engine()
-        if not hasattr(e, '_observer') or not e._observer:
-            console.print("[red]Observer not available[/red]")
-            return
-        stats = e._observer.get_buffer_stats()
+        if isinstance(e, DaemonProxy):
+            stats = e.observer_buffer()
+        else:
+            if not hasattr(e, '_observer') or not e._observer:
+                console.print("[red]Observer not available[/red]")
+                return
+            stats = e._observer.get_buffer_stats()
         console.print(Panel(
             f"Buffer size: [bold]{stats['buffer_size']}[/bold]\n"
             f"Observation types: {stats['observation_types']}\n"
@@ -562,10 +632,13 @@ if HAS_RICH:
     def learning_observations(limit):
         """Show recent observations."""
         e = get_engine()
-        if not hasattr(e, '_observer') or not e._observer:
-            console.print("[red]Observer not available[/red]")
-            return
-        obs = e._observer.dump_observations(limit)
+        if isinstance(e, DaemonProxy):
+            obs = e.observer_observations(limit)
+        else:
+            if not hasattr(e, '_observer') or not e._observer:
+                console.print("[red]Observer not available[/red]")
+                return
+            obs = e._observer.dump_observations(limit)
         if not obs:
             console.print("[yellow]No observations yet[/yellow]")
             return
@@ -581,11 +654,11 @@ if HAS_RICH:
     def learning_infer():
         """Run pattern inference now."""
         e = get_engine()
-        if not hasattr(e, '_pattern_learner') or not e._pattern_learner:
+        if not isinstance(e, DaemonProxy) and (not hasattr(e, '_pattern_learner') or not e._pattern_learner):
             console.print("[red]Pattern learner not available[/red]")
             return
         console.print("[bold]Running pattern inference...[/bold]")
-        patterns = e._pattern_learner.infer_all_patterns()
+        patterns = e.pattern_infer() if isinstance(e, DaemonProxy) else e._pattern_learner.infer_all_patterns()
         if patterns:
             console.print(Panel(
                 "\n".join([f"• {k}: {v}" for k, v in list(patterns.items())[:10]]),
@@ -598,10 +671,10 @@ if HAS_RICH:
     def learning_workflow():
         """Show your inferred workflow."""
         e = get_engine()
-        if not hasattr(e, '_pattern_learner') or not e._pattern_learner:
+        if not isinstance(e, DaemonProxy) and (not hasattr(e, '_pattern_learner') or not e._pattern_learner):
             console.print("[red]Pattern learner not available[/red]")
             return
-        rec = e._pattern_learner.get_workflow_recommendation()
+        rec = e.pattern_workflow() if isinstance(e, DaemonProxy) else e._pattern_learner.get_workflow_recommendation()
         console.print(Panel(rec, title="💡 Workflow Recommendation"))
 
     # ── MCP servers ─────────────────────────────────────────────────────────
