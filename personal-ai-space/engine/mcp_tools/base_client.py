@@ -80,12 +80,30 @@ def _encode_message(body: str) -> bytes:
 
 
 def _decode_message(stream) -> Optional[str]:
-    """Read one Content-Length framed message from a binary stream."""
+    """Read one message from a binary stream.
+
+    Handles two formats:
+      1. Content-Length framing (MCP standard):
+           Content-Length: N\r\n\r\n{body}
+      2. JSON-line format (used by FastMCP servers):
+           {json}\n
+
+    Detects format by peeking at the first byte.
+    """
+    first_byte = stream.read(1)
+    if not first_byte:
+        return None
+
+    # Peek: if it starts with '{', it's JSON-line format
+    if first_byte == b'{':
+        rest = stream.readline()
+        raw = first_byte + rest
+        return raw.decode("utf-8").strip()
+
+    # Content-Length framing
     headers = {}
-    while True:
-        line = stream.readline()
-        if not line:
-            return None
+    line = first_byte + stream.readline()
+    while line:
         line = line.strip()
         if isinstance(line, bytes):
             line = line.decode("utf-8")
@@ -94,6 +112,7 @@ def _decode_message(stream) -> Optional[str]:
         if ":" in line:
             key, val = line.split(":", 1)
             headers[key.strip().lower()] = val.strip()
+        line = stream.readline()
     length = int(headers.get("content-length", 0))
     if length == 0:
         return None
@@ -144,17 +163,32 @@ class StdioMCPClient:
         if not self._proc or self._proc.stdin is None:
             raise RuntimeError("Not connected")
         raw = _make_request(method, params)
-        self._proc.stdin.write(_encode_message(raw))
+        # FastMCP servers read stdin as JSON-line format.
+        # Send raw JSON with newline — the standard Content-Length
+        # framing confuses their parser.
+        self._proc.stdin.write((raw + "\n").encode())
         self._proc.stdin.flush()
 
     def _recv(self) -> dict:
+        """Read the next JSON-RPC response, skipping notifications.
+
+        MCP servers may emit notifications (no "id" field) before or
+        between responses. This method reads messages until it finds
+        one with an "id" field (the actual response).
+        """
         if not self._proc or self._proc.stdout is None:
             raise RuntimeError("Not connected")
-        raw = _decode_message(self._proc.stdout)
-        if raw is None:
-            stderr = self._proc.stderr.read().decode() if self._proc.stderr else ""
-            raise RuntimeError(f"No response from MCP server. Stderr: {stderr[:200]}")
-        return _parse_response(raw)
+        for _ in range(50):  # safety limit
+            raw = _decode_message(self._proc.stdout)
+            if raw is None:
+                stderr = self._proc.stderr.read().decode() if self._proc.stderr else ""
+                raise RuntimeError(f"No response from MCP server. Stderr: {stderr[:200]}")
+            data = json.loads(raw)
+            if "id" in data:
+                if "error" in data and data["error"]:
+                    raise RuntimeError(data["error"].get("message", str(data["error"])))
+                return data.get("result", data)
+        raise RuntimeError("Exceeded notification skip limit (50)")
 
     def list_tools(self) -> list[MCPTool]:
         if self._tools_cache:

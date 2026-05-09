@@ -117,9 +117,14 @@ The `TextGenerator` now automatically selects the best model for each task type:
 
 | Task | Model hint | Preferred model | When |
 |------|-----------|----------------|------|
-| Phrasing (habit insights) | `phrasing` | smollm2:1.7b | Fastest acceptable, 1.7B tier |
-| Tool routing (MCP selection) | `tool_routing` | llama3.2:3b | Needs better reasoning, 3B tier |
-| Writing (digest opener) | `writing` | llama3.2:3b | Best available quality, 3B tier |
+| Phrasing (habit insights) | `phrasing` | smollm2:1.7b | 1.7B tier, 8K context |
+| Tool routing (MCP selection) | `tool_routing` | smollm2:1.7b | 1.7B tier (see note below) |
+| Writing (digest opener) | `writing` | smollm2:1.7b | 1.7B tier (see note below) |
+
+> **M1 8GB memory note:** `llama3.2:3b` has a default 128K context window, which
+> creates a 13GB+ KV cache on Apple Silicon. All Ollama calls are capped at
+> `num_ctx=8192` (set via `OLLAMA_NUM_CTX` in `llm_bridge.py`). Smaller 1.7B
+> models like `smollm2:1.7b` have 8K context by default and use ~1GB loaded.
 
 Defined in `MODEL_HINTS` in `llm_bridge.py`. Falls back gracefully if the preferred model isn't installed.
 

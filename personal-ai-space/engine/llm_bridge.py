@@ -32,6 +32,11 @@ logger = logging.getLogger("engine.llm_bridge")
 OLLAMA_BASE = "http://localhost:11434"
 OLLAMA_TIMEOUT = 120  # seconds per request (M1 8GB: first load of 3B can take 30-60s)
 
+# M1 8GB memory constraint: cap KV cache by limiting context window.
+# llama3.2:3b defaults to 128K context (13GB+ KV cache).
+# 8K is enough for any prompt in this system.
+OLLAMA_NUM_CTX = 8192
+
 
 # ── intent catalogue ──────────────────────────────────────────────────────────
 # Each intent maps to one agent command + parameter extraction hints.
@@ -339,10 +344,10 @@ class IntentClassifier:
 MODEL_HINTS = {
     "phrasing":     ["smollm2:1.7b-instruct-q4_K_M", "smollm2:1.7b",
                      "llama3.2:3b", "qwen2.5:3b"],
-    "tool_routing": ["llama3.2:3b", "qwen2.5:3b",
-                     "phi4-mini:3.8b", "smollm2:1.7b"],
-    "writing":      ["llama3.2:3b", "qwen2.5:3b",
-                     "phi4-mini:3.8b", "smollm2:1.7b"],
+    "tool_routing": ["smollm2:1.7b-instruct-q4_K_M", "smollm2:1.7b",
+                     "llama3.2:3b", "qwen2.5:3b"],
+    "writing":      ["smollm2:1.7b-instruct-q4_K_M", "smollm2:1.7b",
+                     "llama3.2:3b", "qwen2.5:3b"],
 }
 """Task-specific model preferences.
 
@@ -350,11 +355,12 @@ Each key maps to a list of preferred model prefixes, in order of preference.
 The first model actually installed on the user's machine is selected.
 
   phrasing     — rephrasing structured data into natural language.
-                 Fastest acceptable model (1.7B tier).
+                 1.7B tier (fast, small context = 8K).
   tool_routing — understanding tool schemas and extracting parameters.
-                 Needs better reasoning (3B tier).
+                 1.7B tier (llama3.2:3b's 128K default context = 13GB+ KV cache
+                 on M1, so prefer smaller models with 8K default).
   writing      — longer creative text (digests, drafts).
-                 Best available quality (3B+ tier).
+                 1.7B tier. Same context reasoning as tool_routing.
 """
 
 
@@ -425,7 +431,7 @@ class TextGenerator:
         try:
             r = requests.post(
                 f"{OLLAMA_BASE}/api/generate",
-                json={"model": self.model, "prompt": "", "keep_alive": "5m"},
+                json={"model": self.model, "prompt": "", "keep_alive": "5m", "num_ctx": OLLAMA_NUM_CTX},
                 timeout=5,
             )
             self._warm = r.ok
@@ -450,6 +456,7 @@ class TextGenerator:
                 "system": system,
                 "temperature": temperature,
                 "max_tokens": max_tokens,
+                "num_ctx": OLLAMA_NUM_CTX,
                 "stream": False,
                 "keep_alive": "5m",
             }
@@ -507,6 +514,7 @@ class TextGenerator:
                 "messages": messages,
                 "temperature": temperature,
                 "max_tokens": max_tokens,
+                "num_ctx": OLLAMA_NUM_CTX,
                 "stream": False,
                 "keep_alive": "5m",
             }
