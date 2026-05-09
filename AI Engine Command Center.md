@@ -3,7 +3,7 @@ tags:
   - pai/engine
   - pai/control
 created: 2026-05-09T18:26:25
-updated: 2026-05-09T19:00
+updated: 2026-05-09T20:07
 ---
 
 # AI Engine Command Center
@@ -87,6 +87,12 @@ cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine
 ```
 
 ```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py task add "Learn TypeScript" --priority high --due 2026-05-15 --hours 3
+%%%
+➕ Add: Learn TypeScript
+```
+
+```runsh
 cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py task add "Weekly planning" --priority normal
 %%%
 ➕ Add: Weekly Planning
@@ -104,6 +110,12 @@ cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine
 cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py habit insights
 %%%
 📊 Habit Insights
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py habit insights --days 30
+%%%
+📊 Habit Insights (30 days)
 ```
 
 ```runsh
@@ -130,6 +142,12 @@ cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine
 cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py learning observations
 %%%
 📋 Recent Observations
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py learning observations --limit 20
+%%%
+📋 Recent Observations (20)
 ```
 
 ```runsh
@@ -189,9 +207,21 @@ cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine
 ```
 
 ```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py memory add-fact user.language Portuguese --confidence 0.95
+%%%
+➕ Add: Language Fact
+```
+
+```runsh
 cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py memory add-lesson "LLM context must be capped to 8K on M1" --category engineering
 %%%
 ➕ Add: Engineering Lesson
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py memory add-lesson "Always back up before updates" --negative
+%%%
+➕ Add: Avoid Lesson (Negative)
 ```
 
 ## 📚 Knowledge Base
@@ -206,6 +236,12 @@ cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine
 cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py note add "Quick thought" --tags "idea" --category general
 %%%
 ➕ Add: Quick Thought
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py note add "React patterns" --content "Notes about hooks" --tags "react,frontend"
+%%%
+➕ Add: React Patterns
 ```
 
 ```runsh
@@ -263,15 +299,15 @@ cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine
 ```
 
 ```runsh
-cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl --enhance "what's on my plate today?"
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl --enhance "how are my habits looking?"
 %%%
-🔮✨ Enhanced: Agenda
+🔮✨ Enhanced: Habits
 ```
 
 ```runsh
-cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl "summarize my week"
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl "how are my habits" --enhance
 %%%
-🔮 Weekly Summary
+🔮✨ Enhanced: Habits (alt)
 ```
 
 ```runsh
@@ -284,6 +320,12 @@ cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine
 cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl "how are my habits looking?"
 %%%
 🔮 Habit Check
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl "how are my habits this week"
+%%%
+🔮 Habit Check (Week)
 ```
 
 ```runsh
@@ -310,6 +352,42 @@ cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine
 🔮 Remind Me
 ```
 
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl "what should I do today"
+%%%
+🔮 What should I do today?
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl "add a task to review the budget"
+%%%
+🔮 Add: Review Budget
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl "what's overdue"
+%%%
+🔮 What's Overdue?
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl "send an email to Maria saying I'm running late"
+%%%
+📧 MCP: Send Email via NL
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl "check my Gmail inbox"
+%%%
+📧 MCP: Check Gmail
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py nl "look up John's contact"
+%%%
+📧 MCP: Look Up Contact
+```
+
 ---
 
 ## 🚀 Daemon Management
@@ -318,6 +396,18 @@ cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine
 cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py daemon status
 %%%
 🔄 Daemon Status
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py daemon start
+%%%
+🚀 Daemon Start
+```
+
+```runsh
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine && python3 cli.py daemon stop
+%%%
+🛑 Daemon Stop
 ```
 
 *Powered by PAI RunSH v1.2 · Commands run from `personal-ai-space/engine/`*

@@ -1,3 +1,7 @@
+---
+created: 2026-05-09T08:13
+updated: 2026-05-09T20:05
+---
 # CLI Commands Reference
 
 All commands run from `engine/` directory via:
@@ -175,6 +179,22 @@ python3 cli.py nl "what's overdue"
 # LLM diagnostics
 python3 cli.py llm status
 python3 cli.py llm classify "find something about sexology"
+```
+
+---
+
+## Daemon (Background Engine)
+
+| Command | Description |
+|---------|-------------|
+| `daemon status` | Show whether the engine daemon is running and health |
+| `daemon start` | Start the engine daemon in background |
+| `daemon stop` | Stop the engine daemon |
+
+```bash
+python3 cli.py daemon status
+python3 cli.py daemon start
+python3 cli.py daemon stop
 ```
 
 ---
