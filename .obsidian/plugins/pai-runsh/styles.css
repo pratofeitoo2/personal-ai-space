@@ -1,0 +1,69 @@
+/* PAI RunSH - Enhanced shell command runner for Obsidian */
+
+.pai-runsh-block {
+  margin: 0.75em 0;
+}
+
+.pai-runsh-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pai-runsh-button {
+  cursor: pointer;
+  padding: 4px 14px;
+  border-radius: var(--radius-s, 4px);
+  border: 1px solid var(--background-modifier-border);
+  background: var(--interactive-normal);
+  color: var(--text-normal);
+  font-size: var(--font-ui-small);
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+
+.pai-runsh-button:hover {
+  background: var(--interactive-hover);
+}
+
+.pai-runsh-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pai-runsh-clear {
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: var(--font-ui-smaller, 12px);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  border-radius: var(--radius-s, 3px);
+}
+
+.pai-runsh-clear:hover {
+  color: var(--text-normal);
+  background: var(--background-modifier-hover);
+}
+
+.pai-runsh-output {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: var(--background-primary-alt);
+  border-radius: var(--radius-s, 4px);
+  border: 1px solid var(--background-modifier-border);
+  font-family: var(--font-monospace);
+  font-size: var(--font-ui-smaller, 12px);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 500px;
+  overflow-y: auto;
+  color: var(--text-normal);
+}
+
+.pai-runsh-output.pai-runsh-error {
+  color: var(--text-error);
+  border-color: var(--background-modifier-error-hover, var(--background-modifier-border));
+  background: var(--background-primary-alt);
+}
