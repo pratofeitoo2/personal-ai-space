@@ -1,0 +1,7 @@
+{
+  "note": "claude-apple-bridges are standalone Swift CLI tools for Claude Desktop (NOT MCP servers).",
+  "location": "mcp-servers/claude-apple-bridges/",
+  "integration": "none",
+  "usage": "Build with 'make install' inside mcp-servers/claude-apple-bridges/ — binaries install to ~/.claude/ for Claude Code/Desktop",
+  "bridges": ["calendar", "contacts", "mail", "notes", "reminders", "tmux"]
+}
