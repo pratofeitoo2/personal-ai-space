@@ -23,7 +23,8 @@ intake/
 
 ```bash
 # Copy your Obsidian files into staging/
-cp ~/Documents/Obsidian/vault/file.md /path/to/intake/staging/
+# The Obsidian vault is the project root (Personal_AI_powerhouse)
+cp /path/to/your/file.md /path/to/intake/staging/
 ```
 
 ### 2. Process Files
@@ -31,9 +32,6 @@ cp ~/Documents/Obsidian/vault/file.md /path/to/intake/staging/
 ```bash
 # Run the intake processor
 python3 process_intake.py
-
-# Or manually route specific files
-python3 route_file.py staging/my_article.md --dest knowledge/articles
 ```
 
 ### 3. Verify & Archive
@@ -71,19 +69,10 @@ Files are routed based on:
 
 ```bash
 # Process all files in staging
-python3 intake.py process
-
-# Process specific file with destination override
-python3 intake.py process staging/my_file.md --dest knowledge/articles
+python3 process_intake.py
 
 # Show what would be processed (dry run)
-python3 intake.py process --dry-run
-
-# View intake history
-python3 intake.py history
-
-# Rollback last import
-python3 intake.py rollback
+python3 process_intake.py --dry-run
 ```
 
 ## Integration with Learning System
@@ -110,4 +99,4 @@ All imports logged to `intake/intake.log` for audit trail.
 
 ---
 
-**Next:** Drop your Obsidian files into `staging/` and run `python3 intake.py process`
+**Next:** Drop your Obsidian files into `staging/` and run `python3 process_intake.py`
