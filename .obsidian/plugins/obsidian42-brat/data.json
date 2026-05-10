@@ -1,9 +1,39 @@
 {
   "pluginList": [
+    "d-eniz/jupymd",
+    "LiuYangArt/obsidian-canvas-banana",
+    "DiegoSmk/obsidian-sql",
+    "RayRayElite/Obsidian-DASH",
+    "jysperm/obsidian-csv-database",
+    "endlessblink/detailed-canvas",
     "rafjaf/obsidian-colored-bases-properties",
     "unxok/obsidian-better-properties"
   ],
   "pluginSubListFrozenVersion": [
+    {
+      "repo": "d-eniz/jupymd",
+      "version": "latest"
+    },
+    {
+      "repo": "LiuYangArt/obsidian-canvas-banana",
+      "version": "latest"
+    },
+    {
+      "repo": "DiegoSmk/obsidian-sql",
+      "version": "latest"
+    },
+    {
+      "repo": "RayRayElite/Obsidian-DASH",
+      "version": ""
+    },
+    {
+      "repo": "jysperm/obsidian-csv-database",
+      "version": "latest"
+    },
+    {
+      "repo": "endlessblink/detailed-canvas",
+      "version": "latest"
+    },
     {
       "repo": "rafjaf/obsidian-colored-bases-properties",
       "version": "latest"

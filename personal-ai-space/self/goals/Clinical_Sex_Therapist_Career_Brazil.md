@@ -1,21 +1,21 @@
 ---
 title: Clinical Sex Therapist Career Brazil
+subtitle: Working as a Clinical Sex Therapist in Brazil
 type: career-plan
 status: draft
 category: Clinical Sexology - Career Planning
 tags:
-- brazil
-- clinical-practice
-- cultural-sensitivity
-- goals
-- mental-health
-- professional-development
-- psychotherapy
-- sexology
-- training
+  - brazil
+  - clinical-practice
+  - cultural-sensitivity
+  - goals
+  - mental-health
+  - professional-development
+  - psychotherapy
+  - sexology
+  - training
 created: 2025-11-13T01:49
 updated: 2025-12-06T15:18
-subtitle: Working as a Clinical Sex Therapist in Brazil
 content_type: resource-list
 ---
 

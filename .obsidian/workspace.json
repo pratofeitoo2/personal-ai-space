@@ -27,44 +27,45 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AI Engine Command Center.md",
+                "file": "personal-ai-space/command/finances/LinkedIn Profile Data.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "AI Engine Command Center"
+              "title": "LinkedIn Profile Data"
+            }
+          },
+          {
+            "id": "ea6c8b139b9c920a",
+            "type": "leaf",
+            "state": {
+              "type": "json",
+              "state": {
+                "file": "personal-ai-space/command/activities/disciplined_routines.json"
+              },
+              "icon": "lucide-file",
+              "title": "disciplined_routines"
             }
           },
           {
             "id": "a00118de8890698a",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "personal-ai-space/self/relationships/Liz.md",
-                "mode": "source",
-                "source": false
+                "file": "personal-ai-space/self/goals/Life Map.canvas",
+                "viewState": {
+                  "x": 245,
+                  "y": -50,
+                  "zoom": 0
+                }
               },
-              "icon": "lucide-file",
-              "title": "Liz"
-            }
-          },
-          {
-            "id": "17591f95bbbdb89a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "personal-ai-space/self/relationships/Tamara.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Tamara"
+              "icon": "lucide-layout-dashboard",
+              "title": "Life Map"
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -214,72 +215,68 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
-      "terminal:Open terminal": false,
-      "univer:Univer": false,
-      "spreadsheets:New Spreadsheet": false,
-      "obsidian42-brat:BRAT": false
+      "obsidian42-brat:BRAT": false,
+      "canvas-banana:Canvas Banana": false
     }
   },
-  "active": "17591f95bbbdb89a",
+  "active": "827905691f87b963",
   "lastOpenFiles": [
-    "personal-ai-space/intake/staging/LinkedIn CV - English.md",
-    "personal-ai-space/intake/staging/ATRAIR PACIENTES SEM PRECISAR SE EXPOR.md",
-    "personal-ai-space/intake/staging/2025-02-11.md",
-    "personal-ai-space/intake/staging/CV - Paulo Rezende - Program Manager.md",
-    "personal-ai-space/intake/staging/test_cv.md",
-    "personal-ai-space/intake/staging",
-    "personal-ai-space/self/needs/current_needs.json",
-    "personal-ai-space/self/relationships/Liz.md",
-    "personal-ai-space/self/profile/Análise Linguística do meu estilo de escrita.md",
-    "personal-ai-space/self/goals/Study Plan Ebook Outline.md",
+    "personal-ai-space/engine/db/self.db-shm",
+    "personal-ai-space/engine/db/self.db-wal",
+    "personal-ai-space/engine/db/memories.db-shm",
+    "personal-ai-space/engine/db/memories.db-wal",
+    "personal-ai-space/engine/db/knowledge.db-shm",
+    "personal-ai-space/engine/db/knowledge.db-wal",
+    "personal-ai-space/db/agent_memory.db-shm",
+    "personal-ai-space/db/agent_memory.db-wal",
+    "personal-ai-space/command/finances/LinkedIn Profile Data.md",
+    "personal-ai-space/command/finances/overview.json",
+    "personal-ai-space/command/inbox/Daily Notes.base",
+    "personal-ai-space/command/inbox/Daily Notes Dashboard.md",
+    "personal-ai-space/command/inbox/Nov-13-2025.md",
+    "personal-ai-space/command/inbox/dez 07, 2025 17h 30.md",
+    "personal-ai-space/command/inbox/Daily Notes Dashboard 1.md",
+    "personal-ai-space/self/goals/Life Map.canvas",
+    "personal-ai-space/command/activities/disciplined_routines.json",
+    "AI Engine Command Center.md",
+    "personal-ai-space/self/goals/Clinical_Sex_Therapist_Career.md",
+    "Dashboard Logs/Daily/2026-05-10.md",
     "personal-ai-space/self/goals/Clinical_Sex_Therapist_Career_Brazil.md",
+    "personal-ai-space/self/goals/Study Plan Ebook Outline.md",
     "personal-ai-space/self/goals/Study Plan ebook.md",
     "personal-ai-space/self/goals/Study plan.md",
-    "personal-ai-space/self/traits/inferred_personality.json",
-    "personal-ai-space/self/relationships/Tamara.md.bak",
-    "personal-ai-space/self/relationships/Ravi.md.bak",
-    "personal-ai-space/self/relationships/PF Rezende.md.bak",
-    "personal-ai-space/self/relationships/Mallu.md.bak",
-    "personal-ai-space/self/relationships/Luan.md.bak",
-    "personal-ai-space/self/relationships/Liz.md.bak",
-    "personal-ai-space/self/profile/Análise Linguística do meu estilo de escrita.md.bak",
-    "personal-ai-space/knowledge/notes/NEDS Vault Filetree.canvas",
-    "personal-ai-space/knowledge/articles/My Theoretical Framework to Approach.md",
+    "personal-ai-space/knowledge/articles/Classes sexólogos Portugal.md",
     "personal-ai-space/knowledge/notes/Atendimentos Online.md",
+    "personal-ai-space/knowledge/notes/Getliner A prática da psicoterapia sexual no Brasil.md",
     "personal-ai-space/knowledge/notes/Messy Brain Notes.md",
-    "personal-ai-space/knowledge/notes/Qwen.md",
-    "personal-ai-space/knowledge/notes/Microsoft Copilot.md",
+    "personal-ai-space/knowledge/notes/NEDS Vault Filetree.canvas",
+    "personal-ai-space/knowledge/notes/Qwen O Ecossistema da Psicoterapia Sexual no Brasil.md",
+    "personal-ai-space/knowledge/notes/Microsoft Copilot Psicoterapia Sexual no Brasil.md",
     "personal-ai-space/knowledge/notes/Grok.md",
-    "personal-ai-space/knowledge/notes/Getliner.md",
-    "personal-ai-space/command/finances/ZenKlub.md",
-    "personal-ai-space/command/finances/VP of Talent Operations.md",
-    "personal-ai-space/command/finances/Talent and Learning Specialist.md",
-    "personal-ai-space/command/finances/Supervisor de Talent Acquisition Bilíngue.md",
-    "personal-ai-space/command/finances/Senior Program Manager.md",
-    "personal-ai-space/command/finances/Program Coordinator – More Data Better Health.md",
-    "personal-ai-space/command/finances/People Lead.md",
-    "personal-ai-space/command/finances/Marketing Specialist, Growth.md",
+    "personal-ai-space/vault/personal documents  PF/Certificado de conclusao ensino medio .JPG",
+    "personal-ai-space/vault/personal documents  PF/CPF Ravi .jpg",
+    "personal-ai-space/vault/personal documents  PF/Sex CompulsionOCSB Assessment - Insight Psychological.jpeg.png",
+    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende(2).jpg",
+    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende(1).jpg",
+    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende.jpg",
+    "personal-ai-space/self/relationships/Liz.md",
+    "personal-ai-space/self/relationships/Tamara.md",
+    "Dashboard Logs/Calendar.md",
+    "Obsidian DASH/Documentation/DASH Docs - FAQ.md",
+    "Obsidian DASH/Documentation/DASH Docs - Reports, Reviews, and Exports.md",
+    "Obsidian DASH/Documentation/DASH Docs - AI and Research Guide.md",
     "personal-ai-space/self/goals/NEDS Vault Filetree.canvas",
-    "personal-ai-space/self/goals/Life Map.canvas",
     "personal-ai-space/docs/architecture-map.canvas",
     "personal-ai-space/intake/staging/NEDS Vault Filetree.canvas",
     "personal-ai-space/intake/staging/Life Map.canvas",
     "personal-ai-space/vault/personal documents  PF/Titulo de eleitor .JPG",
-    "personal-ai-space/vault/personal documents  PF/Sex CompulsionOCSB Assessment - Insight Psychological.jpeg.png",
     "personal-ai-space/vault/personal documents  PF/RG.jpg",
-    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende.jpg",
-    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende(2).jpg",
-    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende(1).jpg",
     "personal-ai-space/vault/personal documents  PF/NIS.jpg",
-    "personal-ai-space/vault/personal documents  PF/IMG_0310.PNG",
-    "personal-ai-space/vault/personal documents  PF/IMG_0309.PNG",
-    "personal-ai-space/vault/personal documents  PF/Histórico Escolar PF .JPG"
+    "personal-ai-space/vault/personal documents  PF/IMG_0310.PNG"
   ]
 }

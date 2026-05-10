@@ -66,7 +66,7 @@ views:
       formula.mood_list: 350
       formula.influencer_count: 100
       formula.primary_influencer: 150
-      note.created: 150
+      note.created: 294
   - type: table
     name: Current Mood Snapshot
     filters:

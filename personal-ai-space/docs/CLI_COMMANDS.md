@@ -13,13 +13,13 @@ python3 cli.py <command> [options]
 
 ## System
 
-| Command | Description |
-|---------|-------------|
-| `health` | Show engine health, agent status, database tables |
-| `digest` | Generate and display today's daily digest |
-| `review` | Generate and display weekly review |
-| `reminders` | Show overdue tasks, tasks due today, and upcoming |
-| `context` | Display current profile, habits, needs, and MCP memory facts |
+| Command     | Description                                                  |
+|-------------|--------------------------------------------------------------|
+| `health`    | Show engine health, agent status, database tables            |
+| `digest`    | Generate and display today's daily digest                    |
+| `review`    | Generate and display weekly review                           |
+| `reminders` | Show overdue tasks, tasks due today, and upcoming            |
+| `context`   | Display current profile, habits, needs, and MCP memory facts |
 
 ---
 
@@ -119,11 +119,11 @@ nl "check my Gmail inbox"
 
 The `TextGenerator` now automatically selects the best model for each task type:
 
-| Task | Model hint | Preferred model | When |
-|------|-----------|----------------|------|
-| Phrasing (habit insights) | `phrasing` | smollm2:1.7b | 1.7B tier, 8K context |
-| Tool routing (MCP selection) | `tool_routing` | smollm2:1.7b | 1.7B tier (see note below) |
-| Writing (digest opener) | `writing` | smollm2:1.7b | 1.7B tier (see note below) |
+| Task                         | Model hint     | Preferred model | When                       |
+|------------------------------|----------------|-----------------|----------------------------|
+| Phrasing (habit insights)    | `phrasing`     | smollm2:1.7b    | 1.7B tier, 8K context      |
+| Tool routing (MCP selection) | `tool_routing` | smollm2:1.7b    | 1.7B tier (see note below) |
+| Writing (digest opener)      | `writing`      | smollm2:1.7b    | 1.7B tier (see note below) |
 
 > **M1 8GB memory note:** `llama3.2:3b` has a default 128K context window, which
 > creates a 13GB+ KV cache on Apple Silicon. All Ollama calls are capped at
@@ -152,12 +152,12 @@ python3 cli.py mcp call mail send_email --args '{"to": "maria@...", "subject": "
 
 *Available on `feature/llm-integration` branch only.*
 
-| Command | Description |
-|---------|-------------|
-| `nl <text>` | Free-text query — routes to the right agent automatically |
+| Command               | Description                                                  |
+|-----------------------|--------------------------------------------------------------|
+| `nl <text>`           | Free-text query — routes to the right agent automatically    |
 | `nl <text> --enhance` | Same, with LLM-generated narrative on top of structured data |
-| `llm status` | Check Ollama availability and list pulled models |
-| `llm classify <text>` | Test intent classification accuracy without executing |
+| `llm status`          | Check Ollama availability and list pulled models             |
+| `llm classify <text>` | Test intent classification accuracy without executing        |
 
 ### How `nl` works
 

@@ -1,20 +1,20 @@
 ---
 title: Clinical Sex Therapist Career
+subtitle: Working as a Clinical Sex Therapist
 type: career-plan
+content_type: resource-list
 status: draft
 category: Clinical Sexology - Career Planning
 tags:
-- business-model
-- clinical-practice
-- cultural-sensitivity
-- diversity-inclusion
-- goals
-- sexology
-- training
+  - business-model
+  - clinical-practice
+  - cultural-sensitivity
+  - diversity-inclusion
+  - goals
+  - sexology
+  - training
 created: 2025-11-13T01:45
 updated: 2025-12-06T15:18
-subtitle: Working as a Clinical Sex Therapist
-content_type: resource-list
 ---
 
 # Working as a Clinical Sex Therapist

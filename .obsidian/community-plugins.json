@@ -1,13 +1,10 @@
 [
-  "data-files-editor",
   "editing-toolbar",
   "editor-width-slider",
-  "runsh",
-  "univer",
   "pai-runsh",
   "spreadsheets",
-  "terminal",
   "obsidian42-brat",
   "better-properties",
-  "colored-bases-properties"
+  "data-files-editor",
+  "csv-database"
 ]

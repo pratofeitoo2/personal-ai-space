@@ -1,7 +1,7 @@
 {
   "file-explorer": true,
   "global-search": true,
-  "switcher": true,
+  "switcher": false,
   "graph": true,
   "backlink": true,
   "canvas": true,
@@ -11,10 +11,10 @@
   "properties": true,
   "page-preview": true,
   "daily-notes": true,
-  "templates": true,
+  "templates": false,
   "note-composer": true,
   "command-palette": true,
-  "slash-command": false,
+  "slash-command": true,
   "editor-status": true,
   "bookmarks": true,
   "markdown-importer": false,
@@ -27,7 +27,7 @@
   "workspaces": false,
   "file-recovery": true,
   "publish": false,
-  "sync": true,
+  "sync": false,
   "bases": true,
-  "webviewer": false
+  "webviewer": true
 }
