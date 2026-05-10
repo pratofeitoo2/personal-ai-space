@@ -57,10 +57,11 @@ class ComprehensiveExtractor:
         self._extract_relationships()
         
         print("[2/6] Extracting Goals & Projects...")
-        self._extract_goals()
-        
+        # Goals handled by GoalExtractor in extractors/__init__.py — skip to avoid duplication
+
         print("[3/6] Extracting Daily Patterns & Behaviors...")
         self._extract_daily_patterns()
+
         
         print("[4/6] Extracting Professional Traits...")
         self._extract_professional_data()
@@ -296,13 +297,15 @@ class ComprehensiveExtractor:
                 pass
         
         # Insert learning interests as needs
+        import uuid
+        from datetime import datetime
         for topic in topics_found:
             try:
                 execute("self", """
-                    INSERT OR IGNORE INTO needs 
-                    (category, description, priority)
-                    VALUES (?, ?, ?)
-                """, ('learning', topic, 1))
+                    INSERT OR IGNORE INTO needs
+                    (id, category, name, priority, status, description, created_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (uuid.uuid4().hex, 'learning', topic, 'medium', 'active', topic, datetime.now().isoformat()))
                 self.stats['learning_needs'] += 1
             except Exception:
                 pass

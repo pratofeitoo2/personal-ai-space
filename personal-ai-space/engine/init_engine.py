@@ -45,12 +45,19 @@ def seed_profile():
 
     db.execute(
         "self",
-        "INSERT OR IGNORE INTO profile (id, name, timezone, work_style) VALUES (?,?,?,?)",
+        "INSERT OR IGNORE INTO profile "
+        "(id, name, age, timezone, work_style, energy_peak_hours, "
+        "communication_preference, decision_style) "
+        "VALUES (?,?,?,?,?,?,?,?)",
         (
             profile.get("id", "self_001"),
             profile.get("name", "User"),
+            profile.get("age"),
             profile.get("timezone", "America/Sao_Paulo"),
             profile.get("work_style", "deep_work_preferred"),
+            json.dumps(profile.get("energy_peak_hours", [])),
+            profile.get("preferences", {}).get("communication"),
+            profile.get("preferences", {}).get("decision_making"),
         )
     )
     print("  ✓ Profile seeded from self/profile.json")
@@ -64,19 +71,20 @@ def seed_habits():
         return
 
     starter_habits = [
-        ("morning_standup",  "Morning standup",      "productivity", "daily",   0, 0),
-        ("deep_work",        "Deep work block",       "productivity", "daily",   0, 0),
-        ("reading",          "Read technical articles","learning",    "3x_week", 0, 0),
-        ("exercise",         "Exercise",              "health",       "4x_week", 0, 0),
-        ("weekly_review",    "Weekly review",         "meta",         "weekly",  0, 0),
+        ("morning_standup",  "Morning standup",      "productivity", "daily",   0, 0, 30),
+        ("deep_work",        "Deep work block",       "productivity", "daily",   0, 0, 30),
+        ("reading",          "Read technical articles","learning",    "3x_week", 0, 0, 20),
+        ("exercise",         "Exercise",              "health",       "4x_week", 0, 0, 20),
+        ("weekly_review",    "Weekly review",         "meta",         "weekly",  0, 0, 12),
     ]
     for h in starter_habits:
         db.execute(
             "self",
             "INSERT OR IGNORE INTO habits "
-            "(id, habit_name, category, frequency, current_streak, total_completions, status) "
-            "VALUES (?,?,?,?,?,?,?)",
-            (uuid.uuid4().hex, h[1], h[2], h[3], h[4], h[5], "active")
+            "(id, habit_name, category, frequency, current_streak, total_completions, "
+            "start_date, target_streak, status) "
+            "VALUES (?,?,?,?,?,?,?,?,?)",
+            (uuid.uuid4().hex, h[1], h[2], h[3], h[4], h[5], date.today().isoformat(), h[6], "active")
         )
     print(f"  ✓ {len(starter_habits)} habits seeded")
 

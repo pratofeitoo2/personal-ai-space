@@ -68,13 +68,16 @@ CREATE INDEX IF NOT EXISTS idx_habits_category ON habits(category);
 CREATE INDEX IF NOT EXISTS idx_habits_status ON habits(status);
 CREATE INDEX IF NOT EXISTS idx_habit_logs_habit ON habit_logs(habit_id);
 CREATE TABLE IF NOT EXISTS relationships (
-  id TEXT PRIMARY KEY,
-  name TEXT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  email TEXT,
+  phone TEXT,
+  cpf TEXT,
+  birth_date TEXT,
   relationship_type TEXT,
-  metadata TEXT,
   notes TEXT,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME
+  created_at TEXT,
+  updated_at TEXT
 );
 
 CREATE TABLE IF NOT EXISTS goals (
