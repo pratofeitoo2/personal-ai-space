@@ -1,21 +1,23 @@
 ---
+title: Cover Letter   Vital Strategies Application 1
+type: cover-letter
+status:
+- active
+language: en
+position: Cover Letter - Vital Strategies Application
+organization: ONG Um Mais Um---
+tags:
+- command
+- cover-letter
+- finances
+- job-application
+- senior-program-manager
+- vital-strategies
 created: 2026-03-11T21:00
 updated: 2026-03-14T01:13
-tags:
-  - vital-strategies
-  - job-application
-  - cover-letter
-  - senior-program-manager
-status:
-  - active
-type:
-  - note
-  - application
-title: Cover Letter   Vital Strategies Application 1
 topics:
-  - knowledge-base
-description: "Strategic document: Cover Letter   Vital Strategies Application 1"
-organization: ONG Um Mais Um---
+- knowledge-base
+description: 'Strategic document: Cover Letter   Vital Strategies Application 1'
 ---
 
 **Paulo Rezende**  

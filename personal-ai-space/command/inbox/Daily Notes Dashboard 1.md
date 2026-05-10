@@ -1,9 +1,17 @@
 ---
-tags: dashboard
+title: 📓 Daily Notes Dashboard
+type: daily-note
+tags:
+- 0ea5e9
+- 0ea5e933
+- 10b981
+- 10b98133
+- command
+- f59e0b
+- f59e0b33
+- inbox
 created: 2025-12-05T19:35
 updated: 2025-12-07T22:52
-type:
-  - Dashboard
 ---
 
 # 📓 Daily Notes Dashboard

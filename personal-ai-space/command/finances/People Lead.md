@@ -1,14 +1,23 @@
 ---
+title: People Lead
+type: job-posting
+status: active
+language: en
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 Position:
-  - People Lead
+- People Lead
 Application Progress:
-  - Resume Submitted 
+- Resume Submitted 
 Company:
-  - TOTVS
+- TOTVS
 Location:
-  - São Paulo
+- São Paulo
 Modality:
-  - Hybrid
+- Hybrid
 URL: https://www.linkedin.com/jobs/view/4375947470
-How Fit:
 ---
+

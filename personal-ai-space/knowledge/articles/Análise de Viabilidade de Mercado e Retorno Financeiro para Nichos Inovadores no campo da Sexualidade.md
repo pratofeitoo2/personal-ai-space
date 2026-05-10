@@ -1,21 +1,26 @@
 ---
-title: Análise de Viabilidade de Mercado e Retorno Financeiro para Nichos Inovadores no campo da Sexualidade
-subtitle: Análise de Viabilidade de Mercado e Retorno Financeiro para Nichos Inovadores
-type: note
+title: Análise de Viabilidade de Mercado e Retorno Financeiro para Nichos Inovadores
+  no campo da Sexualidade
+type: research-article
 category: Clinical Sexology - Career Planning
-content_type: analysis-table
+publication_date: '2025-11-13'
+language: pt
 tags:
-  - clinical-practice
-  - healthtech
-  - innovation
-  - market-analysis
-  - mental-health
-  - neuroscience
-  - protocols
-  - sexology
-  - training
+- article
+- clinical-practice
+- healthtech
+- innovation
+- knowledge
+- market-analysis
+- mental-health
+- neuroscience
+- protocols
+- sexology
+- training
 created: 2025-11-13T19:13
 updated: 2025-12-06T15:18
+subtitle: Análise de Viabilidade de Mercado e Retorno Financeiro para Nichos Inovadores
+content_type: analysis-table
 ---
 
 # Análise de Viabilidade de Mercado e Retorno Financeiro para Nichos Inovadores

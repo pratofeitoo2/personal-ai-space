@@ -1,6 +1,8 @@
 ---
+title: Análise Linguística do meu estilo de escrita
+type: note
 tags:
-  - AI
+- ai
 created: 2025-03-13T21:44
 updated: 2025-12-06T02:12
 Cover: https://wallpapers.com/images/hd/blue-galaxy-facebook-cover-l2fm7bbjor9cauwn.jpg

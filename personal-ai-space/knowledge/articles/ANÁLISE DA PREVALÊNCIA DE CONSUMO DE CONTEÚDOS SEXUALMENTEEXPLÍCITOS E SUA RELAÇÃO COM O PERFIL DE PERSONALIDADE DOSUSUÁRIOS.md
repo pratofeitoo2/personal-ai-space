@@ -1,7 +1,20 @@
 ---
+title: Revista Brasileira de
+type: research-article
+author: outro
+publication_date: '2025-11-13'
+doi: 10.35919/Rbsh.V36.1230
+language: pt
+tags:
+- article
+- conteúdo-principal
+- introdução
+- knowledge
+- pontos-chave
 created: 2025-11-13T18:30
 updated: 2025-11-13T18:44
 ---
+
 # Revista Brasileira de
 
 ---

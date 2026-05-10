@@ -1,25 +1,27 @@
 ---
 title: Grok
-type: note
+type: tool-note
 category: Clinical Sexology - Career Planning
-content_type: resource-list
 tags:
-  - brazil
-  - business-model
-  - clinical-practice
-  - cultural-sensitivity
-  - diversity-inclusion
-  - innovation
-  - market-analysis
-  - mental-health
-  - patient-care
-  - professional-development
-  - psychotherapy
-  - sexology
-  - sexual-therapy
-  - training
+- brazil
+- business-model
+- clinical-practice
+- cultural-sensitivity
+- diversity-inclusion
+- innovation
+- knowledge
+- market-analysis
+- mental-health
+- note
+- patient-care
+- professional-development
+- psychotherapy
+- sexology
+- sexual-therapy
+- training
 created: 2025-11-13T23:48
 updated: 2025-12-06T15:18
+content_type: resource-list
 ---
 
 **Grok**

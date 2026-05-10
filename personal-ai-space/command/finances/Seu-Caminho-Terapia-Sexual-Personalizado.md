@@ -1,35 +1,36 @@
 ---
-title: "Seu Caminho em Terapia Sexual Clínica: Guia Personalizado para Paulo Rezende"
-subtitle: "Especialização Clínica Integrada: Neurociência, Sexologia e Saúde Mental"
+title: 'Seu Caminho em Terapia Sexual Clínica: Guia Personalizado para Paulo Rezende'
 type: note
-category: Clinical Sexology - Mental Health
-content_type: personalized-clinical-guide
+status: active
+language: en
+position: Seu-Caminho-Terapia-Sexual-Personalizado
+organization: ONG Um Mais Um
 tags:
-  - career-planning
-  - clinical
-  - masculinity
-  - english
-  - mental-health
-  - sexologia-clinica
-  - therapy
-  - training
-  - sexuality
-  - evidence-based
-  - clinical-protocol
-author: Paulo Rezende
-personalization_date: 2025-11-14T04:05
+- career-planning
+- clinical
+- clinical-protocol
+- command
+- english
+- evidence-based
+- finances
+- masculinity
+- mental-health
+- sexologia-clinica
+- sexuality
+- therapy
+- training
 created: 2025-11-14T03:47
 updated: 2026-03-14T01:08
+subtitle: 'Especialização Clínica Integrada: Neurociência, Sexologia e Saúde Mental'
+category: Clinical Sexology - Mental Health
+content_type: personalized-clinical-guide
+author: Paulo Rezende
+personalization_date: 2025-11-14T04:05
 topics:
-  - knowledge-base
-status: active
-description: "Strategic document: Seu Caminho em Terapia Sexual Clínica: Guia Personalizado para Paulo Rezende"
-organization: ONG Um Mais Um
+- knowledge-base
+description: 'Strategic document: Seu Caminho em Terapia Sexual Clínica: Guia Personalizado
+  para Paulo Rezende'
 ---
-
-
-
-
 
 # Seu Caminho em Terapia Sexual Clínica: Especialização em Saúde Mental e Sexualidade
 

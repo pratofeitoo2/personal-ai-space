@@ -1,24 +1,26 @@
 ---
 title: Getliner
-subtitle: I. Fundamentos da Psicoterapia Sexual no Brasil
-type: note
+type: tool-note
 category: Clinical Sexology - Career Planning
-content_type: resource-list
 tags:
-  - brazil
-  - clinical-practice
-  - cultural-sensitivity
-  - diversity-inclusion
-  - market-analysis
-  - mental-health
-  - patient-care
-  - professional-development
-  - psychotherapy
-  - sexology
-  - sexual-therapy
-  - training
+- brazil
+- clinical-practice
+- cultural-sensitivity
+- diversity-inclusion
+- knowledge
+- market-analysis
+- mental-health
+- note
+- patient-care
+- professional-development
+- psychotherapy
+- sexology
+- sexual-therapy
+- training
 created: 2025-11-13T23:48
 updated: 2025-12-06T15:18
+subtitle: I. Fundamentos da Psicoterapia Sexual no Brasil
+content_type: resource-list
 ---
 
 **Getliner** 

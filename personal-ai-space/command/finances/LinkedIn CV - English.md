@@ -1,3 +1,16 @@
+---
+title: PAULO REZENDE
+type: cv
+status: active
+language: en
+position: LinkedIn CV - English
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
+---
+
 # PAULO REZENDE
 
 **São Paulo, SP | Brazil**  

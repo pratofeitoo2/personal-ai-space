@@ -1,23 +1,20 @@
 ---
-created: 2026-03-11T05:33
-updated: 2026-03-14T01:13
----
----
+title: Linguistic Analysis Of My Writing Style
+type: writing-sample
+status: active
+language: en
+organization: ONG Um Mais Um---
 tags:
-  - AI
+- ai
+- command
+- finances
 created: 2025-03-13T21:44
 updated: 2026-03-14T00:32
-language: en
 Cover: https://wallpapers.com/images/hd/blue-galaxy-facebook-cover-l2fm7bbjor9cauwn.jpg
-title: Linguistic Analysis Of My Writing Style
-type: strategic-document
 topics:
-  - knowledge-base
-status: active
-description: "Strategic document: Linguistic Analysis Of My Writing Style"
-organization: ONG Um Mais Um---
-
-
+- knowledge-base
+description: 'Strategic document: Linguistic Analysis Of My Writing Style'
+---
 
 ## Chain of Thought: Replicating Paulo Fernando's Writing Style
 

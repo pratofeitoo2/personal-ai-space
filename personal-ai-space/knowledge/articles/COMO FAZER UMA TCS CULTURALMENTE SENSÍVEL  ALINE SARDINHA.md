@@ -1,21 +1,26 @@
 ---
 title: COMO FAZER UMA TCS CULTURALMENTE SENSÍVEL  ALINE SARDINHA
-subtitle: COMO FAZER UMA TCS CULTURALMENTE SENSÍVEL | ALINE SARDINHA
-type: note
+type: guide
 category: Clinical Sexology - Career Planning
-content_type: video-transcript
+publication_date: '2025-11-13'
+source: https://www.youtube.com/watch?v=HWlwLDCR71w
+language: pt
 tags:
-  - brazil
-  - cognitive-sexual-therapy
-  - cultural-sensitivity
-  - expert-aline-sardinha
-  - patient-care
-  - professional-development
-  - protocols
-  - training
-  - video-transcript
+- article
+- brazil
+- cognitive-sexual-therapy
+- cultural-sensitivity
+- expert-aline-sardinha
+- knowledge
+- patient-care
+- professional-development
+- protocols
+- training
+- video-transcript
 created: 2025-11-13T19:39
 updated: 2025-12-06T15:18
+subtitle: COMO FAZER UMA TCS CULTURALMENTE SENSÍVEL | ALINE SARDINHA
+content_type: video-transcript
 ---
 
 # COMO FAZER UMA TCS CULTURALMENTE SENSÍVEL | ALINE SARDINHA

@@ -1,13 +1,17 @@
 ---
 title: TERAPIA SEXUAL - A IMPORTÂNCIA DE ALINHAR EXPECTATIVAS
-type: note
+type: research-article
 category: Clinical Sexology - Career Planning
-content_type: article
+publication_date: '2025-11-13'
+language: pt
 tags:
-  - clinical-practice
-  - patient-care
+- article
+- clinical-practice
+- knowledge
+- patient-care
 created: 2025-11-13T20:36
 updated: 2025-12-06T15:18
+content_type: article
 ---
 
 Isso acontece muito na queixa sexual, gente.

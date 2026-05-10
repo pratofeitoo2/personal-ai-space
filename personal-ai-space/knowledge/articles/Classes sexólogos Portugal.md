@@ -1,7 +1,22 @@
 ---
+title: 'DOI: 10.1590/1413-81232015212.11112015'
+type: research-article
+author: fim, discute-se a pertinência social, real e simbólica da emergência da profissão
+  de sexólogo em Portugal e algumas implicações que decorrem desta evolução profissional
+  para o papel da sexologia enquanto ciência e profissão.
+publication_date: '2025-11-13'
+doi: 10.1590/1413-81232015212.11112015
+language: pt
+tags:
+- article
+- conteúdo-principal
+- introdução
+- knowledge
+- pontos-chave
 created: 2025-11-13T18:30
 updated: 2025-11-14T00:55
 ---
+
 # DOI: 10.1590/1413-81232015212.11112015
 
 ---

@@ -1,21 +1,27 @@
 ---
-title: Como aplicar a Terapia Cognitiva Sexual DRA ALINE SARDINHA MELHORES MOMENTOS CAFE COM TCS
-subtitle: Como Aplicar a Terapia Cognitiva Sexual - Dra. Aline Sardinha
-type: note
+title: Como aplicar a Terapia Cognitiva Sexual DRA ALINE SARDINHA MELHORES MOMENTOS
+  CAFE COM TCS
+type: transcript
 category: Clinical Sexology - Career Planning
-content_type: article
+author: quê?
+publication_date: '2025-11-14'
+language: pt
 tags:
-  - expert-aline-sardinha
-  - health
-  - mental-health
-  - neuroscience
-  - patient-care
-  - professional
-  - professional-development
-  - protocols
-  - sexual-therapy
-created: 2025-11-14 00:37:57.611534+00:00
+- article
+- expert-aline-sardinha
+- health
+- knowledge
+- mental-health
+- neuroscience
+- patient-care
+- professional
+- professional-development
+- protocols
+- sexual-therapy
+created: '2025-11-14 00:37:57.611534+00:00'
 updated: 2025-12-06T15:18
+subtitle: Como Aplicar a Terapia Cognitiva Sexual - Dra. Aline Sardinha
+content_type: article
 ---
 
 # Como Aplicar a Terapia Cognitiva Sexual - Dra. Aline Sardinha

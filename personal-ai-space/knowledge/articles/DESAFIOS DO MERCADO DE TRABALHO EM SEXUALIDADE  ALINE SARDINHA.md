@@ -1,22 +1,27 @@
 ---
 title: DESAFIOS DO MERCADO DE TRABALHO EM SEXUALIDADE  ALINE SARDINHA
-subtitle: DESAFIOS DO MERCADO DE TRABALHO EM SEXUALIDADE | ALINE SARDINHA
-type: note
+type: research-article
 category: Clinical Sexology - Career Planning
-content_type: video-transcript
+publication_date: '2025-11-13'
+source: https://www.youtube.com/watch?v=4a_Q6IU-two
+language: pt
 tags:
-  - business-model
-  - clinical-practice
-  - expert-aline-sardinha
-  - market-analysis
-  - mental-health
-  - patient-care
-  - psychotherapy
-  - sexual-therapy
-  - training
-  - video-transcript
+- article
+- business-model
+- clinical-practice
+- expert-aline-sardinha
+- knowledge
+- market-analysis
+- mental-health
+- patient-care
+- psychotherapy
+- sexual-therapy
+- training
+- video-transcript
 created: 2025-11-13T19:39
 updated: 2025-12-06T15:18
+subtitle: DESAFIOS DO MERCADO DE TRABALHO EM SEXUALIDADE | ALINE SARDINHA
+content_type: video-transcript
 ---
 
 # DESAFIOS DO MERCADO DE TRABALHO EM SEXUALIDADE | ALINE SARDINHA

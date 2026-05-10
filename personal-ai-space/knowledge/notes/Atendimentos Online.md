@@ -1,9 +1,16 @@
 ---
-created:
-date: 2026-05-01T17:56:00
+title: Atendimentos Online
+type: personal-note
+tags:
+- knowledge
+- note
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
+date: 2026-05-01 17:56:00
 topic:
-  - Atendimentos
+- Atendimentos
 ---
+
 ## 18h00
 
 Decidi que apesar de nada estar como eu planejei em relação a minha carreira dentro da sexologia que eu irei tentar criar um perfil de profissional em algumas plataformas de terapia online. 

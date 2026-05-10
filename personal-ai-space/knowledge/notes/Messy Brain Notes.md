@@ -1,11 +1,16 @@
 ---
-created: 2025-11-13T18:09:00
-updated: 2025-11-17T13:49
+title: Messy Brain Notes
+type: personal-note
 tags:
-  - Career
-  - sexualidade
-  - sexuality
+- career
+- knowledge
+- note
+- sexualidade
+- sexuality
+created: '2025-11-13 18:09:00'
+updated: 2025-11-17T13:49
 ---
+
 I'm currently trying to bring back to surface whatever thought i once had about getting a career and satisfying professional life in the sexuality field. And to be honest, i can't remember a single thing. Which means and back to first mark on planning this without a clue on where and how to start. 
 
 Since im using a lot of AI currently, im trying to leverage this tool in my favor. Im now fetching some resources from professionals i trust, some papers about the practice in Brazil and doing some research to understand sexuality as a field for better understand the overlap sexuality as a field got with sexuality as a market.  

@@ -1,14 +1,24 @@
 ---
+title: Especialista I - Programas Corporativos
+type: job-posting
+status: active
+language: en
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 Position:
-  - Especialista I - Programas Corporativos
+- Especialista I - Programas Corporativos
 Application Progress:
-  - Resume Submitted 
+- Resume Submitted 
 Company:
-  - Grupo Boticário
+- Grupo Boticário
 Location:
-  - Remote
+- Remote
 Modality:
-  - Remote
+- Remote
 URL: https://grupoboticario.gupy.io/jobs/11072870?jobBoardSource=share_link
 How Fit: 94
 ---
+

@@ -1,21 +1,22 @@
 ---
-created: 2026-03-11
-updated: 2026-03-14T00:32
 title: CV   Paulo Rezende   Gerente de Programa
-description: "Documento estratégico: CV   Paulo Rezende   Gerente de Programa"
-language: pt-BR
-type:
-  - cv
-  - resume
-tags:
-  - job-application
-  - vital-strategies
-  - violence-prevention
-cssclasses:
-  - cover-circle
-topics:
-  - knowledge-base
+type: cv
 status: active
+language: pt-BR
+organization: Vital Strategies
+tags:
+- command
+- finances
+- job-application
+- violence-prevention
+- vital-strategies
+created: '2026-03-11'
+updated: 2026-03-14T00:32
+description: 'Documento estratégico: CV   Paulo Rezende   Gerente de Programa'
+cssclasses:
+- cover-circle
+topics:
+- knowledge-base
 cover: https://media.licdn.com/dms/image/v2/D5603AQFchfFmETWYjw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1692912988974?e=1775088000&v=beta&t=1ou8zOaLOM_AhNdvZtd3UDHWmp_r0gRc2_fZxaNypXs
 ---
 

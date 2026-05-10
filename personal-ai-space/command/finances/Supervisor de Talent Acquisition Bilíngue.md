@@ -1,15 +1,24 @@
 ---
+title: Supervisor de Talent Acquisition Bilíngue
+type: job-posting
+status: active
+language: en
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 Position:
-  - Supervisor de Talent Acquisition Bilíngue
+- Supervisor de Talent Acquisition Bilíngue
 Application Progress:
-  - Resume Submitted 
+- Resume Submitted 
 Company:
-  - Concentrix
+- Concentrix
 Location:
-  - Rio de Janeiro
+- Rio de Janeiro
 Modality:
-  - Hybrid
+- Hybrid
 URL: https://www.linkedin.com/jobs/view/4385110137
-How Fit:
 ---
+
 ****

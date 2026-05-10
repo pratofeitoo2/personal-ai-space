@@ -1,3 +1,19 @@
+---
+title: 📚 Perfil do LinkedIn - Formação e Certificações
+type: profile
+status: active
+language: en
+position: LinkedIn Profile - Education & Certifications pt-br
+tags:
+- command
+- escola-conquer
+- finances
+- linkedin-learning
+- outros-provedores
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
+---
+
 # 📚 Perfil do LinkedIn - Formação e Certificações
 
 

@@ -1,14 +1,23 @@
 ---
+title: Coordenador de Pós-graduação em Psicologia Organizacional e RH
+type: job-posting
+status: active
+language: en
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 Position:
-  - Coordenador de Pós-graduação em Psicologia Organizacional e RH
+- Coordenador de Pós-graduação em Psicologia Organizacional e RH
 Application Progress:
-  - Resume Submitted 
+- Resume Submitted 
 Company:
-  - ESPD - Escola Superior de Pesquisa e Desenvolvimento
+- ESPD - Escola Superior de Pesquisa e Desenvolvimento
 Location:
-  - Remote
+- Remote
 Modality:
-  - Remote
+- Remote
 URL: https://www.linkedin.com/jobs/view/4393485477/
-How Fit:
 ---
+

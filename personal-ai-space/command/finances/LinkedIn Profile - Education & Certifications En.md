@@ -1,3 +1,19 @@
+---
+title: 📚 LinkedIn Profile - Education & Certifications
+type: profile
+status: active
+language: en
+position: LinkedIn Profile - Education & Certifications En
+tags:
+- command
+- escola-conquer
+- finances
+- linkedin-learning
+- other-providers
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
+---
+
 # 📚 LinkedIn Profile - Education & Certifications
 
 > **Extracted from:** LinkedIn Prints (PNG Screenshots)  

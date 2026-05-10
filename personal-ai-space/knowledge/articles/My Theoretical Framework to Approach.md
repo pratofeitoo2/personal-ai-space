@@ -1,9 +1,15 @@
 ---
+title: LET'S RECAP TO MOVE FORWARD
+type: research-article
+language: pt
 tags:
-  - study
-  - Study_logs
+- article
+- knowledge
+- study
+- study_logs
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 ---
-
 
 **I. Framing Your Research:**
 

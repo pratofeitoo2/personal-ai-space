@@ -1,7 +1,18 @@
 ---
+title: 'O campo da sexologia no Brasil:'
+type: research-article
+publication_date: '2025-11-13'
+language: pt
+tags:
+- article
+- conteúdo-principal
+- introdução
+- knowledge
+- pontos-chave
 created: 2025-11-13T18:30
 updated: 2025-11-14T00:59
 ---
+
 # O campo da sexologia no Brasil:
 
 ---

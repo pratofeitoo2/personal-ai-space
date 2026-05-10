@@ -1,33 +1,14 @@
 ---
-created: 2026-03-11
-updated: 2026-03-14T01:08
-language: en
-type:
-  - profile
-  - professional
-  - comprehensive
-tags:
-  - career
-  - na
-  - english
-  - sexology
-  - therapy
-  - diversity
-  - leadership
-title: Paulo Rezende   Enhanced Professional Profile
-topics:
-  - knowledge-base
+title: Paulo Rezende — Comprehensive Professional Profile
+type: profile
 status: active
-description: "Strategic document: Paulo Rezende   Enhanced Professional Profile"
-organization: ONG Um Mais Um---
-
-
-
-
-# Paulo Rezende — Comprehensive Professional Profile
-
-**Applied Neuroscience Specialist | Sexologist & Psychotherapist | Diversity, Inclusion & Belonging Leader** 
-
+language: en
+position: Paulo Rezende - Enhanced Professional Profile
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 ---
 
 ## Contact Information

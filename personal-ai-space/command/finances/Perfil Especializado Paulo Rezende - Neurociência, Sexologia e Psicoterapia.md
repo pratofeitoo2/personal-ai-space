@@ -1,21 +1,22 @@
 ---
+title: Perfil Especializado Paulo Rezende   Neurociência, Sexologia E Psicoterapia
+type: profile
+status: active
+language: en
+position: Perfil Especializado Paulo Rezende - Neurociência, Sexologia e Psicoterapia
+organization: ONG Um Mais Um
+tags:
+- command
+- finances
+- strategic
 created: 2025-11-13T00:39
 updated: 2026-03-14T01:13
 URL: https://www.linkedin.com/in/paulofabio/?locale=en-US
-title: Perfil Especializado Paulo Rezende   Neurociência, Sexologia E Psicoterapia
-type: strategic-document
 topics:
-  - knowledge-base
-tags:
-  - strategic
-status: active
-description: "Strategic document: Perfil Especializado Paulo Rezende   Neurociência, Sexologia E Psicoterapia"
-organization: ONG Um Mais Um
+- knowledge-base
+description: 'Strategic document: Perfil Especializado Paulo Rezende   Neurociência,
+  Sexologia E Psicoterapia'
 ---
-
-
-
-
 
 Este perfil detalhado foca na expertise de Paulo Rezende nas áreas de **Neurociência Aplicada**, **Sexologia** e **Psicoterapia**, destacando sua formação, atuação clínica e a aplicação desses conhecimentos em contextos de desenvolvimento humano e diversidade.
 

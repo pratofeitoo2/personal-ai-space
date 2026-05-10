@@ -1,26 +1,14 @@
 ---
-created: 2026-03-11T05:17
-updated: 2026-03-14T00:32
-language: en
-type:
-  - profile 
-  - resume
-  - personal
-title: Linkedin Profile
-topics:
-  - knowledge-base
-tags:
-  - strategic
+title: Paulo Rezende
+type: profile
 status: active
-description: "Strategic document: Linkedin Profile"
-organization: ONG Um Mais Um---
-
-
-
-# Paulo Rezende
-
-**CEO Uprise | CMO DiverCidade | President Director at UmMaisUm (NGO)**
-
+language: en
+position: Linkedin Profile
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 ---
 
 ## Contact Information

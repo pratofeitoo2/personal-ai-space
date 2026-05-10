@@ -1,15 +1,21 @@
 ---
+title: 'Perfil Especializado: Paulo Rezende - Neurociência, Sexologia e Terapia'
+type: profile
+status: active
+language: en
+position: 'Perfil Especializado: Paulo Rezende - Neurociência, Sexologia e Terapia'
 tags:
-  - career-planning
-  - Career
-  - clinical-practice
-  - sexology
-  - neuroscience
+- career
+- career-planning
+- clinical-practice
+- command
+- finances
+- neuroscience
+- sexology
 created: 2025-11-13T00:39
 updated: 2025-12-05T20:23
-type:
-  - Professional Profile
 ---
+
 # Perfil Especializado: Paulo Rezende - Neurociência, Sexologia e Terapia
 
 Este perfil detalhado foca na expertise de Paulo Rezende nas áreas de **Neurociência Aplicada**, **Sexologia** e **Psicoterapia**, destacando sua formação, atuação clínica e a aplicação desses conhecimentos em contextos de desenvolvimento humano e diversidade.

@@ -1,25 +1,37 @@
 ---
-title: SEXOLOGIA E TERAPIA SEXUAL QUAL A DIFERENÇA  DRA ALINE SARDINHA  MELHORES MOMENTOS CAFÉ COM TCS
-subtitle: "SEXOLOGIA E TERAPIA SEXUAL: QUAL A DIFERENÇA? | DRA. ALINE SARDINHA | MELHORES MOMENTOS CAFÉ COM TCS"
-type: note
+title: SEXOLOGIA E TERAPIA SEXUAL QUAL A DIFERENÇA  DRA ALINE SARDINHA  MELHORES MOMENTOS
+  CAFÉ COM TCS
+type: transcript
 category: Clinical Sexology - Career Planning
-content_type: video-transcript
+author: outro lado, a gente tem a terapia sexual que foi catada na rédia pela psicologia.
+  Por quê? Porque muitas das contribuições para a terapia sexual vieram da área da
+  psicologia. E aí essa confusão de achar que terapia sexual é uma área de atuação
+  da psicologia apenas restrita ao psicólogo. Enfim, você conversar com o Conselho
+  Federal de Psicologia sobre isso, eles nem regulamentam isso.
+publication_date: '2025-11-13'
+source: https://www.youtube.com/watch?v=INoJu4EIKKc&t=268s
+language: pt
 tags:
-  - brazil
-  - career-planning
-  - clinical-practice
-  - cognitive-sexual-therapy
-  - expert-aline-sardinha
-  - market-analysis
-  - patient-care
-  - professional-development
-  - psychotherapy
-  - sexology
-  - sexual-therapy
-  - training
-  - video-transcript
+- article
+- brazil
+- career-planning
+- clinical-practice
+- cognitive-sexual-therapy
+- expert-aline-sardinha
+- knowledge
+- market-analysis
+- patient-care
+- professional-development
+- psychotherapy
+- sexology
+- sexual-therapy
+- training
+- video-transcript
 created: 2025-11-13T19:38
 updated: 2025-12-06T15:18
+subtitle: 'SEXOLOGIA E TERAPIA SEXUAL: QUAL A DIFERENÇA? | DRA. ALINE SARDINHA | MELHORES
+  MOMENTOS CAFÉ COM TCS'
+content_type: video-transcript
 ---
 
 # SEXOLOGIA E TERAPIA SEXUAL: QUAL A DIFERENÇA? | DRA. ALINE SARDINHA | MELHORES MOMENTOS CAFÉ COM TCS

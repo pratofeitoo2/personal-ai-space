@@ -1,29 +1,30 @@
 ---
-title: "Guia Completo: Como Iniciar uma Carreira em Terapia Sexual Clínica"
-subtitle: Caminho Prático e Estratégico para Profissionais da Saúde Mental no Brasil
-type:
-  - career plan
+title: 'Guia Completo: Como Iniciar uma Carreira em Terapia Sexual Clínica'
+type: career-plan
+status: draft
 category: Clinical Sexology - Career Planning
-content_type: comprehensive-guide
 tags:
-  - career-planning
-  - clinical-sex-therapy
-  - professional-development
-  - training
-  - market-analysis
-  - brazil
-  - regulatory-framework
-  - clinical-practice
-  - business-model
-  - sexology
-  - psychotherapy
-  - patient-care
-  - cultural-sensitivity
-  - evidence-based
-  - protocols
-author: Paulo Rezende
+- brazil
+- business-model
+- career-planning
+- clinical-practice
+- clinical-sex-therapy
+- cultural-sensitivity
+- evidence-based
+- goals
+- market-analysis
+- patient-care
+- professional-development
+- protocols
+- psychotherapy
+- regulatory-framework
+- sexology
+- training
 created: 2025-11-14T03:47
 updated: 2025-12-06T15:18
+subtitle: Caminho Prático e Estratégico para Profissionais da Saúde Mental no Brasil
+content_type: comprehensive-guide
+author: Paulo Rezende
 ---
 
 # Guia Completo: Como Iniciar uma Carreira em Terapia Sexual Clínica

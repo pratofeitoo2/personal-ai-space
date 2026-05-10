@@ -1,22 +1,20 @@
 ---
-created: 2025-03-13T21:44
-updated: 2026-03-14T01:13
+title: Análise Linguística Do Meu Estilo De Escrita
+type: writing-sample
+status: active
+language: en
+organization: ONG Um Mais Um
 tags:
-  - AI
+- ai
+- command
+- finances
 created: 2025-03-13T21:44
 updated: 2026-03-14T00:32
 Cover: https://wallpapers.com/images/hd/blue-galaxy-facebook-cover-l2fm7bbjor9cauwn.jpg
-title: Análise Linguística Do Meu Estilo De Escrita
-type: strategic-document
 topics:
-  - knowledge-base
-status: active
-description: "Strategic document: Análise Linguística Do Meu Estilo De Escrita"
-organization: ONG Um Mais Um
+- knowledge-base
+description: 'Strategic document: Análise Linguística Do Meu Estilo De Escrita'
 ---
-
-
-
 
 ## Chain of Thought: Replicando o Estilo de Escrita de Paulo Fernando
 

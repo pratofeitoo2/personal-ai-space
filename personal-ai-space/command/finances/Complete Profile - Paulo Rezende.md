@@ -1,28 +1,25 @@
 ---
-created: 2026-03-11T05:31
-updated: 2026-03-14T01:13
----
----
-type: strategic-document
+title: Complete Profile   Paulo Rezende
+type: profile
+status: active
+language: en
+position: Complete Profile - Paulo Rezende
+organization: ONG Um Mais Um---
+tags:
+- career
+- career-planning
+- clinical
+- command
+- finances
+- na
+- sexology
+- therapy
 created: 2025-11-13T00:35
 updated: 2026-03-14T01:08
-language: en
-tags:
-  - career
-  - career-planning
-  - clinical
-  - na
-  - therapy
-  - sexology
-title: Complete Profile   Paulo Rezende
 topics:
-  - knowledge-base
-status: active
-description: "Strategic document: Complete Profile   Paulo Rezende"
-organization: ONG Um Mais Um---
-
-
-
+- knowledge-base
+description: 'Strategic document: Complete Profile   Paulo Rezende'
+---
 
 # Complete Profile: Paulo Rezende
 

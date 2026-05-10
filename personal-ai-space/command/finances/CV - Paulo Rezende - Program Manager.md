@@ -1,34 +1,15 @@
 ---
-created: 2026-03-11
-updated: 2026-03-14T00:32
-language: en
-type:
-  - cv
-  - resume
-tags:
-  - job-application
-  - vital-strategies
-  - violence-prevention
-cover: https://media.licdn.com/dms/image/v2/D5603AQFchfFmETWYjw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1692912988974?e=1775088000&v=beta&t=1ou8zOaLOM_AhNdvZtd3UDHWmp_r0gRc2_fZxaNypXs
-cssclasses:
-  - cover-circle
-title: Cv   Paulo Rezende   Program Manager
-topics:
-  - knowledge-base
+title: PAULO REZENDE
+type: cv
 status: active
-description: "Strategic document: Cv   Paulo Rezende   Program Manager"
-organization: ONG Um Mais Um---
-
-
-
-# PAULO REZENDE
-
-**Program Manager | Diversity, Equity & Inclusion Leader | NGO Executive**
-
-São Paulo, Brazil | +55 19 920 010 580 | pfrezendehs@icloud.com  
-LinkedIn: [linkedin.com/in/paulofabio](https://www.linkedin.com/in/paulofabio)  
-Portfolio: [divercidade.net/paulo-rezende](https://www.divercidade.net/paulo-rezende)
-
+language: en
+position: CV - Paulo Rezende - Program Manager
+organization: Vital Strategies
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 ---
 
 ## PROFESSIONAL SUMMARY

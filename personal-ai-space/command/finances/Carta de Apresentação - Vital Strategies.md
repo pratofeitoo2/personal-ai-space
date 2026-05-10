@@ -1,20 +1,24 @@
 ---
+title: Carta de Apresentação   Aplicação Vital Strategies 1
+type: cover-letter
+status:
+- active
+language: en
+position: Carta de Apresentação - Vital Strategies
+organization: Vital Strategies
+tags:
+- command
+- cover-letter
+- finances
+- job-application
+- senior-program-manager
+- vital-strategies
 created: 2026-03-11T21:00
 updated: 2026-03-14T01:13
-title: Carta de Apresentação   Aplicação Vital Strategies 1
-description: "Documento estratégico: Carta de Apresentação   Aplicação Vital Strategies 1"
-tags:
-  - vital-strategies
-  - job-application
-  - cover-letter
-  - senior-program-manager
-status:
-  - active
-type:
-  - note
-  - application
+description: 'Documento estratégico: Carta de Apresentação   Aplicação Vital Strategies
+  1'
 topics:
-  - knowledge-base
+- knowledge-base
 ---
 
 **Paulo Rezende**  

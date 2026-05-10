@@ -2,7 +2,10 @@
 """
 Intake Processor — Routes files from staging to correct destinations.
 
-Handles nested directories, Obsidian structure, and intelligent routing.
+Pipeline:
+  1. Standardize YAML frontmatter on every file (mandatory pre-routing step)
+  2. Route file to destination directory based on metadata + filename patterns
+  3. Archive original in processed/
 
 Usage:
   python3 process_intake.py              # Process all files
@@ -17,6 +20,9 @@ from pathlib import Path
 from datetime import datetime
 import yaml
 import re
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "engine"))
+from frontmatter_apply import standardize_single_file, read_file
 
 INTAKE_DIR = Path(__file__).parent
 STAGING_DIR = INTAKE_DIR / "staging"
@@ -99,7 +105,34 @@ def determine_destination(file_path: Path, relative_source: Path, frontmatter: d
     filename = file_path.name.lower()
     source_str = str(relative_source).lower()
     
-    # Check explicit frontmatter tags first
+    # Route by standardized type field (set by frontmatter_apply)
+    file_type = (frontmatter.get("type") or "").lower()
+    type_routes = {
+        "cv": COMMAND_DIR / "finances",
+        "cover-letter": COMMAND_DIR / "finances",
+        "profile": COMMAND_DIR / "finances",
+        "job-posting": COMMAND_DIR / "finances",
+        "linkedin": COMMAND_DIR / "finances",
+        "writing-sample": COMMAND_DIR / "finances",
+        "financial": COMMAND_DIR / "finances",
+        "daily-note": COMMAND_DIR / "inbox",
+        "quick-capture": COMMAND_DIR / "inbox",
+        "person": SELF_DIR / "relationships",
+        "study-plan": SELF_DIR / "goals",
+        "career-plan": SELF_DIR / "goals",
+        "life-plan": SELF_DIR / "goals",
+        "research-article": KNOWLEDGE_DIR / "articles",
+        "analysis": KNOWLEDGE_DIR / "articles",
+        "transcript": KNOWLEDGE_DIR / "articles",
+        "guide": KNOWLEDGE_DIR / "articles",
+        "tool-note": KNOWLEDGE_DIR / "notes",
+        "personal-note": KNOWLEDGE_DIR / "notes",
+        "note": KNOWLEDGE_DIR / "notes",
+    }
+    if file_type in type_routes:
+        return type_routes[file_type]
+    
+    # Check explicit frontmatter tags
     tags = frontmatter.get("tags", [])
     if isinstance(tags, str):
         tags = [tags]
@@ -116,19 +149,19 @@ def determine_destination(file_path: Path, relative_source: Path, frontmatter: d
     
     # Route by Obsidian folder structure
     if "Daily Notes" in str(relative_source):
-        return COMMAND_DIR / "inbox"  # Daily notes → inbox for processing
+        return COMMAND_DIR / "inbox"
     
     if "Life Plans" in str(relative_source):
-        return SELF_DIR / "goals"  # Life plans → self goals
+        return SELF_DIR / "goals"
     
     if "People" in str(relative_source):
-        return SELF_DIR / "relationships"  # People → relationships
+        return SELF_DIR / "relationships"
     
     if "PF" in str(relative_source) or "financial" in source_str or "finance" in source_str:
-        return COMMAND_DIR / "finances"  # Financial → finances
+        return COMMAND_DIR / "finances"
     
     if "About me" in str(relative_source):
-        return SELF_DIR / "profile"  # About me → profile
+        return SELF_DIR / "profile"
     
     # Route by filename conventions
     if filename.startswith("project_"):
@@ -153,9 +186,16 @@ def process_file(file_path: Path, staging_relative: Path, dry_run: bool = False)
         log_import(str(staging_relative), "N/A", "ERROR", {"reason": "not_found"})
         return False
     
-    # Extract metadata
-    frontmatter = extract_frontmatter(file_path) if file_path.suffix == ".md" else {}
-    dest_dir = determine_destination(file_path, staging_relative, frontmatter)
+    # Step 1: Standardize YAML frontmatter (mandatory pre-routing step)
+    metadata = {}
+    if file_path.suffix == ".md":
+        try:
+            metadata = standardize_single_file(file_path)
+        except Exception as e:
+            print(f"  ⚠ Frontmatter error: {e}")
+    
+    # Step 2: Route to destination
+    dest_dir = determine_destination(file_path, staging_relative, metadata)
     dest_path = dest_dir / file_path.name
     
     # Show what would happen (compact format)
@@ -168,7 +208,7 @@ def process_file(file_path: Path, staging_relative: Path, dry_run: bool = False)
     
     if dry_run:
         print(f" [DRY RUN]")
-        log_import(str(staging_relative), str(dest_path), "DRY_RUN", frontmatter)
+        log_import(str(staging_relative), str(dest_path), "DRY_RUN", metadata)
         return True
     
     print()  # Newline after destination
@@ -194,7 +234,7 @@ def process_file(file_path: Path, staging_relative: Path, dry_run: bool = False)
     
     # Log (whether copied or already existed)
     status = "ALREADY_EXISTS" if file_exists_at_dest else "SUCCESS"
-    log_import(str(staging_relative), str(dest_path), status, frontmatter)
+    log_import(str(staging_relative), str(dest_path), status, metadata)
     
     return True
 

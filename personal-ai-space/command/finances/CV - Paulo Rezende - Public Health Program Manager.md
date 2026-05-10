@@ -1,32 +1,15 @@
 ---
-created: 2026-03-11
-updated: 2026-03-14T00:32
-language: en
-type:
-  - cv
-  - resume
-  - public-health
-tags:
-  - job-application
-  - vital-strategies
-  - public-health
-  - violence-prevention
-title: Cv   Paulo Rezende   Public Health Program Manager
-topics:
-  - knowledge-base
+title: PAULO REZENDE
+type: cv
 status: active
-description: "Strategic document: Cv   Paulo Rezende   Public Health Program Manager"
-organization: ONG Um Mais Um---
-
-
-
-# PAULO REZENDE
-
-**Public Health Program Manager | Violence Prevention Specialist | Health Equity Leader**
-
-Campinas, São Paulo, Brazil | +55 21 9 6639-4764 | pfrezendehs@icloud.com  
-LinkedIn: [linkedin.com/in/paulofabio](https://www.linkedin.com/in/paulofabio)
-
+language: en
+position: CV - Paulo Rezende - Public Health Program Manager
+organization: Vital Strategies
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 ---
 
 ## PROFESSIONAL SUMMARY

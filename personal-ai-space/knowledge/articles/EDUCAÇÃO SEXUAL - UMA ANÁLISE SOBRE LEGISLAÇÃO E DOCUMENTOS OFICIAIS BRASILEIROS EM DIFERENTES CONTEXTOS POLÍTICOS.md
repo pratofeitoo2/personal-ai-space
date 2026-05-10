@@ -1,7 +1,21 @@
 ---
+title: EDUR • Educação em Revista. 2023; 39:e39794
+type: research-article
+author: lo tanto, para ello, los profesores y catedráticos
+publication_date: '2025-11-13'
+doi: 10.1590/0102-469839794
+source: http://dx.doi.org/10.1590/0102-469839794
+language: pt
+tags:
+- article
+- conteúdo-principal
+- introdução
+- knowledge
+- pontos-chave
 created: 2025-11-13T18:30
 updated: 2025-11-13T18:44
 ---
+
 # EDUR • Educação em Revista. 2023; 39:e39794
 
 ---

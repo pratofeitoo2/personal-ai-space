@@ -1,28 +1,34 @@
 ---
-title: Precisa ser Sexologo pra Atuar em Sexualidade DRA ALINE SARDINHA Melhores Momentos Cafe com TCS
-subtitle: PRECISA SER SEXÓLOGO PRA ATUAR EM SEXUALIDADE? | DRA ALINE SARDINHA | MELHORES MOMENTOS CAFÉ COM TCS
-type: note
+title: Precisa ser Sexologo pra Atuar em Sexualidade DRA ALINE SARDINHA Melhores Momentos
+  Cafe com TCS
+type: transcript
 category: Clinical Sexology - Career Planning
-content_type: article
+publication_date: '2025-11-14'
+language: pt
 tags:
-  - brazil
-  - business-model
-  - career
-  - career-planning
-  - clinical
-  - clinical-practice
-  - cognitive-sexual-therapy
-  - cultural-sensitivity
-  - expert-aline-sardinha
-  - health
-  - mental-health
-  - patient-care
-  - professional
-  - professional-development
-  - sexology
-  - training
-created: 2025-11-14 00:37:57.616886+00:00
+- article
+- brazil
+- business-model
+- career
+- career-planning
+- clinical
+- clinical-practice
+- cognitive-sexual-therapy
+- cultural-sensitivity
+- expert-aline-sardinha
+- health
+- knowledge
+- mental-health
+- patient-care
+- professional
+- professional-development
+- sexology
+- training
+created: '2025-11-14 00:37:57.616886+00:00'
 updated: 2025-12-06T15:18
+subtitle: PRECISA SER SEXÓLOGO PRA ATUAR EM SEXUALIDADE? | DRA ALINE SARDINHA | MELHORES
+  MOMENTOS CAFÉ COM TCS
+content_type: article
 ---
 
 # PRECISA SER SEXÓLOGO PRA ATUAR EM SEXUALIDADE? | DRA ALINE SARDINHA | MELHORES MOMENTOS CAFÉ COM TCS

@@ -1,26 +1,30 @@
 ---
 title: Possibilidades Profissionais Inovadoras e de Alto Valor em Sexualidade
-subtitle: Possibilidades Profissionais Inovadoras e de Alto Valor em Sexualidade
-type: note
+type: analysis
 category: Clinical Sexology - Career Planning
-content_type: analysis-table
+publication_date: '2025-11-13'
+language: pt
 tags:
-  - business-model
-  - career-planning
-  - clinical-practice
-  - cultural-sensitivity
-  - diversity-inclusion
-  - innovation
-  - market-analysis
-  - mental-health
-  - neuroscience
-  - professional-development
-  - protocols
-  - psychotherapy
-  - sexology
-  - training
+- article
+- business-model
+- career-planning
+- clinical-practice
+- cultural-sensitivity
+- diversity-inclusion
+- innovation
+- knowledge
+- market-analysis
+- mental-health
+- neuroscience
+- professional-development
+- protocols
+- psychotherapy
+- sexology
+- training
 created: 2025-11-13T01:01
 updated: 2025-12-06T15:18
+subtitle: Possibilidades Profissionais Inovadoras e de Alto Valor em Sexualidade
+content_type: analysis-table
 ---
 
 # Possibilidades Profissionais Inovadoras e de Alto Valor em Sexualidade

@@ -1,27 +1,34 @@
 ---
-title: TERAPIA SEXUAL NA PRÁTICA POR ONDE COMEÇAR  ALINE SARDINHA  MELHORES MOMENTOS DO CAFÉ COM TCS
-subtitle: "TERAPIA SEXUAL NA PRÁTICA: POR ONDE COMEÇAR? | ALINE SARDINHA | MELHORES MOMENTOS DO CAFÉ COM TCS"
-type: note
+title: TERAPIA SEXUAL NA PRÁTICA POR ONDE COMEÇAR  ALINE SARDINHA  MELHORES MOMENTOS
+  DO CAFÉ COM TCS
+type: transcript
 category: Clinical Sexology - Career Planning
-content_type: video-transcript
+publication_date: '2025-11-13'
+source: https://www.youtube.com/watch?v=a2A9_kZF-W4
+language: pt
 tags:
-  - brazil
-  - career-planning
-  - clinical-practice
-  - cognitive-sexual-therapy
-  - cultural-sensitivity
-  - expert-aline-sardinha
-  - market-analysis
-  - patient-care
-  - professional-development
-  - protocols
-  - psychotherapy
-  - sexology
-  - sexual-therapy
-  - training
-  - video-transcript
+- article
+- brazil
+- career-planning
+- clinical-practice
+- cognitive-sexual-therapy
+- cultural-sensitivity
+- expert-aline-sardinha
+- knowledge
+- market-analysis
+- patient-care
+- professional-development
+- protocols
+- psychotherapy
+- sexology
+- sexual-therapy
+- training
+- video-transcript
 created: 2025-11-13T19:38
 updated: 2025-12-06T15:18
+subtitle: 'TERAPIA SEXUAL NA PRÁTICA: POR ONDE COMEÇAR? | ALINE SARDINHA | MELHORES
+  MOMENTOS DO CAFÉ COM TCS'
+content_type: video-transcript
 ---
 
 # TERAPIA SEXUAL NA PRÁTICA: POR ONDE COMEÇAR? | ALINE SARDINHA | MELHORES MOMENTOS DO CAFÉ COM TCS

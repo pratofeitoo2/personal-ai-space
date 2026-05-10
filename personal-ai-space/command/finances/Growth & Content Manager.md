@@ -1,17 +1,23 @@
 ---
+title: Growth & Content Manager
+type: job-posting
+status: active
+language: en
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 Position:
-  - Growth & Content Manager
+- Growth & Content Manager
 Company:
-  - AlphaCorp AI
+- AlphaCorp AI
 Location:
-  - Remote
+- Remote
 Modality:
-  - Remote
+- Remote
 Application Progress:
-  - Resume Submitted 
-Website:
+- Resume Submitted 
 URL: https://www.linkedin.com/jobs/view/4384741619
-Salary:
-Duration:
-How Fit:
 ---
+

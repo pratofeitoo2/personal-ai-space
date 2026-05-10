@@ -1,37 +1,41 @@
 ---
 title: Microsoft Copilot
-subtitle: "Psicoterapia Sexual no Brasil: Regulamentação, Prática Clínica, Desafios, Oportunidades e Tendências Futuras"
-type: note
+type: tool-note
 category: Clinical Sexology - Career Planning
-content_type: regulatory-guide
+source: https://site.cfp.org.br/wp-content/uploads/2023/06/caderno_reflexoes_e_orientacoes_sobre_a_pratica_de_psicoterapia.pdf
 tags:
-  - brazil
-  - clinical-practice
-  - cognitive-behavioral-therapy
-  - cultural-sensitivity
-  - diversity-inclusion
-  - evidence-based
-  - gender-identity
-  - hypoactive-sexual-desire
-  - innovation
-  - market-analysis
-  - mental-health
-  - patient-care
-  - professional-development
-  - protocols
-  - psychotherapy
-  - regulation
-  - regulatory-bodies
-  - sex-education
-  - sexology
-  - sexual-desire
-  - sexual-dysfunction
-  - sexual-rights
-  - sexual-therapy
-  - sexual-violence
-  - training
+- brazil
+- clinical-practice
+- cognitive-behavioral-therapy
+- cultural-sensitivity
+- diversity-inclusion
+- evidence-based
+- gender-identity
+- hypoactive-sexual-desire
+- innovation
+- knowledge
+- market-analysis
+- mental-health
+- note
+- patient-care
+- professional-development
+- protocols
+- psychotherapy
+- regulation
+- regulatory-bodies
+- sex-education
+- sexology
+- sexual-desire
+- sexual-dysfunction
+- sexual-rights
+- sexual-therapy
+- sexual-violence
+- training
 created: 2025-11-14T00:03
 updated: 2025-12-06T15:18
+subtitle: 'Psicoterapia Sexual no Brasil: Regulamentação, Prática Clínica, Desafios,
+  Oportunidades e Tendências Futuras'
+content_type: regulatory-guide
 ---
 
 Tudo certo, Paulo! Elaborei um plano de pesquisa aprofundada para explorar a regulamentação, os desafios e as oportunidades da psicoterapia sexual no Brasil. Vamos em frente com isso.

@@ -1,20 +1,24 @@
 ---
 title: ATRAIR PACIENTES SEM PRECISAR SE EXPOR
-type: note
+type: research-article
 category: Clinical Sexology - Career Planning
-content_type: video-transcript
+publication_date: '2025-11-13'
+language: pt
 tags:
-  - brazil
-  - business-model
-  - career-planning
-  - clinical-practice
-  - cognitive-sexual-therapy
-  - cultural-sensitivity
-  - patient-care
-  - professional-development
-  - video-transcript
+- article
+- brazil
+- business-model
+- career-planning
+- clinical-practice
+- cognitive-sexual-therapy
+- cultural-sensitivity
+- knowledge
+- patient-care
+- professional-development
+- video-transcript
 created: 2025-11-13T20:37
 updated: 2025-12-06T15:18
+content_type: video-transcript
 ---
 
 Eu começaria pelos seus próprios pacientes.

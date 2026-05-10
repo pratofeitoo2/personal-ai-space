@@ -1,26 +1,30 @@
 ---
 title: Possibilidades Avançadas em Saúde Mental e Sexual
-subtitle: Possibilidades Avançadas em Saúde Mental e Sexual
-type: note
+type: analysis
 category: Clinical Sexology - Career Planning
-content_type: analysis-table
+publication_date: '2025-11-13'
+language: pt
 tags:
-  - career-planning
-  - clinical-practice
-  - cultural-sensitivity
-  - diversity-inclusion
-  - healthtech
-  - innovation
-  - market-analysis
-  - mental-health
-  - neuroscience
-  - protocols
-  - psychotherapy
-  - sexology
-  - sexual-therapy
-  - training
+- article
+- career-planning
+- clinical-practice
+- cultural-sensitivity
+- diversity-inclusion
+- healthtech
+- innovation
+- knowledge
+- market-analysis
+- mental-health
+- neuroscience
+- protocols
+- psychotherapy
+- sexology
+- sexual-therapy
+- training
 created: 2025-11-13T00:56
 updated: 2025-12-06T15:18
+subtitle: Possibilidades Avançadas em Saúde Mental e Sexual
+content_type: analysis-table
 ---
 
 # Possibilidades Avançadas em Saúde Mental e Sexual

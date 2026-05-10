@@ -1,14 +1,23 @@
 ---
+title: CEO
+type: job-posting
+status: active
+language: en
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 Position:
-  - CEO
+- CEO
 Application Progress:
-  - Resume Submitted 
+- Resume Submitted 
 Company:
-  - Okia AI Consultoria
+- Okia AI Consultoria
 Location:
-  - Remote
+- Remote
 Modality:
-  - Remote
+- Remote
 URL: https://www.linkedin.com/jobs/view/4397880045
-How Fit:
 ---
+

@@ -1,7 +1,19 @@
 ---
+title: Psicoterapia, Legislação e Prática da Psicologia
+type: research-article
+publication_date: '2025-11-13'
+doi: 10.5935/2318-0404.20230012
+language: pt
+tags:
+- article
+- conteúdo-principal
+- introdução
+- knowledge
+- pontos-chave
 created: 2025-11-13T18:30
 updated: 2025-11-13T18:44
 ---
+
 # Psicoterapia, Legislação e Prática da Psicologia
 
 ---

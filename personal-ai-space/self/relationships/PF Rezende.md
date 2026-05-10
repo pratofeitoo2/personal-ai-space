@@ -1,23 +1,29 @@
 ---
+title: PF Rezende
+type: person
+email: pfrezendehs@icloud.com
+birth_date: '1997-08-22'
+tags:
+- relationships
+created: 2025-12-09T13:40
+updated: 2025-12-09T15:59
 Name: Paulo Fábio de Rezende Junior
 CPF: 168.029.537-30
-updated: 2025-12-09T15:59
 RG: 24059184-2
-Cover: "[[IMG_2426.jpeg]]"
+Cover: '[[IMG_2426.jpeg]]'
 cssclasses:
-  - cover-circle
-created: 2025-12-09T13:40
-email: pfrezendehs@icloud.com
+- cover-circle
 number: +55 12 920 011 084
 Married:
-  - "[[Tamara]]"
+- '[[Tamara]]'
 Filhos:
-  - "[[PERSONAL/People/Mallu|Mallu]]"
-  - "[[PERSONAL/People/Liz|Liz]]"
-  - "[[PERSONAL/People/Ravi|Ravi]]"
-  - "[[PERSONAL/People/Luan|Luan]]"
+- '[[PERSONAL/People/Mallu|Mallu]]'
+- '[[PERSONAL/People/Liz|Liz]]'
+- '[[PERSONAL/People/Ravi|Ravi]]'
+- '[[PERSONAL/People/Luan|Luan]]'
 Birth Date: 1997-08-22
 ---
+
 ## DOCS
 
 #### CERTIDÃO

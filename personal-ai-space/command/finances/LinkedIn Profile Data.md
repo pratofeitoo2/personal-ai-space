@@ -1,29 +1,14 @@
 ---
-created: 2026-03-11
-updated: 2026-03-14T00:32
-language: en
-type:
-  - profile
-  - linkedin
-  - personal
-tags:
-  - career
-  - professional-profile
-  - linkedin
-title: Linkedin Profile Data
-topics:
-  - knowledge-base
+title: LinkedIn Profile Data - Paulo Rezende
+type: profile
 status: active
-description: "Strategic document: Linkedin Profile Data"
-organization: ONG Um Mais Um---
-
-
-
-# LinkedIn Profile Data - Paulo Rezende
-
-**Source:** [linkedin.com/in/paulofabio](https://www.linkedin.com/in/paulofabio/?locale=en-US)  
-**Compiled:** March 11, 2026
-
+language: en
+position: LinkedIn Profile Data
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 ---
 
 ## Basic Information

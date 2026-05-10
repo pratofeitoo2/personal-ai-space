@@ -1,23 +1,28 @@
 ---
 title: ABORDAGENS INOVADORAS NA CLÍNICA - SESSÃO ÚNICA EM SEXUALIDADE  ALINE SARDINHA
-subtitle: ABORDAGENS INOVADORAS NA CLÍNICA - SESSÃO ÚNICA EM SEXUALIDADE | ALINE SARDINHA
-type: note
+type: transcript
 category: Clinical Sexology - Career Planning
-content_type: video-transcript
+publication_date: '2025-11-13'
+source: https://www.youtube.com/watch?v=7GDksT0uEPM
+language: pt
 tags:
-  - brazil
-  - clinical-practice
-  - cognitive-sexual-therapy
-  - expert-aline-sardinha
-  - innovation
-  - patient-care
-  - professional-development
-  - protocols
-  - psychotherapy
-  - training
-  - video-transcript
+- article
+- brazil
+- clinical-practice
+- cognitive-sexual-therapy
+- expert-aline-sardinha
+- innovation
+- knowledge
+- patient-care
+- professional-development
+- protocols
+- psychotherapy
+- training
+- video-transcript
 created: 2025-11-13T19:39
 updated: 2025-12-06T15:18
+subtitle: ABORDAGENS INOVADORAS NA CLÍNICA - SESSÃO ÚNICA EM SEXUALIDADE | ALINE SARDINHA
+content_type: video-transcript
 ---
 
 # ABORDAGENS INOVADORAS NA CLÍNICA - SESSÃO ÚNICA EM SEXUALIDADE | ALINE SARDINHA

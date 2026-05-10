@@ -1,11 +1,13 @@
 ---
+title: '"Plano de Estudos em Sexologia Clínica Avançada"'
+type: study-plan
+status: draft
 tags:
-  - study
-  - sexuality
-  - sexualidade
-  - SEXED
-type:
-  - study plan
+- goals
+- sexed
+- sexualidade
+- sexuality
+- study
 created: 2025-03-03T12:16
 updated: 2025-12-05T20:29
 ---

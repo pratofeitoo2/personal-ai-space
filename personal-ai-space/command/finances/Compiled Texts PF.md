@@ -1,27 +1,27 @@
 ---
+title: Compiled Texts Pf
+type: note
+status: active
+language: en
+organization: ONG Um Mais Um
 tags:
-  - writing
+- command
+- finances
+- writing
 created: 2025-03-15T09:57
 updated: 2026-03-14T00:32
-language: en
-type:
-  - note
 content_type:
-  - Writing style
+- Writing style
 Cover: https://wallpapers.com/images/hd/blue-galaxy-facebook-cover-l2fm7bbjor9cauwn.jpg
 how_good: 0
 rating: 3
-cover: "[[IMG_2426.jpeg]]"
+cover: '[[IMG_2426.jpeg]]'
 cssclasses:
-  - cover-vertical-cover
-title: Compiled Texts Pf
+- cover-vertical-cover
 topics:
-  - knowledge-base
-status: active
-description: "Strategic document: Compiled Texts Pf"
-organization: ONG Um Mais Um
+- knowledge-base
+description: 'Strategic document: Compiled Texts Pf'
 ---
-
 
 I WAS NEVER ENOUGH 😵‍💫
 

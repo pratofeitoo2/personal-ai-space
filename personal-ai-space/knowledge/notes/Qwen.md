@@ -1,28 +1,31 @@
 ---
 title: Qwen
-subtitle: "O Ecossistema da Psicoterapia Sexual no Brasil: Um Guia Analítico para a Prática Clínica"
-type: note
+type: tool-note
 category: Clinical Sexology - Career Planning
-content_type: analysis-table
 tags:
-  - brazil
-  - business-model
-  - career-planning
-  - clinical-practice
-  - cognitive-sexual-therapy
-  - cultural-sensitivity
-  - diversity-inclusion
-  - expert-aline-sardinha
-  - market-analysis
-  - mental-health
-  - patient-care
-  - professional-development
-  - psychotherapy
-  - sexology
-  - sexual-therapy
-  - training
+- brazil
+- business-model
+- career-planning
+- clinical-practice
+- cognitive-sexual-therapy
+- cultural-sensitivity
+- diversity-inclusion
+- expert-aline-sardinha
+- knowledge
+- market-analysis
+- mental-health
+- note
+- patient-care
+- professional-development
+- psychotherapy
+- sexology
+- sexual-therapy
+- training
 created: 2025-11-13T22:20
 updated: 2025-12-06T15:18
+subtitle: 'O Ecossistema da Psicoterapia Sexual no Brasil: Um Guia Analítico para
+  a Prática Clínica'
+content_type: analysis-table
 ---
 
 **Qwen**

@@ -1,15 +1,18 @@
 ---
-type:
-  - study plan
+title: Study Plan Ebook Outline
+type: study-plan
+status: draft
+category: study
+tags:
+- career-planning
+- clinical-practice
+- clinical-sex-therapy
+- goals
+- professional-development
+- psychotherapy
+- sexology
 created: 2025-03-03T14:43
 updated: 2025-12-05T20:30
-tags:
-  - career-planning
-  - clinical-practice
-  - clinical-sex-therapy
-  - psychotherapy
-  - sexology
-  - professional-development
 ---
 
 USING MOSTLY AI STUDIO ON GEMINI 2.0 FLASH THINKING 

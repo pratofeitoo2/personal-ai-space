@@ -1,23 +1,22 @@
 ---
-created: 2026-03-11T05:30
-updated: 2026-03-14T01:13
----
----
+title: Specialized Profile Paulo Rezende   Neuroscience, Sexology And Psychotherapy
+type: profile
+status: active
+language: en
+position: Specialized Profile Paulo Rezende - Neuroscience, Sexology and Psychotherapy
+organization: ONG Um Mais Um---
+tags:
+- command
+- finances
+- strategic
 created: 2025-11-13T00:39
 updated: 2026-03-14T00:32
 URL: https://www.linkedin.com/in/paulofabio/?locale=en-US
-language: en
-title: Specialized Profile Paulo Rezende   Neuroscience, Sexology And Psychotherapy
-type: strategic-document
 topics:
-  - knowledge-base
-tags:
-  - strategic
-status: active
-description: "Strategic document: Specialized Profile Paulo Rezende   Neuroscience, Sexology And Psychotherapy"
-organization: ONG Um Mais Um---
-
-
+- knowledge-base
+description: 'Strategic document: Specialized Profile Paulo Rezende   Neuroscience,
+  Sexology And Psychotherapy'
+---
 
 This detailed profile focuses on Paulo Rezende's expertise in the areas of **Applied Neuroscience**, **Sexology**, and **Psychotherapy**, highlighting his training, clinical practice, and the application of this knowledge in contexts of human development and diversity.
 

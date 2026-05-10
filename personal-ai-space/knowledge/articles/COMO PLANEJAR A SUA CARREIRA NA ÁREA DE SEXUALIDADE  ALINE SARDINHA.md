@@ -1,22 +1,27 @@
 ---
 title: COMO PLANEJAR A SUA CARREIRA NA ÁREA DE SEXUALIDADE  ALINE SARDINHA
-subtitle: COMO PLANEJAR A SUA CARREIRA NA ÁREA DE SEXUALIDADE | ALINE SARDINHA
-type: note
+type: guide
 category: Clinical Sexology - Career Planning
-content_type: video-transcript
+publication_date: '2025-11-13'
+source: https://www.youtube.com/watch?v=0-UVu3Obx4M
+language: pt
 tags:
-  - business-model
-  - career-planning
-  - clinical-practice
-  - cognitive-sexual-therapy
-  - expert-aline-sardinha
-  - market-analysis
-  - patient-care
-  - psychotherapy
-  - training
-  - video-transcript
+- article
+- business-model
+- career-planning
+- clinical-practice
+- cognitive-sexual-therapy
+- expert-aline-sardinha
+- knowledge
+- market-analysis
+- patient-care
+- psychotherapy
+- training
+- video-transcript
 created: 2025-11-13T19:39
 updated: 2025-12-06T15:18
+subtitle: COMO PLANEJAR A SUA CARREIRA NA ÁREA DE SEXUALIDADE | ALINE SARDINHA
+content_type: video-transcript
 ---
 
 # COMO PLANEJAR A SUA CARREIRA NA ÁREA DE SEXUALIDADE | ALINE SARDINHA

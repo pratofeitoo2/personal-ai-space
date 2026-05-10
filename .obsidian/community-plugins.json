@@ -1,21 +1,13 @@
 [
-  "advanced-canvas",
-  "code-styler",
   "data-files-editor",
-  "dataview",
   "editing-toolbar",
   "editor-width-slider",
-  "obsidian-charts",
-  "obsidian-enhancing-mindmap",
-  "obsidian42-brat",
-  "oz-image-plugin",
-  "pai-runsh",
-  "pretty-properties",
   "runsh",
-  "sqlite-db",
-  "tasknotes",
-  "terminal",
-  "text-extractor",
   "univer",
-  "update-time-on-edit"
+  "pai-runsh",
+  "spreadsheets",
+  "terminal",
+  "obsidian42-brat",
+  "better-properties",
+  "colored-bases-properties"
 ]

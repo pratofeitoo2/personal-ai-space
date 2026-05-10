@@ -1,18 +1,23 @@
 ---
+title: Compilado de textos PF
+type: writing-sample
+status: active
+language: en
+position: Compilado de textos PF
 tags:
-  - writing
+- command
+- finances
+- writing
 created: 2025-03-15T09:57
 updated: 2025-12-09T14:01
-type:
-  - note
 content_type:
-  - Writing style
+- Writing style
 Cover: https://wallpapers.com/images/hd/blue-galaxy-facebook-cover-l2fm7bbjor9cauwn.jpg
 how_good: 0
 rating: 3
-cover: "[[IMG_2426.jpeg]]"
+cover: '[[IMG_2426.jpeg]]'
 cssclasses:
-  - cover-vertical-cover
+- cover-vertical-cover
 ---
 
 EU NUNCA FUI O SUFICIENTE 😵‍💫  

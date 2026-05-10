@@ -1,14 +1,23 @@
 ---
+title: Coordenador de Marketing
+type: job-posting
+status: active
+language: en
+tags:
+- command
+- finances
+created: 2026-05-10T01:39
+updated: 2026-05-10T01:39
 Position:
-  - Coordenador de Marketing
+- Coordenador de Marketing
 Application Progress:
-  - Resume Submitted 
+- Resume Submitted 
 Company:
-  - FBNF - Faculdade Brasileira de Negócios e Finanças
+- FBNF - Faculdade Brasileira de Negócios e Finanças
 Location:
-  - São Paulo
+- São Paulo
 Modality:
-  - Onsite
+- Onsite
 URL: https://www.linkedin.com/jobs/view/4382082834
-How Fit:
 ---
+
