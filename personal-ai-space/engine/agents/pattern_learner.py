@@ -14,7 +14,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from log_manager import get_logger
+from log_manager import get_logger, audit
 import db_manager as db
 
 logger = get_logger("engine.pattern_learner")
@@ -180,6 +180,16 @@ class PatternLearner:
     
     # ── Inference ─────────────────────────────────────────────────────
     
+    def _persist_patterns(self) -> None:
+        """Store learned patterns to agent_memory table."""
+        try:
+            for key, value in self.learned_patterns.items():
+                val = str(value) if not isinstance(value, str) else value
+                db.store_agent_memory("pattern_learner", f"pattern.{key}", val)
+            audit(f"[pattern_learner] persisted {len(self.learned_patterns)} patterns to memory db")
+        except Exception as e:
+            logger.warning(f"Failed to persist patterns: {e}")
+
     def infer_all_patterns(self) -> dict:
         """Run all learners and compile patterns."""
         logger.info("Running pattern inference...")
@@ -190,6 +200,8 @@ class PatternLearner:
             **self.learn_task_completion_rates(),
             **self.learn_habit_consistency(),
         }
+
+        self._persist_patterns()
         
         logger.info(f"Inference complete: {len(self.learned_patterns)} patterns learned")
         return self.learned_patterns

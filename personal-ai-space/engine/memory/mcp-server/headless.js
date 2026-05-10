@@ -28,8 +28,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // DB lives in engine/db/ alongside all other project databases
-const DB_PATH = resolve(__dirname, "..", "..", "..", "db", "agent_memory.db");
-const DB_DIR  = resolve(__dirname, "..", "..", "..", "db");
+const DB_PATH = resolve(__dirname, "..", "..", "db", "agent_memory.db");
+const DB_DIR  = resolve(__dirname, "..", "..", "db");
 
 if (!existsSync(DB_DIR)) mkdirSync(DB_DIR, { recursive: true });
 

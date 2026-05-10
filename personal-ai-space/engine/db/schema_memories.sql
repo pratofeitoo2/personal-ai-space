@@ -34,4 +34,7 @@ CREATE TABLE IF NOT EXISTS agent_memory (
 
 CREATE INDEX IF NOT EXISTS idx_interactions_agent ON interactions(agent_id);
 CREATE INDEX IF NOT EXISTS idx_interactions_timestamp ON interactions(timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_interactions_status ON interactions(status);
 CREATE INDEX IF NOT EXISTS idx_context_session ON context_window(session_id);
+CREATE INDEX IF NOT EXISTS idx_memory_agent_key ON agent_memory(agent_id, key);
+CREATE INDEX IF NOT EXISTS idx_memory_created ON agent_memory(created_at DESC);

@@ -9,6 +9,7 @@ from pathlib import Path
 from contextlib import contextmanager
 from datetime import datetime
 from typing import Any, Optional
+from collections.abc import Sequence
 
 logger = logging.getLogger("engine.db")
 
@@ -81,6 +82,67 @@ def init_all():
             conn.executescript(f.read())
         conn.close()
         logger.info(f"Initialized: {db_name}.db")
+
+
+def log_interaction(
+    agent_id: str, action: str, input_data: Any = None,
+    output_data: Any = None, duration_ms: int = 0,
+    status: str = "success", error_message: str = None,
+    context: dict = None
+) -> str:
+    """Log an agent interaction to memories.db."""
+    import uuid as _uid
+    import json as _json
+    interaction_id = _uid.uuid4().hex
+    execute("memories", """
+        INSERT INTO interactions
+        (id, agent_id, action, input_data, output_data, duration_ms,
+         status, error_message, context)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        interaction_id, agent_id, action,
+        _json.dumps(input_data) if input_data else None,
+        _json.dumps(output_data) if output_data else None,
+        duration_ms, status, error_message,
+        _json.dumps(context) if context else None,
+    ))
+    return interaction_id
+
+
+def store_agent_memory(
+    agent_id: str, key: str, value: str,
+    ttl_seconds: int = None
+) -> bool:
+    """Upsert a key-value pair into agent_memory table."""
+    import uuid as _uid
+    memory_id = _uid.uuid4().hex
+    try:
+        execute("memories", """
+            INSERT OR REPLACE INTO agent_memory
+            (id, agent_id, key, value, ttl_seconds)
+            VALUES (?, ?, ?, ?, ?)
+        """, (memory_id, agent_id, key, value, ttl_seconds))
+        return True
+    except Exception:
+        return False
+
+
+def get_agent_memory(agent_id: str, key: str = None) -> list[dict]:
+    """Retrieve memories for an agent, optionally filtered by key."""
+    if key:
+        return query("memories",
+            "SELECT * FROM agent_memory WHERE agent_id=? AND key=? ORDER BY created_at DESC",
+            (agent_id, key))
+    return query("memories",
+        "SELECT * FROM agent_memory WHERE agent_id=? ORDER BY created_at DESC",
+        (agent_id,))
+
+
+def get_recent_interactions(limit: int = 10) -> list[dict]:
+    """Return most recent agent interactions."""
+    return query("memories",
+        "SELECT * FROM interactions ORDER BY timestamp DESC LIMIT ?",
+        (limit,))
 
 
 def health_check() -> dict:

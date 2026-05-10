@@ -19,6 +19,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from log_manager import get_logger
+import db_manager as db
 
 logger = get_logger("engine.observer")
 
@@ -160,6 +161,9 @@ class BehaviorObserver:
                 except:
                     pass
         
+        # Persist observations to agent_memory table
+        self._persist_to_memory_db(type_counts, category_counts, time_patterns)
+
         # Store top learnings to MCP
         try:
             # Most common observation type
@@ -201,6 +205,26 @@ class BehaviorObserver:
         
         except Exception as e:
             logger.warning(f"Failed to store learned facts: {e}")
+
+    def _persist_to_memory_db(self, type_counts: dict, category_counts: dict, time_patterns: dict) -> None:
+        """Persist learned observations to agent_memory table."""
+        try:
+            if type_counts:
+                top_type = max(type_counts, key=type_counts.get)
+                db.store_agent_memory("observer", "behavior.top_action_type", top_type)
+
+            if category_counts:
+                top_cat = max(category_counts, key=category_counts.get)
+                db.store_agent_memory("observer", "behavior.primary_category", top_cat)
+
+            if time_patterns:
+                top_time = max(time_patterns, key=time_patterns.get)
+                db.store_agent_memory("observer", "behavior.active_time", top_time)
+
+            buffer_size = len(self.observation_buffer)
+            db.store_agent_memory("observer", "behavior.last_buffer_size", str(buffer_size))
+        except Exception as e:
+            logger.warning(f"Failed to persist to agent_memory: {e}")
         
         # Clear buffer
         self.observation_buffer.clear()

@@ -87,10 +87,7 @@ class ContextManager(BaseAgent):
         profile = self._load_profile()
         habits  = db.query("self", "SELECT * FROM habits WHERE status='active'")
         needs   = db.query("self", "SELECT * FROM needs WHERE status='active'")
-        recent  = db.query(
-            "memories",
-            "SELECT * FROM interactions ORDER BY timestamp DESC LIMIT 10"
-        )
+        recent  = db.get_recent_interactions(10)
 
         # Enrich context with MCP semantic memory snapshot
         mcp_facts: dict = {}

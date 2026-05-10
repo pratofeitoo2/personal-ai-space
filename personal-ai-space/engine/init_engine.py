@@ -119,19 +119,20 @@ def seed_tasks():
         print("  Tasks already exist — skipping")
         return
 
-    tasks = [
-        ("task_001", "Initialize engine databases",       "personal-ai", "critical", "completed"),
-        ("task_002", "Design agent communication protocol","personal-ai", "high",     "pending"),
-        ("task_003", "Build habit tracking system",       "personal-ai", "high",     "pending"),
-        ("task_004", "Connect first integration",         "personal-ai", "medium",   "pending"),
-        ("task_005", "Review and curate knowledge base",  "knowledge",   "medium",   "pending"),
-    ]
-    for t in tasks:
+    now = datetime.now().isoformat()
+    for tid, title, pid, priority, status, desc, hours in [
+        ("task_001", "Initialize engine databases",       "personal-ai", "critical", "completed", "Initialize all databases and seed starter data", 2.0),
+        ("task_002", "Design agent communication protocol", "personal-ai", "high", "pending", "Define message format and routing between agents", 15.0),
+        ("task_003", "Build habit tracking system",       "personal-ai", "high",     "pending", "Implement habit logging and streak tracking", 12.0),
+        ("task_004", "Connect first integration",         "personal-ai", "medium",   "pending", "Set up first external tool integration via MCP", 8.0),
+        ("task_005", "Review and curate knowledge base",  "knowledge",   "medium",   "pending", "Organize and deduplicate knowledge notes", 4.0),
+    ]:
         db.execute(
             "tasks",
-            "INSERT OR IGNORE INTO tasks (id, title, project_id, priority, status, created_at) "
-            "VALUES (?,?,?,?,?,?)",
-            (t[0], t[1], t[2], t[3], t[4], datetime.now().isoformat())
+            "INSERT OR IGNORE INTO tasks "
+            "(id, title, description, project_id, priority, status, created_at, estimated_hours, category) "
+            "VALUES (?,?,?,?,?,?,?,?,?)",
+            (tid, title, desc, pid, priority, status, now, hours, "general")
         )
     print(f"  ✓ {len(tasks)} tasks seeded")
 
@@ -145,14 +146,16 @@ def seed_projects():
 
     db.execute(
         "tasks",
-        "INSERT OR IGNORE INTO projects (id, name, description, status, start_date, created_at) "
-        "VALUES (?,?,?,?,?,?)",
+        "INSERT OR IGNORE INTO projects "
+        "(id, name, description, status, start_date, total_tasks, completed_tasks, created_at) "
+        "VALUES (?,?,?,?,?,?,?,?)",
         (
             "personal-ai",
             "Personal AI Powerhouse",
             "Build the personal agentic AI system",
             "active",
             date.today().isoformat(),
+            0, 0,
             datetime.now().isoformat(),
         )
     )

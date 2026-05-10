@@ -240,7 +240,7 @@ export class MemoryStore {
     value: string,
     confidence: number = 0.8,
     category?: string,
-    source?: string
+    source: string = "user"
   ): void {
     if (!this.db) throw new Error("MemoryStore not initialized");
 
@@ -249,6 +249,13 @@ export class MemoryStore {
     }
 
     try {
+      // Check existing value — only log event if something actually changed
+      const existing = this.db.prepare(
+        "SELECT value, confidence FROM semantic WHERE key = ?"
+      ).get(key) as { value: string; confidence: number } | undefined;
+
+      const sameValue = existing && existing.value === value && existing.confidence === confidence;
+
       const id = randomUUID();
       const now = new Date().toISOString();
 
@@ -277,7 +284,9 @@ export class MemoryStore {
         now
       );
 
-      this.logEvent("INSERT", `semantic:${key}`, `Added fact: ${key}`);
+      if (!sameValue) {
+        this.logEvent("INSERT", `semantic:${key}`, `Added fact: ${key}`);
+      }
       this.log(`Added fact: key=${key}, confidence=${confidence}`);
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error);

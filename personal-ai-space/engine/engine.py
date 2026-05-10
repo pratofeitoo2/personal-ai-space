@@ -100,10 +100,13 @@ class Engine:
         """
         Send a message to an agent.
         Returns the agent's response dict.
+        Logs every interaction to memories.db and feeds the behavior observer.
         """
         agent = self._agents.get(agent_id)
         if not agent:
-            return {"status": "error", "error": f"Agent not found: {agent_id}"}
+            err = f"Agent not found: {agent_id}"
+            self.logger.warning(err)
+            return {"status": "error", "error": err}
 
         message = {
             "id": uuid.uuid4().hex,
@@ -113,7 +116,39 @@ class Engine:
             "action": "request",
             "payload": {"command": command, **(extra or {}), "data": data or {}},
         }
-        return agent.handle(message)
+
+        t0 = time.monotonic()
+        try:
+            result = agent.handle(message)
+            elapsed_ms = int((time.monotonic() - t0) * 1000)
+            status = "success" if result.get("status") == "success" else "error"
+            error_msg = result.get("error") if status == "error" else None
+
+            db.log_interaction(
+                agent_id=agent_id, action=command,
+                input_data={"data": data, "extra": extra},
+                output_data=result.get("payload"),
+                duration_ms=elapsed_ms, status=status,
+                error_message=error_msg,
+            )
+
+            if self._observer:
+                self._observer.observe_cli_command(command)
+                if status == "error":
+                    self._observer.observe_anomaly_detected(
+                        f"agent_{agent_id}_error", "warning"
+                    )
+
+            return result
+        except Exception as e:
+            elapsed_ms = int((time.monotonic() - t0) * 1000)
+            db.log_interaction(
+                agent_id=agent_id, action=command,
+                input_data={"data": data, "extra": extra},
+                duration_ms=elapsed_ms,
+                status="error", error_message=str(e),
+            )
+            raise
 
     # ── convenience wrappers ──────────────────────────────────────────────
 

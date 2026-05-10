@@ -339,11 +339,12 @@ class ComprehensiveExtractor:
                         task_text = match.strip()
                         if len(task_text) > 5:
                             try:
+                                import uuid as _uid
                                 execute("tasks", """
-                                    INSERT INTO tasks 
-                                    (title, description, status, created_at)
-                                    VALUES (?, ?, ?, ?)
-                                """, (task_text[:100], "", "pending", datetime.now().isoformat()))
+                                    INSERT INTO tasks
+                                    (id, title, description, priority, status, created_at, category)
+                                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                                """, (_uid.uuid4().hex, task_text[:100], "", "normal", "pending", datetime.now().isoformat(), "general"))
                                 self.stats['implicit_tasks'] += 1
                             except Exception:
                                 pass
