@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT))
 
 import db_manager as db
 from log_manager import setup_logging, get_logger
+import propagator
 
 setup_logging("INFO")
 logger = get_logger("init")
@@ -134,6 +135,7 @@ def seed_tasks():
             "VALUES (?,?,?,?,?,?,?,?,?)",
             (tid, title, desc, pid, priority, status, now, hours, "general")
         )
+        propagator.on_task_created(tid)
     print(f"  ✓ {len(tasks)} tasks seeded")
 
 

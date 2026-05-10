@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from agents.base_agent import BaseAgent
 from log_manager import audit
 import db_manager as db
+import propagator
 
 
 PRIORITY_WEIGHTS = {"critical": 40, "high": 30, "normal": 20, "low": 10}
@@ -79,24 +80,21 @@ class TaskCoordinator(BaseAgent):
         )
         audit(f"CREATED task={task_id} title={data.get('title')}")
         self.logger.info(f"Task created: {task_id}")
+        propagator.on_task_created(task_id)
         return task_id
 
     def update_status(self, task_id: str, new_status: str) -> bool:
+        old = db.query("tasks", "SELECT status FROM tasks WHERE id=?", (task_id,))
+        old_status = old[0]["status"] if old else None
         rows = db.execute(
             "tasks",
-            "UPDATE tasks SET status=? WHERE id=?",
-            (new_status, task_id)
+            "UPDATE tasks SET status=?, completed_at=CASE WHEN ?='completed' THEN ? ELSE completed_at END WHERE id=?",
+            (new_status, new_status, datetime.now().isoformat(), task_id)
         )
         if rows:
             audit(f"STATUS_CHANGE task={task_id} new_status={new_status}")
             self.logger.info(f"Task {task_id} → {new_status}")
-            # Log to history
-            db.execute(
-                "tasks",
-                "INSERT INTO task_history (id, task_id, changed_at, field, new_value) "
-                "VALUES (?,?,?,?,?)",
-                (uuid.uuid4().hex, task_id, datetime.now().isoformat(), "status", new_status)
-            )
+            propagator.on_task_updated(task_id, {"status": old_status} if old_status else None)
         return bool(rows)
 
     def summary(self) -> dict:

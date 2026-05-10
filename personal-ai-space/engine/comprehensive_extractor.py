@@ -13,6 +13,7 @@ from collections import defaultdict
 
 sys.path.insert(0, str(Path(__file__).parent))
 from db_manager import execute, query
+import propagator
 
 PROJECT_ROOT = Path(__file__).parent.parent
 
@@ -340,12 +341,14 @@ class ComprehensiveExtractor:
                         if len(task_text) > 5:
                             try:
                                 import uuid as _uid
+                                tid = _uid.uuid4().hex
                                 execute("tasks", """
                                     INSERT INTO tasks
                                     (id, title, description, priority, status, created_at, category)
                                     VALUES (?, ?, ?, ?, ?, ?, ?)
-                                """, (_uid.uuid4().hex, task_text[:100], "", "normal", "pending", datetime.now().isoformat(), "general"))
+                                """, (tid, task_text[:100], "", "normal", "pending", datetime.now().isoformat(), "general"))
                                 self.stats['implicit_tasks'] += 1
+                                propagator.on_task_created(tid)
                             except Exception:
                                 pass
             except Exception:
