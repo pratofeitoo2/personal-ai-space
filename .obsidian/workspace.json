@@ -8,16 +8,47 @@
         "type": "tabs",
         "children": [
           {
-            "id": "7799f84b2536a6b2",
+            "id": "abc5595d089965e8",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "personal-ai-space/docs/CLI_COMMANDS.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "CLI_COMMANDS"
+            }
+          },
+          {
+            "id": "4cf9570bf988004b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "AI Engine Command Center.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "AI Engine Command Center"
+            }
+          },
+          {
+            "id": "a00118de8890698a",
+            "type": "leaf",
+            "state": {
+              "type": "json",
+              "state": {
+                "file": "personal-ai-space/self/traits/inferred_personality.json"
+              },
+              "icon": "lucide-file",
+              "title": "inferred_personality"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -74,7 +105,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 412.5
   },
   "right": {
     "id": "7f93b33c44aa02b9",
@@ -174,12 +205,63 @@
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
-      "obsidian42-brat:BRAT": false
+      "terminal:Open terminal": false,
+      "univer:Univer": false,
+      "spreadsheets:New Spreadsheet": false
     }
   },
-  "active": "7799f84b2536a6b2",
+  "active": "827905691f87b963",
   "lastOpenFiles": [
-    "personal-ai-space/engine/db/tasks.db-shm",
-    "personal-ai-space/engine/db/tasks.db-wal"
+    "personal-ai-space/knowledge/notes/NEDS Vault Filetree.canvas",
+    "personal-ai-space/knowledge/notes/Plataformas online.base",
+    "personal-ai-space/command/finances/Job Board.base",
+    "personal-ai-space/knowledge/articles/My Theoretical Framework to Approach.md",
+    "personal-ai-space/knowledge/notes/Atendimentos Online.md",
+    "personal-ai-space/knowledge/notes/Messy Brain Notes.md",
+    "personal-ai-space/knowledge/notes/Qwen.md",
+    "personal-ai-space/knowledge/notes/Microsoft Copilot.md",
+    "personal-ai-space/knowledge/notes/Grok.md",
+    "personal-ai-space/knowledge/notes/Getliner.md",
+    "personal-ai-space/command/finances/ZenKlub.md",
+    "personal-ai-space/command/finances/VP of Talent Operations.md",
+    "personal-ai-space/command/finances/Talent and Learning Specialist.md",
+    "personal-ai-space/command/finances/Supervisor de Talent Acquisition Bilíngue.md",
+    "personal-ai-space/command/finances/Senior Program Manager.md",
+    "personal-ai-space/command/finances/Program Coordinator – More Data Better Health.md",
+    "personal-ai-space/command/finances/People Lead.md",
+    "personal-ai-space/command/finances/Marketing Specialist, Growth.md",
+    "personal-ai-space/command/finances/Marketing Instructor (AI Training).md",
+    "personal-ai-space/command/finances/Manager, Marketing Operations.md",
+    "personal-ai-space/command/finances/Human Resources Specialist.md",
+    "personal-ai-space/command/finances/Growth & Content Manager.md",
+    "personal-ai-space/command/finances/Especialista em Growth.md",
+    "personal-ai-space/command/finances/Especialista em Branding.md",
+    "personal-ai-space/command/finances/Especialista I - Programas Corporativos.md",
+    "personal-ai-space/command/finances/Editorial Reviewer - Sociology, Anthropology, and Cultural studies.md",
+    "personal-ai-space/command/finances/Doctoralia.md",
+    "personal-ai-space/command/finances/Coordenador(a) de Desenvolvimento de Ecossistema.md",
+    "personal-ai-space/command/finances/paulo_rezende_cv.pdf",
+    "personal-ai-space/command/finances/Paulo_Rezende_resume.pdf",
+    "personal-ai-space/command/finances/Paulo_Rezende_mkt_pt.pdf",
+    "personal-ai-space/command/finances/Paulo_Rezende_mkt_en.pdf",
+    "personal-ai-space/command/finances/Paulo_Rezende_RH.pdf",
+    "personal-ai-space/command/finances/LinkedIn Profile.pdf",
+    "personal-ai-space/command/finances/Cover Letter - Vital Strategies Application.pdf",
+    "personal-ai-space/knowledge/articles/Regulamentação da psicoterapia .pdf",
+    "personal-ai-space/self/goals/NEDS Vault Filetree.canvas",
+    "personal-ai-space/self/goals/Life Map.canvas",
+    "personal-ai-space/docs/architecture-map.canvas",
+    "personal-ai-space/intake/staging/NEDS Vault Filetree.canvas",
+    "personal-ai-space/intake/staging/Life Map.canvas",
+    "personal-ai-space/vault/personal documents  PF/Titulo de eleitor .JPG",
+    "personal-ai-space/vault/personal documents  PF/Sex CompulsionOCSB Assessment - Insight Psychological.jpeg.png",
+    "personal-ai-space/vault/personal documents  PF/RG.jpg",
+    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende.jpg",
+    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende(2).jpg",
+    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende(1).jpg",
+    "personal-ai-space/vault/personal documents  PF/NIS.jpg",
+    "personal-ai-space/vault/personal documents  PF/IMG_0310.PNG",
+    "personal-ai-space/vault/personal documents  PF/IMG_0309.PNG",
+    "personal-ai-space/vault/personal documents  PF/Histórico Escolar PF .JPG"
   ]
 }
