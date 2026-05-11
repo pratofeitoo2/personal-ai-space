@@ -1,0 +1,1 @@
+"call memory_remember with type=\"context\", content=\"Test memory - user name is Paul\" and scope=\"user\""

@@ -3,7 +3,7 @@
   "checkpoint_id": "6cbcd32e84b0",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 4,
+  "checkpoints_count": 5,
   "files_touched": [
     ".sisyphus/run-continuation/ses_1e6ea4135ffeCP90Y7GbFRiKCg.json",
     ".sisyphus/run-continuation/ses_1e7738e6cffeDWyrx3OL9AbWpt.json",
@@ -27,13 +27,19 @@
       "transcript": "/6c/bcd32e84b0/2/full.jsonl",
       "content_hash": "/6c/bcd32e84b0/2/content_hash.txt",
       "prompt": "/6c/bcd32e84b0/2/prompt.txt"
+    },
+    {
+      "metadata": "/6c/bcd32e84b0/3/metadata.json",
+      "transcript": "/6c/bcd32e84b0/3/full.jsonl",
+      "content_hash": "/6c/bcd32e84b0/3/content_hash.txt",
+      "prompt": "/6c/bcd32e84b0/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 122825,
+    "input_tokens": 175144,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 411392,
-    "output_tokens": 3084,
-    "api_call_count": 10
+    "cache_read_tokens": 463584,
+    "output_tokens": 3328,
+    "api_call_count": 12
   }
 }

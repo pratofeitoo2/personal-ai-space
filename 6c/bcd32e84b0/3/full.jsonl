@@ -1,0 +1,260 @@
+{
+  "info": {
+    "id": "ses_1e6f0bfdcffec3gBy24AmCH8at",
+    "slug": "stellar-garden",
+    "projectID": "8d32502bc366fd2fed3d81047e967a21e02468cb",
+    "directory": "/Users/paulorezende/Documents/Personal_AI_powerhouse",
+    "path": "",
+    "title": "New session - 2026-05-11T22:01:30.403Z",
+    "agent": "Sisyphus - Ultraworker",
+    "model": {
+      "id": "minimax-m2.5-free",
+      "providerID": "opencode",
+      "variant": "default"
+    },
+    "version": "1.14.48",
+    "summary": {
+      "additions": 0,
+      "deletions": 0,
+      "files": 0
+    },
+    "permission": [
+      {
+        "permission": "question",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_enter",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_exit",
+        "pattern": "*",
+        "action": "deny"
+      }
+    ],
+    "time": {
+      "created": 1778536890403,
+      "updated": 1778536901395
+    }
+  },
+  "messages": [
+    {
+      "info": {
+        "role": "user",
+        "time": {
+          "created": 1778536890490
+        },
+        "agent": "Sisyphus - Ultraworker",
+        "model": {
+          "providerID": "opencode",
+          "modelID": "minimax-m2.5-free"
+        },
+        "summary": {
+          "diffs": []
+        },
+        "id": "msg_e190f407a001hC2PLoS9Qfr3Ov",
+        "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "\"call memory_remember with type=\\\"context\\\", content=\\\"Test memory - user name is Paul\\\" and scope=\\\"user\\\"\"",
+          "id": "prt_e190f4090001mTQf1PwM0S5zC4",
+          "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at",
+          "messageID": "msg_e190f407a001hC2PLoS9Qfr3Ov"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_e190f407a001hC2PLoS9Qfr3Ov",
+        "role": "assistant",
+        "mode": "Sisyphus - Ultraworker",
+        "agent": "Sisyphus - Ultraworker",
+        "path": {
+          "cwd": "/Users/paulorezende/Documents/Personal_AI_powerhouse",
+          "root": "/Users/paulorezende/Documents/Personal_AI_powerhouse"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 52354,
+          "input": 52204,
+          "output": 150,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 0
+          }
+        },
+        "modelID": "minimax-m2.5-free",
+        "providerID": "opencode",
+        "time": {
+          "created": 1778536891423,
+          "completed": 1778536901177
+        },
+        "finish": "tool-calls",
+        "id": "msg_e190f441f0016k0vdVrAVqyS62",
+        "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at"
+      },
+      "parts": [
+        {
+          "snapshot": "185c023b56d394cfed59b5131ccd012ad4f5b2d2",
+          "type": "step-start",
+          "id": "prt_e190f62c6001iywdUtuu8BBrok",
+          "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at",
+          "messageID": "msg_e190f441f0016k0vdVrAVqyS62"
+        },
+        {
+          "type": "reasoning",
+          "text": "The user is asking me to call a memory tool with specific parameters. Looking at the available tools, I can see there's a `memory` tool that supports `add`, `search`, `profile`, `list`, `forget`, and `help` modes. The user wants to add a memory with:\n- type=\"context\"\n- content=\"Test memory - user name is Paul\"\n- scope=\"user\"\n\nI should use the memory tool with mode=\"add\" to add this memory.",
+          "time": {
+            "start": 1778536900625,
+            "end": 1778536900634
+          },
+          "metadata": {
+            "anthropic": {
+              "signature": "63b45aaeb4a1f8cbf84a07a0adc8ad0467d4e3fb064b32b34f969bb56a76fac6"
+            }
+          },
+          "id": "prt_e190f6811001SlVjXBpFnLWhJL",
+          "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at",
+          "messageID": "msg_e190f441f0016k0vdVrAVqyS62"
+        },
+        {
+          "type": "tool",
+          "tool": "memory",
+          "callID": "call_function_zasoytezu15b_1",
+          "state": {
+            "status": "completed",
+            "input": {
+              "content": "Test memory - user name is Paul",
+              "mode": "add",
+              "type": "context"
+            },
+            "output": "{\"success\":true,\"message\":\"Memory added\",\"id\":\"mem_1778536900861_kre1f89pu\"}",
+            "metadata": {
+              "truncated": false
+            },
+            "title": "",
+            "time": {
+              "start": 1778536900788,
+              "end": 1778536900871
+            }
+          },
+          "id": "prt_e190f6829001pGVW89Oq5z3nX6",
+          "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at",
+          "messageID": "msg_e190f441f0016k0vdVrAVqyS62"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "185c023b56d394cfed59b5131ccd012ad4f5b2d2",
+          "type": "step-finish",
+          "tokens": {
+            "total": 52354,
+            "input": 52204,
+            "output": 150,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 0
+            }
+          },
+          "cost": 0,
+          "id": "prt_e190f69e50019dn86L3XggdWpq",
+          "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at",
+          "messageID": "msg_e190f441f0016k0vdVrAVqyS62"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_e190f407a001hC2PLoS9Qfr3Ov",
+        "role": "assistant",
+        "mode": "Sisyphus - Ultraworker",
+        "agent": "Sisyphus - Ultraworker",
+        "path": {
+          "cwd": "/Users/paulorezende/Documents/Personal_AI_powerhouse",
+          "root": "/Users/paulorezende/Documents/Personal_AI_powerhouse"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 52401,
+          "input": 115,
+          "output": 94,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 52192
+          }
+        },
+        "modelID": "minimax-m2.5-free",
+        "providerID": "opencode",
+        "time": {
+          "created": 1778536901179,
+          "completed": 1778536903519
+        },
+        "finish": "stop",
+        "id": "msg_e190f6a3b0018X4tglL6L2Bfya",
+        "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at"
+      },
+      "parts": [
+        {
+          "snapshot": "185c023b56d394cfed59b5131ccd012ad4f5b2d2",
+          "type": "step-start",
+          "id": "prt_e190f6ffe001zWftoIKodnEzO6",
+          "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at",
+          "messageID": "msg_e190f6a3b0018X4tglL6L2Bfya"
+        },
+        {
+          "type": "reasoning",
+          "text": "The user asked me to call the memory tool with specific parameters. I've done that - added a memory with type=\"context\", content=\"Test memory - user name is Paul\" and scope=\"user\" (which is the default scope).\n\nThe memory was successfully added with ID: mem_1778536900861_kre1f89pu",
+          "time": {
+            "start": 1778536903051,
+            "end": 1778536903227
+          },
+          "metadata": {
+            "anthropic": {
+              "signature": "aede590115fb551adfdd6f64dc315d142d34f7bb669d345227fe9859fdd18dd2"
+            }
+          },
+          "id": "prt_e190f718b001uisAFppAbwNEjz",
+          "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at",
+          "messageID": "msg_e190f6a3b0018X4tglL6L2Bfya"
+        },
+        {
+          "type": "text",
+          "text": "\n\nDone. Memory added with ID: `mem_1778536900861_kre1f89pu`",
+          "time": {
+            "start": 1778536903228,
+            "end": 1778536903237
+          },
+          "id": "prt_e190f723c0014EqOvBRlMPlw1L",
+          "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at",
+          "messageID": "msg_e190f6a3b0018X4tglL6L2Bfya"
+        },
+        {
+          "reason": "stop",
+          "snapshot": "185c023b56d394cfed59b5131ccd012ad4f5b2d2",
+          "type": "step-finish",
+          "tokens": {
+            "total": 52401,
+            "input": 115,
+            "output": 94,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 52192
+            }
+          },
+          "cost": 0,
+          "id": "prt_e190f730a001vnsJHZ1z2xRpVB",
+          "sessionID": "ses_1e6f0bfdcffec3gBy24AmCH8at",
+          "messageID": "msg_e190f6a3b0018X4tglL6L2Bfya"
+        }
+      ]
+    }
+  ]
+}
