@@ -1,0 +1,11 @@
+[MEMORY]
+
+Project Knowledge:
+- [100%] Test memory - user name is Paul
+Search exhaustively for any configuration files, documentation, or code that defines or lists available subagents in opencode. Check:
+1. Any files named like agent*, subagent*, config*, etc. in the project root and common config dirs
+2. Look in .opencode/, .config/, agents/ directories
+3. Search for patterns like "agent", "subagent", "agent_type" in JSON, YAML, TOML, TS, JS files
+4. Check package.json or similar
+Report ALL files found with their paths and relevant content snippets.
+<!-- OMO_INTERNAL_INITIATOR -->

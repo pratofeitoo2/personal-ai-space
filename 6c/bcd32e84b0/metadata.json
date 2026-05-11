@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "6cbcd32e84b0",
+  "strategy": "manual-commit",
+  "branch": "feature/llm-integration",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".sisyphus/run-continuation/ses_1e6ea4135ffeCP90Y7GbFRiKCg.json",
+    ".sisyphus/run-continuation/ses_1e7738e6cffeDWyrx3OL9AbWpt.json",
+    "personal-ai-space/knowledge/notes/Entire CLI README.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/6c/bcd32e84b0/0/metadata.json",
+      "transcript": "/6c/bcd32e84b0/0/full.jsonl",
+      "content_hash": "/6c/bcd32e84b0/0/content_hash.txt",
+      "prompt": "/6c/bcd32e84b0/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 1
+  }
+}
