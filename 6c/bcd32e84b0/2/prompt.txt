@@ -1,0 +1,5 @@
+[MEMORY]
+
+Project Knowledge:
+- [100%] Test memory - user name is Paul
+"call memory_recall with scope=\"user\""
