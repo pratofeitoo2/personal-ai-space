@@ -1,0 +1,1 @@
+install this plugin https://github.com/ApplauseLab/opencode-plugin-simple-memory.git. Be careful to not making mistakes on the opencode config file like you have been doing almost everytime.
