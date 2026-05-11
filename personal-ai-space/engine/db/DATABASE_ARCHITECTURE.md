@@ -61,7 +61,7 @@ relationships, and how data propagates between databases.
 | `tasks` | Work items + subtasks | id, project_id, **parent_task_id** (self-ref for subtasks), title, status, priority, **progress_pct**, **sort_order**, effort_hours |
 | `task_dependencies` | Task blocking/relating | task_id, depends_on, dependency_type (blocked_by, relates_to, etc.) |
 | `task_history` | Status/progress change log | task_id, field, old_value, new_value, changed_by |
-| `calendar_events` | Time-bound task slots | task_id, start_time, end_time, status |
+| `calendar_events` | Time-bound task slots | task_id, start_time, end_time, status — STANDBY (no pipeline) |
 | `doc_links` | .md file → entity mapping | entity_type/entity_id, file_path, link_type, frontmatter_status |
 | `sync_state` | File ↔ DB sync tracking | entity, file_path, file_hash, last_modified, direction |
 
@@ -151,10 +151,10 @@ relationships, and how data propagates between databases.
 |-------|---------|-------|
 | `articles` | Imported web articles | title, url, source, tags, summary |
 | `notes` | User-written notes | title, content, tags, category |
-| `"references"` | Reference links | 0 rows — no pipeline yet |
-| `projects_knowledge` | Project-specific knowledge | 0 rows — no pipeline yet |
+| `"references"` | Reference links | STANDBY (no pipeline) |
+| `projects_knowledge` | Project-specific knowledge | STANDBY (no pipeline) |
 | `knowledge_index` | Tag/keyword frequency index | 206 terms |
-| `cross_references` | Entity cross-links | 0 rows |
+| `cross_references` | Entity cross-links | STANDBY (no pipeline) |
 
 **Cleanup:** `refs` table was dropped (empty duplicate of `"references"`).
 

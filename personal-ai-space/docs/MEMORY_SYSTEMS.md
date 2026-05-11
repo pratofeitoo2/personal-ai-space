@@ -202,7 +202,7 @@ Stream results (don't cache)
 
 ---
 
-## 4. Vector Memory (Semantic Search)
+## 4. Vector Memory (Semantic Search) — STANDBY
 
 **Storage**: FAISS (or Pinecone)  
 **Embedding Model**: all-MiniLM-L6-v2 (384 dim)  

@@ -135,7 +135,7 @@ Defined in `MODEL_HINTS` in `llm_bridge.py`. Falls back gracefully if the prefer
 ### Supported transports
 
 - **stdio** — spawns subprocess, communicates via JSON-RPC 2.0 with Content-Length framing
-- **http** — POST JSON-RPC to a remote endpoint (e.g. whatsapp-mcp daemon)
+- **http** — POST JSON-RPC to a remote endpoint (e.g. mail-mcp daemon)
 
 Server configurations live in `engine/mcp_tools/registry.json`. Enable a server by setting `"enabled": true`.
 
