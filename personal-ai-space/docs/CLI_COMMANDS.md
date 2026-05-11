@@ -1,6 +1,6 @@
 ---
 created: 2026-05-09T08:13
-updated: 2026-05-09T20:05
+updated: 2026-05-10T14:00
 ---
 # CLI Commands Reference
 
@@ -18,8 +18,10 @@ python3 cli.py <command> [options]
 | `health`    | Show engine health, agent status, database tables            |
 | `digest`    | Generate and display today's daily digest                    |
 | `review`    | Generate and display weekly review                           |
+| `sync`      | Manually sync .md frontmatter with database                  |
 | `reminders` | Show overdue tasks, tasks due today, and upcoming            |
 | `context`   | Display current profile, habits, needs, and MCP memory facts |
+| `serve`     | Run engine as persistent HTTP server (foreground)            |
 
 ---
 
@@ -88,8 +90,6 @@ python3 cli.py <command> [options]
 
 ## MCP Tools (External Service Integration)
 
-*Available on `feature/llm-integration` branch only.*
-
 | Command | Description |
 |---------|-------------|
 | `mcp status` | Show configured MCP servers and connection status |
@@ -149,8 +149,6 @@ python3 cli.py mcp call mail send_email --args '{"to": "maria@...", "subject": "
 ---
 
 ## Natural Language (LLM Bridge)
-
-*Available on `feature/llm-integration` branch only.*
 
 | Command               | Description                                                  |
 |-----------------------|--------------------------------------------------------------|
@@ -225,14 +223,18 @@ python3 cli.py memory add-lesson "Always back up before updates" --negative
 python3 cli.py learning observations --limit 20
 python3 cli.py learning infer
 
-# Natural language (LLM bridge — feature/llm-integration)
+# Natural language (LLM bridge)
 python3 cli.py nl "what's on my plate today" --enhance
 python3 cli.py nl "how are my habits this week"
 
-# MCP tools (feature/llm-integration)
+# MCP tools
 python3 cli.py mcp status
 python3 cli.py mcp tools
 python3 cli.py mcp discover
+
+# Sync & serve
+python3 cli.py sync
+python3 cli.py serve
 
 # LLM-powered MCP tool routing
 python3 cli.py nl "send an email to Maria saying I'm running late"

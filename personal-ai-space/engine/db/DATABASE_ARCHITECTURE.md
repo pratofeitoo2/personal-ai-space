@@ -36,15 +36,15 @@ relationships, and how data propagates between databases.
        │  events            │
        └────────┬───────────┘
                 │
-       ┌────────┴───────────┐
-       │  knowledge.db      │
-       │  articles          │
-       │  notes             │
-       │  refs / "refs"     │ ← duplicated (to consolidate)
-       │  projects_knowledge│
-       │  knowledge_index   │
-       │  cross_references  │
-       └────────────────────┘
+        ┌────────┴───────────┐
+        │  knowledge.db      │
+        │  articles          │
+        │  notes             │
+        │  "references"      │
+        │  projects_knowledge│
+        │  knowledge_index   │
+        │  cross_references  │
+        └────────────────────┘
 ```
 
 ---
@@ -53,7 +53,7 @@ relationships, and how data propagates between databases.
 
 **Path:** `engine/db/tasks.db`
 **Schema:** `engine/db/schema_tasks.sql`
-**Rows:** 33 tasks, 5 projects, 0 deps/history/doc_links/sync_state
+**Rows:** 33 tasks, 5 projects, 0 deps/history/doc_links/cal_events, 37 sync_state
 
 | Table | Purpose | Key Columns |
 |-------|---------|-------------|
@@ -83,13 +83,13 @@ relationships, and how data propagates between databases.
 
 **Path:** `engine/db/self.db`
 **Schema:** `engine/db/schema_self.sql`
-**Rows:** 1 profile, 5 habits, 25 traits, 4 needs, 20 behaviors, 6 relationships, 0 goals (user seeds)
+**Rows:** 1 profile, 5 habits, 25 traits, 4 needs, 20 behaviors, 6 relationships, 0 goals (user seeds), 0 habit_logs
 
 | Table | Purpose | Notes |
 |-------|---------|-------|
 | `profile` | User identity data | name, age, timezone, work_style, energy_peak_hours, etc. |
 | `habits` | Tracked habits | frequency, current_streak, target_streak, status |
-| `habit_logs` | Habit completion records | 0 rows — not yet wired |
+| `habit_logs` | Habit completion records | 0 rows — wired (engine.log_habit) |
 | `traits` | Inferred personality traits | from `comprehensive_extractor.py` |
 | `needs` | User needs/pain points | priority, status, linked_tasks |
 | `behaviors` | Observed behavior patterns | trigger, response, frequency, effectiveness |
@@ -106,12 +106,12 @@ relationships, and how data propagates between databases.
 
 **Path:** `engine/db/memories.db`
 **Schema:** `engine/db/schema_memories.sql`
-**Rows:** 76 interactions, 0 context_window, 25 agent_memory
+**Rows:** 84 interactions, 4 context_window, 25 agent_memory
 
 | Table | Purpose | Notes |
 |-------|---------|-------|
 | `interactions` | Every CLI command + engine call | agent_id, action, input, output, duration_ms, status |
-| `context_window` | Session context snapshots | 0 rows — not yet wired |
+| `context_window` | Session context snapshots | 4 rows — wired (engine start + every 5th send) |
 | `agent_memory` | Observer/pattern-learner key-value store | populated by behavior_observer + pattern_learner |
 
 **Cross-database links:**
@@ -124,7 +124,7 @@ relationships, and how data propagates between databases.
 
 **Path:** `engine/db/agent_memory.db`
 **Schema:** `engine/db/schema_agent_memory.sql`
-**Rows:** ~28 semantic facts, 2 lessons, ~24 events
+**Rows:** 39 semantic facts, 3 lessons, 66 events
 
 | Table | Purpose | Notes |
 |-------|---------|-------|
@@ -145,18 +145,18 @@ relationships, and how data propagates between databases.
 
 **Path:** `engine/db/knowledge.db`
 **Schema:** `engine/db/schema_knowledge.sql`
-**Rows:** 24 articles, 6 notes, 0 refs/""refs"", 0 projects_knowledge, 206 knowledge_index, 0 cross_references
+**Rows:** 24 articles, 6 notes, 0 "references", 0 projects_knowledge, 206 knowledge_index, 0 cross_references
 
 | Table | Purpose | Notes |
 |-------|---------|-------|
 | `articles` | Imported web articles | title, url, source, tags, summary |
 | `notes` | User-written notes | title, content, tags, category |
-| `refs` + `"references"` | Reference links | **DUPLICATE** — to consolidate |
-| `projects_knowledge` | Project-specific knowledge | 0 rows |
+| `"references"` | Reference links | 0 rows — no pipeline yet |
+| `projects_knowledge` | Project-specific knowledge | 0 rows — no pipeline yet |
 | `knowledge_index` | Tag/keyword frequency index | 206 terms |
 | `cross_references` | Entity cross-links | 0 rows |
 
-**Needs consolidation:** `refs` and `"references"` serve the same purpose.
+**Cleanup:** `refs` table was dropped (empty duplicate of `"references"`).
 
 ---
 
@@ -251,8 +251,8 @@ run_scan(scan_root)
 The 0 matches is expected — file titles (e.g., "Clinical Sex Therapist Career") don't exactly match
 DB titles (e.g., "Clinical Sexology Spec"). Matching improves when:
 1. Files gain explicit `project:` or `task_id:` fields in frontmatter
-2. Goals table is populated (currently 0 rows due to schema drift)
-3. Fuzzy title matching is added in a later phase
+2. Fuzzy title matching is added in a later phase
+3. Goals table is populated (currently still 0 rows — schema is fixed, user seeds manually)
 
 ---
 
@@ -311,6 +311,9 @@ Wired in `propagator.py`:
 | `sync_scanner.py` + engine.py + cli.py | 2026-05-10 | Auto-sync scanner runs on engine start and via `cli.py sync`. Scans .md frontmatter, matches to tasks/projects/goals, seeds doc_links, updates sync_state. 37 files staged. |
 | `migrate_goals.py` + `schema_self.sql` | 2026-05-10 | Realigned goals schema with actual DB (12 columns). Added progress, target_date, progress_source for AI integration. User seeds data manually. |
 | `engine.py`, `task_coordinator.py`, `propagator.py` | 2026-05-10 | Phase 4: Wired habit_logs (streak logic + propagation), context_window (snapshots on start + every 5th interaction), task_dependencies (create/remove/auto-block/auto-unblock). |
+| `synthesis_loop.py` | 2026-05-10 | Removed duplicate `run_two_pass_analysis` function definition; replaced hardcoded paths with `Path(__file__)`. |
+| `synthesis_run.py` | 2026-05-10 | Replaced hardcoded `/Users/paulorezende/...` paths with `Path(__file__).resolve().parent.parent`. |
+| `schema_knowledge.sql` | 2026-05-10 | Dropped `refs` table (empty duplicate of `"references"`). |
 
 ---
 

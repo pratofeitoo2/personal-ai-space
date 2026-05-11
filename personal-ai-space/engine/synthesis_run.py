@@ -22,17 +22,19 @@ def save_synthesis(conn, synthesis):
     """, (id_val, 'user.identity_synthesis', synthesis, 0.9, 'identity', 'synthesis_agent', now, now))
     conn.commit()
 
+ROOT = Path(__file__).resolve().parent.parent
+
+
 def run_loop():
     # Setup
-    root = Path("/Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space")
-    inbox_file = root / "command/inbox/2025-03-08 16h11.md"
+    inbox_file = ROOT / "command/inbox/2025-03-08 16h11.md"
     
     if not inbox_file.exists():
         print("File not found")
         return
 
     # Initialize DBs
-    conn = sqlite3.connect(root / "engine/db/agent_memory.db")
+    conn = sqlite3.connect(ROOT / "engine/db/agent_memory.db")
     
     # Get State
     current_state = get_current_synthesis(conn)

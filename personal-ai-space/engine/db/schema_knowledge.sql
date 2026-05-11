@@ -26,16 +26,6 @@ CREATE TABLE IF NOT EXISTS notes (
   importance_level INTEGER
 );
 
-CREATE TABLE IF NOT EXISTS refs (
-  id TEXT PRIMARY KEY,
-  name TEXT,
-  url TEXT,
-  type TEXT,
-  category TEXT,
-  added_at DATETIME,
-  used_in_projects TEXT
-);
-
 CREATE TABLE IF NOT EXISTS "references" (
   id TEXT PRIMARY KEY,
   title TEXT,
