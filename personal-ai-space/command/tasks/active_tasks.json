@@ -1,0 +1,42 @@
+[
+  {
+    "id": "task_001",
+    "title": "Complete personal AI space setup",
+    "project": "Personal AI Powerhouse",
+    "priority": "critical",
+    "status": "in_progress",
+    "created": "2026-05-06",
+    "due": "2026-05-20",
+    "estimated_hours": 40
+  },
+  {
+    "id": "task_002",
+    "title": "Design agent communication protocols",
+    "project": "Personal AI Powerhouse",
+    "priority": "high",
+    "status": "pending",
+    "created": "2026-05-06",
+    "due": "2026-05-25",
+    "estimated_hours": 15
+  },
+  {
+    "id": "task_003",
+    "title": "Build habit tracking system",
+    "project": "Personal AI Powerhouse",
+    "priority": "high",
+    "status": "pending",
+    "created": "2026-05-06",
+    "due": "2026-06-01",
+    "estimated_hours": 12
+  },
+  {
+    "id": "task_004",
+    "title": "Review and archive old projects",
+    "project": "Knowledge Management",
+    "priority": "medium",
+    "status": "pending",
+    "created": "2026-05-01",
+    "due": "2026-05-31",
+    "estimated_hours": 8
+  }
+]

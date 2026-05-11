@@ -1,0 +1,11 @@
+{
+	"id": "pai-runsh",
+	"name": "PAI RunSH",
+	"version": "1.1.0",
+	"minAppVersion": "0.15.0",
+	"description": "Run shell commands from notes with inline output capture. Fork of runsh with enhanced output display.",
+	"author": "Forked from Ddone",
+	"authorUrl": "https://github.com/Deedone/obsidian-runsh",
+	"fundingUrl": "",
+	"isDesktopOnly": true
+}

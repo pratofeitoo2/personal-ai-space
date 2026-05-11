@@ -1,0 +1,123 @@
+{
+  "version": "0.1.0",
+  "engine": {
+    "name": "personal-ai-engine",
+    "mode": "development",
+    "timezone": "America/Sao_Paulo"
+  },
+  "agents": {
+    "enabled": [
+      "context-manager",
+      "task-coordinator",
+      "insight-generator",
+      "reminder-system",
+      "report-generator",
+      "knowledge-indexer",
+      "mcp-agent"
+    ],
+    "defaults": {
+      "timeout_seconds": 30,
+      "retry_attempts": 3,
+      "retry_backoff_ms": 1000
+    }
+  },
+  "memory": {
+    "short_term": {
+      "type": "in_memory",
+      "max_size_mb": 512,
+      "ttl_seconds": 3600
+    },
+    "medium_term": {
+      "type": "cache",
+      "provider": "sqlite",
+      "db_path": "./db/cache.db",
+      "ttl_seconds": 604800
+    },
+    "long_term": {
+      "type": "sqlite",
+      "databases": {
+        "memories": "./db/memories.db",
+        "self": "./db/self.db",
+        "tasks": "./db/tasks.db",
+        "knowledge": "./db/knowledge.db"
+      }
+    },
+    "mcp_memory": {
+      "enabled": true,
+      "type": "mcp-server",
+      "server_dir": "./memory/mcp-server",
+      "db_path": "./db/agent_memory.db",
+      "context_budget": 8000,
+      "confidence_threshold": 0.8,
+      "injection_mode": "selective",
+      "description": "Node.js pi-memory MCP server — semantic facts + lessons for cross-session agent memory"
+    },
+    "vector": {
+      "enabled": true,
+      "type": "faiss",
+      "model": "all-MiniLM-L6-v2",
+      "dimension": 384,
+      "index_path": "./db/vectors"
+    }
+  },
+  "logging": {
+    "enabled": true,
+    "level": "info",
+    "location": "./logs",
+    "retention_days": 90,
+    "rotation": {
+      "when": "midnight",
+      "interval": 1,
+      "backup_count": 30
+    },
+    "files": {
+      "system": "system.log",
+      "errors": "errors.log",
+      "audit": "audit.log",
+      "performance": "performance.log"
+    }
+  },
+  "data_flows": {
+    "ingestion": {
+      "enabled": true,
+      "batch_size": 100,
+      "interval_seconds": 300
+    },
+    "processing": {
+      "enabled": true,
+      "feature_extraction": true,
+      "anomaly_detection": true
+    },
+    "reporting": {
+      "enabled": true,
+      "daily_digest": "08:00",
+      "weekly_review": "friday_18:00",
+      "monthly_analysis": "first_monday_09:00"
+    }
+  },
+  "integrations": {
+    "google": {
+      "enabled": false,
+      "services": ["calendar", "gmail"],
+      "sync_interval_minutes": 30
+    },
+    "todoist": {
+      "enabled": false,
+      "sync_interval_minutes": 60
+    },
+    "github": {
+      "enabled": false,
+      "sync_interval_minutes": 120
+    },
+    "fitness": {
+      "enabled": false,
+      "services": ["fitbit", "strava"],
+      "sync_interval_minutes": 1440
+    }
+  },
+  "quality": {
+    "data_validation": true,
+    "duplicate_detection": true,
+    "consistency_checks": true
+  }
+}

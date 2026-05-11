@@ -1,0 +1,17 @@
+# Staging area (user-provided files, not tracked)
+staging/
+processed/
+
+# Intake logs
+*.log
+intake.log
+
+# Temporary processing files
+.tmp/
+*.tmp
+
+# But DO track these for reference
+!README.md
+!process_intake.py
+!route_file.py
+!.gitignore

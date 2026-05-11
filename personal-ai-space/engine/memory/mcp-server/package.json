@@ -1,0 +1,33 @@
+{
+  "name": "personal-ai-memory",
+  "version": "0.1.0",
+  "description": "MCP agent memory server for personal-ai-space",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "memory-cli": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "cli": "tsx src/cli.ts",
+    "cli:demo": "tsx src/cli.ts --demo",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "demo": "tsx src/demo-cli.ts --playground",
+    "demo:verbose": "tsx src/demo-cli.ts --playground --verbose",
+    "playground": "tsx src/playground.ts",
+    "interactive": "tsx src/demo-cli.ts --interactive"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "better-sqlite3": "^11.6.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.4",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  }
+}

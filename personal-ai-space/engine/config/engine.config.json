@@ -1,0 +1,28 @@
+{
+  "engine_version": "0.1.0",
+  "mode": "development",
+  "agents_enabled": [
+    "context-manager",
+    "task-coordinator",
+    "insight-generator",
+    "reminder-system",
+    "report-generator",
+    "knowledge-indexer",
+    "mcp-agent"
+  ],
+  "memory": {
+    "type": "sqlite",
+    "location": "./db/memory.db",
+    "max_context_tokens": 8000
+  },
+  "logging": {
+    "level": "info",
+    "location": "./logs",
+    "retention_days": 90
+  },
+  "update_cycle": {
+    "insight_generation": "daily_08:00",
+    "habit_sync": "hourly",
+    "self_analysis": "weekly_monday_09:00"
+  }
+}

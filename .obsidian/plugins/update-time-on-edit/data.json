@@ -1,0 +1,18 @@
+{
+  "dateFormat": "yyyy-MM-dd'T'HH:mm",
+  "enableCreateTime": true,
+  "headerUpdated": "updated",
+  "headerCreated": "created",
+  "minMinutesBetweenSaves": 1,
+  "ignoreGlobalFolder": [],
+  "ignoreCreatedFolder": [],
+  "enableExperimentalHash": false,
+  "fileHashMap": {
+    "BMO/Profiles/BMO.md": "ed5c3e4bcadf2bfb3bc7084aeaea0ff0dd6a96d6fa8f445dbaad6dd41e302133",
+    "personal-ai-space/docs/ARCHITECTURE.md": "c686d8f2a6716e622f373e0febf442950b3a04556e9d9246591b2a12c0204f68",
+    "personal-ai-space/knowledge/notes/MCP Server Guides/whatsapp-mcp.md": "0a698eae795e3a6f5646a0fb38fcba9036043113555261c780a0d265362336dd",
+    "personal-ai-space/engine/memory/mcp-server/node_modules/braces/README.md": "24980988c08bc23ae7d837a3e1b7dd6b130202243b1b3dbfa0555f3a0126b4e3",
+    "personal-ai-space/INDEX.md": "60152c66d1c41b4ee0e71d2fa73454c5c4f68351e08dec326fd4c1df6ac10a30",
+    "AI Engine Command Center.md": "68fb9c8725d99fbaf85f3f80c5dfd70ccb4f667b4db1b621ea57c7291a7db1f9"
+  }
+}

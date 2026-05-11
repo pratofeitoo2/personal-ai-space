@@ -1,0 +1,34 @@
+[
+  {
+    "id": "need_001",
+    "category": "professional",
+    "name": "Functional AI system",
+    "priority": "critical",
+    "status": "in_progress",
+    "description": "Build a personal AI space that actually works and solves real problems"
+  },
+  {
+    "id": "need_002",
+    "category": "personal",
+    "name": "Time clarity",
+    "priority": "high",
+    "status": "active",
+    "description": "Better understanding of where time actually goes"
+  },
+  {
+    "id": "need_003",
+    "category": "professional",
+    "name": "Knowledge management",
+    "priority": "high",
+    "status": "active",
+    "description": "Stop knowledge hoarding, build systematic organization"
+  },
+  {
+    "id": "need_004",
+    "category": "health",
+    "name": "Consistent routines",
+    "priority": "medium",
+    "status": "active",
+    "description": "Establish and track daily disciplined habits"
+  }
+]

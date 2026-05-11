@@ -1,0 +1,102 @@
+[
+  {
+    "id": "context-manager",
+    "name": "Context Manager",
+    "description": "Maintains conversation state and retrieves user profile data",
+    "priority": "critical",
+    "dependencies": ["self.db", "memories.db"],
+    "capabilities": [
+      "Load user profile",
+      "Maintain session context",
+      "Retrieve recent interactions",
+      "Provide user-aware responses"
+    ],
+    "triggers": ["on_session_start", "on_user_query"],
+    "outputs": ["context_window", "user_profile"],
+    "error_handling": "fallback_to_defaults"
+  },
+  {
+    "id": "task-coordinator",
+    "name": "Task Coordinator",
+    "description": "Manages tasks, priorities, and deadlines",
+    "priority": "high",
+    "dependencies": ["tasks.db"],
+    "capabilities": [
+      "Create/update/delete tasks",
+      "Track progress",
+      "Calculate priorities",
+      "Generate recommendations",
+      "Handle dependencies"
+    ],
+    "triggers": ["scheduled_review", "on_task_change", "deadline_approaching"],
+    "outputs": ["task_status", "priority_queue", "recommendations"],
+    "error_handling": "log_and_continue"
+  },
+  {
+    "id": "insight-generator",
+    "name": "Insight Generator",
+    "description": "Analyzes habits and generates recommendations",
+    "priority": "high",
+    "dependencies": ["self.db", "memories.db"],
+    "capabilities": [
+      "Analyze habit patterns",
+      "Detect anomalies",
+      "Generate recommendations",
+      "Create summaries",
+      "Identify trends"
+    ],
+    "triggers": ["daily_analysis", "weekly_review", "on_habit_change"],
+    "outputs": ["insights", "recommendations", "anomalies"],
+    "error_handling": "degrade_gracefully"
+  },
+  {
+    "id": "reminder-system",
+    "name": "Reminder System",
+    "description": "Time-based and event-based reminders",
+    "priority": "high",
+    "dependencies": ["tasks.db", "self.db"],
+    "capabilities": [
+      "Schedule reminders",
+      "Track deadlines",
+      "Send notifications",
+      "Handle recurring reminders"
+    ],
+    "triggers": ["scheduled_time", "event_occurrence", "deadline_threshold"],
+    "outputs": ["notification", "log"],
+    "error_handling": "retry_with_backoff"
+  },
+  {
+    "id": "knowledge-indexer",
+    "name": "Knowledge Indexer",
+    "description": "Maintains knowledge base index and organization",
+    "priority": "medium",
+    "dependencies": ["knowledge.db"],
+    "capabilities": [
+      "Index new content",
+      "Maintain cross-references",
+      "Deduplicate",
+      "Suggest categorization",
+      "Search knowledge base"
+    ],
+    "triggers": ["on_new_article", "scheduled_curation", "search_request"],
+    "outputs": ["indexed_content", "suggestions", "search_results"],
+    "error_handling": "log_and_continue"
+  },
+  {
+    "id": "report-generator",
+    "name": "Report Generator",
+    "description": "Creates summaries and analysis reports",
+    "priority": "medium",
+    "dependencies": ["tasks.db", "self.db", "memories.db"],
+    "capabilities": [
+      "Generate daily digest",
+      "Create weekly reviews",
+      "Produce monthly analysis",
+      "Export reports",
+      "Visualize data"
+    ],
+    "triggers": ["scheduled_report", "on_request"],
+    "outputs": ["report", "visualization"],
+    "error_handling": "log_and_continue"
+  }
+]

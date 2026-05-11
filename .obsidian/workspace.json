@@ -1,0 +1,282 @@
+{
+  "main": {
+    "id": "bf09da7afce4efb4",
+    "type": "split",
+    "children": [
+      {
+        "id": "6eb1a0e3fe3f34a8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "abc5595d089965e8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "personal-ai-space/docs/CLI_COMMANDS.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "CLI_COMMANDS"
+            }
+          },
+          {
+            "id": "4cf9570bf988004b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "personal-ai-space/command/finances/LinkedIn Profile Data.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "LinkedIn Profile Data"
+            }
+          },
+          {
+            "id": "ea6c8b139b9c920a",
+            "type": "leaf",
+            "state": {
+              "type": "json",
+              "state": {
+                "file": "personal-ai-space/command/activities/disciplined_routines.json"
+              },
+              "icon": "lucide-file",
+              "title": "disciplined_routines"
+            }
+          },
+          {
+            "id": "a00118de8890698a",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "personal-ai-space/self/goals/Life Map.canvas",
+                "viewState": {
+                  "x": 245,
+                  "y": -50,
+                  "zoom": 0
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Life Map"
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7d98005e4658d789",
+    "type": "split",
+    "children": [
+      {
+        "id": "9b449f6b0a1693e6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "827905691f87b963",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "90419197e78f562d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "df4680b14b228f42",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 412.5
+  },
+  "right": {
+    "id": "7f93b33c44aa02b9",
+    "type": "split",
+    "children": [
+      {
+        "id": "4a5827894fc9cf58",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a2b17b4dce690862",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "110358ab1ff5310a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "b5dd29d4b638b21e",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "175ceec63fb38e6a",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "79a1778ddad632e3",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "obsidian42-brat:BRAT": false,
+      "canvas-banana:Canvas Banana": false
+    }
+  },
+  "active": "827905691f87b963",
+  "lastOpenFiles": [
+    "personal-ai-space/engine/db/self.db-shm",
+    "personal-ai-space/engine/db/self.db-wal",
+    "personal-ai-space/engine/db/memories.db-shm",
+    "personal-ai-space/engine/db/memories.db-wal",
+    "personal-ai-space/engine/db/knowledge.db-shm",
+    "personal-ai-space/engine/db/knowledge.db-wal",
+    "personal-ai-space/db/agent_memory.db-shm",
+    "personal-ai-space/db/agent_memory.db-wal",
+    "personal-ai-space/command/finances/LinkedIn Profile Data.md",
+    "personal-ai-space/command/finances/overview.json",
+    "personal-ai-space/command/inbox/Daily Notes.base",
+    "personal-ai-space/command/inbox/Daily Notes Dashboard.md",
+    "personal-ai-space/command/inbox/Nov-13-2025.md",
+    "personal-ai-space/command/inbox/dez 07, 2025 17h 30.md",
+    "personal-ai-space/command/inbox/Daily Notes Dashboard 1.md",
+    "personal-ai-space/self/goals/Life Map.canvas",
+    "personal-ai-space/command/activities/disciplined_routines.json",
+    "AI Engine Command Center.md",
+    "personal-ai-space/self/goals/Clinical_Sex_Therapist_Career.md",
+    "Dashboard Logs/Daily/2026-05-10.md",
+    "personal-ai-space/self/goals/Clinical_Sex_Therapist_Career_Brazil.md",
+    "personal-ai-space/self/goals/Study Plan Ebook Outline.md",
+    "personal-ai-space/self/goals/Study Plan ebook.md",
+    "personal-ai-space/self/goals/Study plan.md",
+    "personal-ai-space/knowledge/articles/Classes sexólogos Portugal.md",
+    "personal-ai-space/knowledge/notes/Atendimentos Online.md",
+    "personal-ai-space/knowledge/notes/Getliner A prática da psicoterapia sexual no Brasil.md",
+    "personal-ai-space/knowledge/notes/Messy Brain Notes.md",
+    "personal-ai-space/knowledge/notes/NEDS Vault Filetree.canvas",
+    "personal-ai-space/knowledge/notes/Qwen O Ecossistema da Psicoterapia Sexual no Brasil.md",
+    "personal-ai-space/knowledge/notes/Microsoft Copilot Psicoterapia Sexual no Brasil.md",
+    "personal-ai-space/knowledge/notes/Grok.md",
+    "personal-ai-space/vault/personal documents  PF/Certificado de conclusao ensino medio .JPG",
+    "personal-ai-space/vault/personal documents  PF/CPF Ravi .jpg",
+    "personal-ai-space/vault/personal documents  PF/Sex CompulsionOCSB Assessment - Insight Psychological.jpeg.png",
+    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende(2).jpg",
+    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende(1).jpg",
+    "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende.jpg",
+    "personal-ai-space/self/relationships/Liz.md",
+    "personal-ai-space/self/relationships/Tamara.md",
+    "Dashboard Logs/Calendar.md",
+    "Obsidian DASH/Documentation/DASH Docs - FAQ.md",
+    "Obsidian DASH/Documentation/DASH Docs - Reports, Reviews, and Exports.md",
+    "Obsidian DASH/Documentation/DASH Docs - AI and Research Guide.md",
+    "personal-ai-space/self/goals/NEDS Vault Filetree.canvas",
+    "personal-ai-space/docs/architecture-map.canvas",
+    "personal-ai-space/intake/staging/NEDS Vault Filetree.canvas",
+    "personal-ai-space/intake/staging/Life Map.canvas",
+    "personal-ai-space/vault/personal documents  PF/Titulo de eleitor .JPG",
+    "personal-ai-space/vault/personal documents  PF/RG.jpg",
+    "personal-ai-space/vault/personal documents  PF/NIS.jpg",
+    "personal-ai-space/vault/personal documents  PF/IMG_0310.PNG"
+  ]
+}

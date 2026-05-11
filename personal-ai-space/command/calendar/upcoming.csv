@@ -1,0 +1,6 @@
+date,event,time,duration_hours,category,status
+2026-05-06,Deep work block,09:00,3,work,completed
+2026-05-07,Team sync,14:00,1,work,scheduled
+2026-05-08,Personal project time,10:00,4,personal,scheduled
+2026-05-09,Review week,09:00,2,meta,scheduled
+2026-05-12,Medical checkup,15:00,1,health,scheduled

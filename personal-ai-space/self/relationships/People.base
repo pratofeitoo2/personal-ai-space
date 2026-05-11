@@ -1,0 +1,53 @@
+filters:
+  and:
+    - file.folder == "PERSONAL/People"
+    - file.ext != "base"
+formulas:
+  Progress Bar: |-
+    if( note["maxProperty"], html("<progress class='metadata-progress' max='" + 
+    note["maxProperty"] + "' value='" + 
+    if(note["valueProperty"], note["valueProperty"], 0) + 
+    "' aria-label='" + 
+    if(note["maxProperty"], (if(note["valueProperty"], note["valueProperty"], 0) / note["maxProperty"] * 100).round(), " ") + " %" + 
+    "' data-tooltip-position='top' data-tooltip-delay='500'>"), "")
+  Progress Circle: |-
+    if(note["maxProperty"], html("<div class='metadata-circle-progress'  style='background: radial-gradient(closest-side, var(--background-primary) 64%, transparent 65% 100%), conic-gradient(var(--color-accent-1) " + if(note["maxProperty"], (if(note["valueProperty"], note["valueProperty"], 0) / note["maxProperty"] * 100).round(), 0) + "%" + ", var(--background-secondary) 0);' aria-label='" + 
+    if(note["maxProperty"], (if(note["valueProperty"], note["valueProperty"], 0) / note["maxProperty"] * 100).round(), " ") + " %" + 
+    "' data-tooltip-position='top' data-tooltip-delay='500'></div>"), "")
+views:
+  - type: table
+    name: Table
+    order:
+      - file.name
+      - Name
+      - RG
+      - CPF
+      - Certidão Nasc.
+      - email
+      - number
+      - Pai
+      - Birth Date
+    sort:
+      - property: number
+        direction: ASC
+      - property: Pai
+        direction: ASC
+    columnSize:
+      note.Name: 235
+      note.RG: 115
+      note.CPF: 148
+      note.Certidão Nasc.: 321
+      note.number: 188
+      note.Birth Date: 217
+  - type: cards
+    name: Cards
+    order:
+      - file.name
+      - Birth Date
+      - Name
+      - Pai
+    image: note.Cover
+    imageAspectRatio: 1.4
+    columnSize:
+      note.Name: 247
+    cardSize: 190

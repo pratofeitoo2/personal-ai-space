@@ -1,0 +1,200 @@
+#!/bin/bash
+
+# Memory Assistant CLI - Feature Showcase
+# This script demonstrates all the key features of the CLI
+
+cat << 'EOF'
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                  🧠 Memory Assistant CLI - Feature Showcase                    ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1️⃣  INTERACTIVE REPL - Natural Language Input
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ The CLI accepts natural language commands:
+
+  Search:      "search typescript" or "find React" or "what is Docker"
+  Remember:    "remember key: value" or "save Python: A programming language"
+  Lessons:     "lesson: write tests" or "avoid: hardcoding secrets"
+  System:      "stats", "help", "config", "export", "clear", "quit"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2️⃣  FORMATTED OUTPUT - Pretty Tables & Charts
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Search Results Table:
+┌────────────────────────────────────────────────────────────────────────────┐
+│ 📋 Search Results:                                                         │
+│ ────────────────────────────────────────────────────────────────────────── │
+│ 1. TypeScript [Languages]                                                  │
+│    Value: Statically typed superset of JavaScript with strict mode         │
+│    Confidence: 95% | Relevance: 95%                                        │
+│    Last accessed: 5/6/2024 10:30:45 AM                                     │
+└────────────────────────────────────────────────────────────────────────────┘
+
+Memory Statistics with Visual Bar Charts:
+┌────────────────────────────────────────────────────────────────────────────┐
+│ 📊 Memory Statistics:                                                      │
+│ ────────────────────────────────────────────────────────────────────────── │
+│ Facts:    ██████████████████████████░░░░░░░░░░░░░░░░░░░░░░░ 25            │
+│ Lessons:  ████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 12            │
+│ Events:   ██████████████████████████████████████░░░░░░░░░░░░ 48            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3️⃣  DEMO MODE - Pre-populated with Sample Data
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Run with: npm run cli:demo
+
+Sample Facts:
+  • TypeScript - Statically typed superset of JavaScript
+  • React Hooks - Must be called unconditionally at top level
+  • SQL Indexing - Improves query speed but increases write overhead
+  • Git Rebase - Maintains clean commit history on feature branches
+  • Error Handling - Always validate input and handle edge cases
+
+Sample Lessons:
+  ✅ Test code before deployment
+  ❌ Never hardcode secrets or API keys
+  ✅ Use environment variables for configuration
+  ❌ Avoid premature optimization without profiling
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4️⃣  DATA PERSISTENCE - SQLite Database
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Database Location: data/memory.db
+
+Tables:
+  • semantic (facts) - key, value, confidence, category, created_at, etc.
+  • lessons - text, negative (0=do, 1=avoid), category, created_at, used_count
+  • events - audit log (action, details, timestamp)
+
+Features:
+  ✓ WAL mode for concurrent access
+  ✓ Automatic indexing on frequently searched columns
+  ✓ Confidence-based filtering (default: 70%)
+  ✓ Automatic export to JSON
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5️⃣  NATURAL LANGUAGE PROCESSING - Simple NLP Router
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Command Recognition:
+
+  SEARCH Commands:
+    search, find, lookup, what, tell me about
+
+  REMEMBER Commands (Save Facts):
+    remember, save, note, i should, remember that
+
+  LESSON Commands (Learn Rules):
+    lesson:, learned:, avoid:, don't, never
+
+  SYSTEM Commands:
+    stats, statistics, config, settings, export, save, clear, reset,
+    help, ?, quit, exit
+
+Examples:
+  ✓ "search typescript" → Search for TypeScript facts
+  ✓ "remember Python: High-level language" → Save a fact
+  ✓ "lesson: write tests" → Record a lesson
+  ✓ "avoid: hardcoding" → Record something to avoid
+  ✓ "stats" → Show memory statistics
+  ✓ "export" → Save memory to JSON
+  ✓ "help" → Show comprehensive help
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6️⃣  TESTING - Comprehensive Test Coverage
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Test Suites:
+
+  ✅ Integration Tests (9 tests)
+     • Store initialization
+     • Injector setup
+     • Fact management
+     • Lesson management
+     • Statistics generation
+     • Context building
+
+  ✅ Edge Case Tests (28 tests)
+     • 23 NLP parsing edge cases
+     • 5 argument parsing tests
+     • Empty input handling
+     • Multi-word queries
+     • Case sensitivity
+
+Run Tests:
+  npm run test              # Run all Jest tests
+  npx tsx tests/cli-integration.test.ts    # Run integration tests
+  npx tsx tests/cli-edge-cases.test.ts     # Run edge case tests
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7️⃣  USAGE EXAMPLES - Complete Workflows
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Workflow 1: Learning New Technology
+────────────────────────────────────
+You: remember Kubernetes: Container orchestration platform
+✅ Fact Saved
+  Key: Kubernetes
+  Value: Container orchestration platform
+  Confidence: 85%
+
+You: lesson: Always use resource limits in Kubernetes
+💡 Lesson Recorded
+  ✅ Learned: Always use resource limits in Kubernetes
+
+You: search Kubernetes
+📋 Search Results:
+1. Kubernetes
+   Value: Container orchestration platform
+   Confidence: 85% | Relevance: 85%
+
+Workflow 2: Reviewing Memory
+──────────────────────────────
+You: stats
+📊 Memory Statistics:
+Facts:    ██████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 6
+Lessons:  ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 4
+Events:   ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 8
+
+You: config
+⚙️ Configuration:
+Memory Store: Ready
+  Facts: 6
+  Lessons: 4
+  Events: 8
+
+Injector Config:
+  Context Budget: 8192 bytes
+  Min Confidence: 70%
+  Injection Mode: all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Files:
+  • CLI_GUIDE.md - Complete user documentation
+  • CLI_IMPLEMENTATION_SUMMARY.md - Implementation details
+  • src/cli.ts - Source code with inline documentation
+
+Quick Start:
+  npm run cli          # Run with persistent memory database
+  npm run cli:demo     # Run with sample pre-populated data
+  npm run build        # Compile TypeScript
+  npm run test         # Run all tests
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎉 Memory Assistant CLI is ready to use!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Start with: npm run cli:demo
+
+Then type "help" to see all available commands.
+
+EOF

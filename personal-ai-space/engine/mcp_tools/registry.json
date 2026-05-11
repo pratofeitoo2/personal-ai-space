@@ -1,0 +1,35 @@
+{
+  "servers": [
+    {
+      "id": "mail",
+      "name": "Mail MCP",
+      "description": "Send, read, search, and manage emails",
+      "transport": "stdio",
+      "command": "/Users/paulorezende/.local/bin/mail-mcp",
+      "args": ["serve"],
+      "env": {
+        "MAIL_MCP_ADMIN_ENV_FILE": "/Users/paulorezende/Documents/Personal_AI_powerhouse/mcp-servers/mail-mcp/mail-admin.env"
+      },
+      "enabled": true,
+      "tools": []
+    },
+    {
+      "id": "whatsapp",
+      "name": "WhatsApp MCP",
+      "description": "Send messages, read chats, manage groups on WhatsApp",
+      "transport": "http",
+      "url": "http://127.0.0.1:8765/mcp",
+      "headers": {
+        "Authorization": "Bearer ${WHATSAPP_MCP_TOKEN}",
+        "Content-Type": "application/json"
+      },
+      "enabled": true,
+      "tools": []
+    }
+  ],
+  "defaults": {
+    "timeout_seconds": 30,
+    "max_retries": 2,
+    "health_check_on_init": false
+  }
+}
