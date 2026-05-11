@@ -4,68 +4,173 @@
     "type": "split",
     "children": [
       {
-        "id": "6eb1a0e3fe3f34a8",
-        "type": "tabs",
+        "id": "e690f76ee98ac130",
+        "type": "split",
         "children": [
           {
-            "id": "abc5595d089965e8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "personal-ai-space/docs/CLI_COMMANDS.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "CLI_COMMANDS"
-            }
-          },
-          {
-            "id": "4cf9570bf988004b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "personal-ai-space/command/finances/LinkedIn Profile Data.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "LinkedIn Profile Data"
-            }
-          },
-          {
-            "id": "ea6c8b139b9c920a",
-            "type": "leaf",
-            "state": {
-              "type": "json",
-              "state": {
-                "file": "personal-ai-space/command/activities/disciplined_routines.json"
-              },
-              "icon": "lucide-file",
-              "title": "disciplined_routines"
-            }
-          },
-          {
-            "id": "a00118de8890698a",
-            "type": "leaf",
-            "state": {
-              "type": "canvas",
-              "state": {
-                "file": "personal-ai-space/self/goals/Life Map.canvas",
-                "viewState": {
-                  "x": 245,
-                  "y": -50,
-                  "zoom": 0
+            "id": "6eb1a0e3fe3f34a8",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "abc5595d089965e8",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "personal-ai-space/docs/CLI_COMMANDS.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "CLI_COMMANDS"
                 }
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "Life Map"
-            }
+              {
+                "id": "4cf9570bf988004b",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "personal-ai-space/command/finances/LinkedIn Profile Data.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "LinkedIn Profile Data"
+                }
+              },
+              {
+                "id": "ea6c8b139b9c920a",
+                "type": "leaf",
+                "state": {
+                  "type": "json",
+                  "state": {
+                    "file": "personal-ai-space/command/activities/disciplined_routines.json"
+                  },
+                  "icon": "lucide-file",
+                  "title": "disciplined_routines"
+                }
+              },
+              {
+                "id": "a00118de8890698a",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "personal-ai-space/intake/README.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "README"
+                }
+              },
+              {
+                "id": "4af84bd59c2ca53e",
+                "type": "leaf",
+                "state": {
+                  "type": "empty",
+                  "state": {},
+                  "icon": "lucide-file",
+                  "title": "New tab"
+                }
+              }
+            ],
+            "currentTab": 3
+          },
+          {
+            "id": "dcc707d7ba5f748e",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "e2279bc3a5adbbf2",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "terminal:terminal",
+                  "state": {
+                    "terminal:terminal": {
+                      "cwd": "/Users/paulorezende/Documents/Personal_AI_powerhouse",
+                      "focus": false,
+                      "profile": {
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
+                        "followTheme": true,
+                        "name": "",
+                        "platforms": {
+                          "darwin": true
+                        },
+                        "pythonExecutable": "python3",
+                        "restoreHistory": false,
+                        "rightClickAction": "copyPaste",
+                        "successExitCodes": [
+                          "0",
+                          "SIGINT",
+                          "SIGTERM"
+                        ],
+                        "terminalOptions": {
+                          "documentOverride": null
+                        },
+                        "type": "integrated",
+                        "useWin32Conhost": true
+                      },
+                      "serial": null
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "terminal",
+                  "title": "Terminal: zsh"
+                }
+              },
+              {
+                "id": "a59c50fd0cfd976f",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "terminal:terminal",
+                  "state": {
+                    "terminal:terminal": {
+                      "cwd": "/Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/intake",
+                      "focus": false,
+                      "profile": {
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
+                        "followTheme": true,
+                        "name": "",
+                        "platforms": {
+                          "darwin": true
+                        },
+                        "pythonExecutable": "python3",
+                        "restoreHistory": false,
+                        "rightClickAction": "copyPaste",
+                        "successExitCodes": [
+                          "0",
+                          "SIGINT",
+                          "SIGTERM"
+                        ],
+                        "terminalOptions": {
+                          "documentOverride": null
+                        },
+                        "type": "integrated",
+                        "useWin32Conhost": true
+                      },
+                      "serial": null
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "terminal",
+                  "title": "Terminal: zsh"
+                }
+              }
+            ],
+            "currentTab": 1
           }
         ],
-        "currentTab": 2
+        "direction": "horizontal"
       }
     ],
     "direction": "vertical"
@@ -221,28 +326,35 @@
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
       "obsidian42-brat:BRAT": false,
-      "canvas-banana:Canvas Banana": false
+      "terminal:Open terminal": false
     }
   },
-  "active": "827905691f87b963",
+  "active": "a59c50fd0cfd976f",
   "lastOpenFiles": [
-    "personal-ai-space/engine/db/self.db-shm",
-    "personal-ai-space/engine/db/self.db-wal",
-    "personal-ai-space/engine/db/memories.db-shm",
-    "personal-ai-space/engine/db/memories.db-wal",
-    "personal-ai-space/engine/db/knowledge.db-shm",
-    "personal-ai-space/engine/db/knowledge.db-wal",
-    "personal-ai-space/db/agent_memory.db-shm",
-    "personal-ai-space/db/agent_memory.db-wal",
+    "personal-ai-space/intake/staging/20260511_141104_Web | OpenCode.pdf",
+    "personal-ai-space/intake/staging/20260511_141104_Tools | OpenCode.pdf",
+    "personal-ai-space/intake/staging/20260511_141104_Server | OpenCode.pdf",
+    "personal-ai-space/intake/staging/20260511_141104_MCP servers | OpenCode.pdf",
+    "personal-ai-space/intake/staging/20260511_141104_Features · Ogham MCP.pdf",
+    "personal-ai-space/intake/staging/20260511_141104_Custom Tools | OpenCode.pdf",
+    "personal-ai-space/intake/staging/20260511_141104_Commands | OpenCode.pdf",
+    "personal-ai-space/intake/staging/20260511_141104_CLI | OpenCode.pdf",
+    "personal-ai-space/intake/staging/20260511_141104_Agents | OpenCode.pdf",
+    "personal-ai-space/intake/staging/20260511_141104_Agent Skills | OpenCode.pdf",
+    "personal-ai-space/intake/staging/20260511_134831_Processo Seletivo - Talentos.pdf",
+    "personal-ai-space/intake/processed/20260511_141104_OpenChamber_README.md",
+    "personal-ai-space/knowledge/notes/OpenChamber_README.md",
+    "personal-ai-space/intake/processed/20260511_141104_Ogham MCP.md",
+    "personal-ai-space/knowledge/notes/Ogham MCP.md",
+    "personal-ai-space/intake/staging/Ogham MCP.md",
+    "personal-ai-space/intake/staging/OpenChamber_README.md",
+    "personal-ai-space/intake/README.md",
+    "personal-ai-space/self/goals/Life Map.canvas",
     "personal-ai-space/command/finances/LinkedIn Profile Data.md",
-    "personal-ai-space/command/finances/overview.json",
-    "personal-ai-space/command/inbox/Daily Notes.base",
     "personal-ai-space/command/inbox/Daily Notes Dashboard.md",
     "personal-ai-space/command/inbox/Nov-13-2025.md",
     "personal-ai-space/command/inbox/dez 07, 2025 17h 30.md",
     "personal-ai-space/command/inbox/Daily Notes Dashboard 1.md",
-    "personal-ai-space/self/goals/Life Map.canvas",
-    "personal-ai-space/command/activities/disciplined_routines.json",
     "AI Engine Command Center.md",
     "personal-ai-space/self/goals/Clinical_Sex_Therapist_Career.md",
     "Dashboard Logs/Daily/2026-05-10.md",
@@ -257,19 +369,12 @@
     "personal-ai-space/knowledge/notes/NEDS Vault Filetree.canvas",
     "personal-ai-space/knowledge/notes/Qwen O Ecossistema da Psicoterapia Sexual no Brasil.md",
     "personal-ai-space/knowledge/notes/Microsoft Copilot Psicoterapia Sexual no Brasil.md",
-    "personal-ai-space/knowledge/notes/Grok.md",
     "personal-ai-space/vault/personal documents  PF/Certificado de conclusao ensino medio .JPG",
     "personal-ai-space/vault/personal documents  PF/CPF Ravi .jpg",
     "personal-ai-space/vault/personal documents  PF/Sex CompulsionOCSB Assessment - Insight Psychological.jpeg.png",
     "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende(2).jpg",
     "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende(1).jpg",
     "personal-ai-space/vault/personal documents  PF/Photo from PF Rezende.jpg",
-    "personal-ai-space/self/relationships/Liz.md",
-    "personal-ai-space/self/relationships/Tamara.md",
-    "Dashboard Logs/Calendar.md",
-    "Obsidian DASH/Documentation/DASH Docs - FAQ.md",
-    "Obsidian DASH/Documentation/DASH Docs - Reports, Reviews, and Exports.md",
-    "Obsidian DASH/Documentation/DASH Docs - AI and Research Guide.md",
     "personal-ai-space/self/goals/NEDS Vault Filetree.canvas",
     "personal-ai-space/docs/architecture-map.canvas",
     "personal-ai-space/intake/staging/NEDS Vault Filetree.canvas",
