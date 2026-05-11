@@ -138,6 +138,29 @@ def get_agent_memory(agent_id: str, key: str = None) -> list[dict]:
         (agent_id,))
 
 
+def store_context_snapshot(
+    session_id: str, content: str, relevance: float = 1.0,
+    ttl_hours: int = 24
+) -> str:
+    """Store a context snapshot with expiry. Keeps newest 50 entries."""
+    import uuid as _uid
+    import json as _json
+    from datetime import timedelta, timezone
+    cid = _uid.uuid4().hex
+    now = datetime.now(timezone.utc)
+    execute("memories", """
+        INSERT INTO context_window (id, session_id, timestamp, content, relevance_score, expires_at)
+        VALUES (?,?,?,?,?,?)
+    """, (cid, session_id, now.isoformat(), _json.dumps(content) if not isinstance(content, str) else content,
+          relevance, (now + timedelta(hours=ttl_hours)).isoformat()))
+    execute("memories", """
+        DELETE FROM context_window WHERE id NOT IN (
+            SELECT id FROM context_window ORDER BY timestamp DESC LIMIT 50
+        )
+    """)
+    return cid
+
+
 def get_recent_interactions(limit: int = 10) -> list[dict]:
     """Return most recent agent interactions."""
     return query("memories",

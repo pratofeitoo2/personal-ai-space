@@ -81,15 +81,18 @@ CREATE TABLE IF NOT EXISTS relationships (
 );
 
 CREATE TABLE IF NOT EXISTS goals (
-  id TEXT PRIMARY KEY,
-  title TEXT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
   description TEXT,
   category TEXT,
-  status TEXT,
-  target_date DATE,
-  progress FLOAT,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME
+  status TEXT DEFAULT 'active',
+  priority INTEGER DEFAULT 0,
+  progress REAL DEFAULT 0 CHECK(progress BETWEEN 0 AND 100),
+  target_date TEXT,
+  progress_source TEXT DEFAULT 'independent',
+  created_at TEXT,
+  updated_at TEXT,
+  completed_at TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_traits_confidence ON traits(confidence_score DESC);

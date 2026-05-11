@@ -15,7 +15,7 @@ All failures are caught and logged — never raised. MCP bridge is optional.
 import json
 import logging
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 logger = logging.getLogger("engine.propagator")
@@ -63,7 +63,7 @@ def _log_history(task_id: str, field: str, old_value, new_value):
                 str(old_value) if old_value is not None else None,
                 str(new_value) if new_value is not None else None,
                 "propagator",
-                datetime.utcnow().isoformat(),
+                datetime.now(timezone.utc).isoformat(),
             ),
         )
     except Exception as e:
@@ -115,7 +115,7 @@ def _recalc_project_progress(project_id: Optional[str]):
         db.execute(
             "tasks",
             "UPDATE projects SET progress_pct=?, updated_at=? WHERE id=?",
-            (round(avg), datetime.utcnow().isoformat(), project_id),
+            (round(avg), datetime.now(timezone.utc).isoformat(), project_id),
         )
         _sync_goal_from_project(project_id, round(avg))
     except Exception as e:
@@ -133,7 +133,7 @@ def _sync_goal_from_project(project_id: str, progress: int):
         db.execute(
             "self",
             "UPDATE goals SET progress=?, updated_at=? WHERE title=?",
-            (progress, datetime.utcnow().isoformat(), pname),
+            (progress, datetime.now(timezone.utc).isoformat(), pname),
         )
     except Exception as e:
         logger.debug("Failed to sync goal from project %s: %s", project_id, e)
@@ -145,13 +145,43 @@ def _touch_updated_at(table: str, row_id: str):
         db.execute(
             "tasks",
             f"UPDATE {table} SET updated_at=? WHERE id=?",
-            (datetime.utcnow().isoformat(), row_id),
+            (datetime.now(timezone.utc).isoformat(), row_id),
         )
     except Exception as e:
         logger.debug("Failed to touch updated_at on %s.%s: %s", table, row_id, e)
 
 
 # ── Public API ─────────────────────────────────────────────────────
+
+
+def _unblock_dependents(task_id: str):
+    """When a task is completed, unblock any tasks waiting on it."""
+    db = _get_db()
+    try:
+        dependents = db.query("tasks", """
+            SELECT d.task_id, t.status FROM task_dependencies d
+            JOIN tasks t ON t.id = d.task_id
+            WHERE d.depends_on = ? AND t.status = 'blocked'
+        """, (task_id,))
+        for dep in dependents:
+            remaining = db.query("tasks", """
+                SELECT count(*) as n FROM task_dependencies d
+                JOIN tasks t ON t.id = d.depends_on
+                WHERE d.task_id = ? AND t.status != 'completed'
+            """, (dep["task_id"],))
+            if remaining[0]["n"] == 0:
+                old = db.query("tasks", "SELECT status FROM tasks WHERE id=?", (dep["task_id"],))
+                old_status = old[0]["status"] if old else None
+                db.execute("tasks", "UPDATE tasks SET status='pending', updated_at=? WHERE id=?",
+                           (datetime.now(timezone.utc).isoformat(), dep["task_id"]))
+                _log_history(dep["task_id"], "status", old_status, "pending")
+                _log_to_memories("task_unblocked", {
+                    "task_id": dep["task_id"],
+                    "unblocked_by": task_id,
+                })
+                logger.info("Auto-unblocked task %s (blocker %s completed)", dep["task_id"], task_id)
+    except Exception as e:
+        logger.debug("Failed to unblock dependents of %s: %s", task_id, e)
 
 
 recalc_project_progress = _recalc_project_progress
@@ -196,6 +226,10 @@ def on_task_updated(task_id: str, old_values: Optional[dict] = None) -> None:
         _recalc_project_progress(task.get("project_id"))
         _update_mcp_fact(f"task.{task_id}.status", task.get("status"))
         _update_mcp_fact(f"task.{task_id}.progress", str(task.get("progress_pct", 0)))
+
+    # Auto-unblock dependents when task is completed
+    if "status" in changes and task.get("status") == "completed":
+        _unblock_dependents(task_id)
 
     _touch_updated_at("tasks", task_id)
     if changes:

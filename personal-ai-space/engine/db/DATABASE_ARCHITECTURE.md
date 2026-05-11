@@ -83,7 +83,7 @@ relationships, and how data propagates between databases.
 
 **Path:** `engine/db/self.db`
 **Schema:** `engine/db/schema_self.sql`
-**Rows:** 1 profile, 5 habits, 25 traits, 4 needs, 20 behaviors, 6 relationships, 90 goals
+**Rows:** 1 profile, 5 habits, 25 traits, 4 needs, 20 behaviors, 6 relationships, 0 goals (user seeds)
 
 | Table | Purpose | Notes |
 |-------|---------|-------|
@@ -93,7 +93,7 @@ relationships, and how data propagates between databases.
 | `traits` | Inferred personality traits | from `comprehensive_extractor.py` |
 | `needs` | User needs/pain points | priority, status, linked_tasks |
 | `behaviors` | Observed behavior patterns | trigger, response, frequency, effectiveness |
-| `goals` | Life/career goals | title, category, status, progress, target_date |
+| `goals` | Life/career goals | title (UNIQUE), category, status, priority, progress, target_date, progress_source (independent/project:X/task:Y) |
 | `relationships` | People in user's life | name, email, phone, relationship_type |
 
 **Cross-database links:**
@@ -200,11 +200,105 @@ on_task_deleted(task_id)
   └── 3. Recalculate project.progress_pct
 ```
 
-**Auto-sync on engine start** (planned for Phase 4):
-1. Scan `.md` files with `status:` and `project:` in frontmatter
-2. Compare `mtime` against `sync_state.last_modified`
-3. File newer → update DB; DB newer → update file; both match → skip
-4. Update `sync_state.last_synced` after each reconciliation
+## Auto-Sync Scanner (wired — Phase 3)
+
+**Module:** `engine/sync_scanner.py`
+
+**Triggered:** At the end of `engine.start()` (every startup), and manually via `python cli.py sync`.
+
+**Safety:** Phase 3 is read-only (file → DB direction only). No file writes.
+
+### Algorithm
+
+```
+run_scan(scan_root)
+  │
+  ├── 1. Walk all .md files (excluding hidden dirs, node_modules)
+  ├── 2. Read YAML frontmatter
+  ├── 3. Load tasks_cache, projects_cache, goals_cache from DB
+  ├── 4. For each file with frontmatter:
+  │     ├── Priority 1: match by explicit task_id in frontmatter
+  │     ├── Priority 2: match by title (case-insensitive) to tasks
+  │     ├── Priority 3: match by title to projects
+  │     ├── Priority 4: match by title to goals
+  │     └── No match → stage in sync_state for future linking
+  │
+  ├── 5. For matched files:
+  │     ├── Seed doc_links (entity ↔ file mapping)
+  │     ├── Update sync_state (file_hash, mtime, last_synced)
+  │     └── One-way sync: frontmatter.status → tasks.status
+  │
+  └── 6. Log summary
+```
+
+### Matching Conventions
+
+- Files with `status:` and `task_id:` in frontmatter → direct task link
+- Files with `status:` and title matching a task title → linked to that task
+- Files with `status:` and title matching a project name → linked to that project
+- Files with `status:` in frontmatter but no match → staged in `sync_state` with `entity_type='unmatched'`
+
+### Current Coverage
+
+| Metric | Count |
+|--------|-------|
+| .md files scanned | 165 |
+| With frontmatter | 120 |
+| With `status:` field | 37 |
+| Matched to DB entities | 0 (title mismatch) |
+| Staged in sync_state | 37 (ready for future matching) |
+
+The 0 matches is expected — file titles (e.g., "Clinical Sex Therapist Career") don't exactly match
+DB titles (e.g., "Clinical Sexology Spec"). Matching improves when:
+1. Files gain explicit `project:` or `task_id:` fields in frontmatter
+2. Goals table is populated (currently 0 rows due to schema drift)
+3. Fuzzy title matching is added in a later phase
+
+---
+
+## Phase 4 Wiring (populated empty tables)
+
+### `habit_logs` (self.db)
+**Before:** 0 rows. **After:** Populated on every `engine.log_habit()` call.
+
+Wired in `engine.py:log_habit()`:
+- Inserts row with `id`, `habit_id`, `completed_at`, `notes`, `confidence_level`
+- Calculates streak: if last completion was today or yesterday → increment; if gap >1 day → reset to 1
+- Updates `habits.current_streak` and `habits.total_completions`
+- Propagates to `memories.db.interactions` via `db.log_interaction()`
+- Propagates to `agent_memory.db` via MCP bridge (key: `habit.<name>.streak`)
+- Logs when target_streak is reached
+
+### `context_window` (memories.db)
+**Before:** 0 rows. **After:** Populated on engine start + every 5th interaction.
+
+Wired in `engine.py`:
+- `engine.start()` — stores initial context snapshot (version, agent states)
+- `engine.send()` — stores lightweight snapshot every 5 calls (agent, command, status)
+- Auto-culled to newest 50 rows (oldest deleted)
+- TTL set to 24 hours per entry (via `expires_at`)
+
+Helper: `db_manager.store_context_snapshot(session_id, content, relevance, ttl_hours)`
+
+### `task_dependencies` (tasks.db)
+**Before:** 0 rows. **After:** Populated via `create_dependency` command.
+
+Wired in `task_coordinator.py`:
+- `create_dependency(task_id, depends_on, dep_type)` — creates dependency row
+- `remove_dependency(task_id, depends_on)` — removes dependency row
+- `get_blockers(task_id)` — returns uncompleted blockers
+- `get_dependents(task_id)` — returns tasks blocked on this task
+- Auto-sets task status to `blocked` when a blocker exists
+- Auto-unblocks when all blockers are completed
+
+Wired in `propagator.py`:
+- `_unblock_dependents(task_id)` — called when a task's status changes to `completed`
+- Checks all tasks that depend on the completed task
+- If no other blockers remain, sets dependent task to `pending`
+- Logs to `task_history` and `memories.db.interactions`
+
+**New CLI access:**
+- `python cli.py task create-dep <task_id> <depends_on>` (via router)
 
 ---
 
@@ -214,6 +308,9 @@ on_task_deleted(task_id)
 |------|------|--------|
 | `migrate_schema_v2.py` | 2026-05-10 | Added parent_task_id, progress_pct, sort_order, updated_at to tasks; priority, progress_pct, category, updated_at to projects; dependency_type, created_at to task_deps; changed_by to task_history; created doc_links + sync_state tables |
 | `propagator.py` + 4 code paths | 2026-05-10 | Propagation layer wired into task_coordinator, comprehensive_extractor, init_engine, engine.py. Routes task create/update/delete to task_history, project progress, goal sync, memories.db, agent_memory.db. |
+| `sync_scanner.py` + engine.py + cli.py | 2026-05-10 | Auto-sync scanner runs on engine start and via `cli.py sync`. Scans .md frontmatter, matches to tasks/projects/goals, seeds doc_links, updates sync_state. 37 files staged. |
+| `migrate_goals.py` + `schema_self.sql` | 2026-05-10 | Realigned goals schema with actual DB (12 columns). Added progress, target_date, progress_source for AI integration. User seeds data manually. |
+| `engine.py`, `task_coordinator.py`, `propagator.py` | 2026-05-10 | Phase 4: Wired habit_logs (streak logic + propagation), context_window (snapshots on start + every 5th interaction), task_dependencies (create/remove/auto-block/auto-unblock). |
 
 ---
 
@@ -232,3 +329,13 @@ on_task_deleted(task_id)
 | schema_memories.sql | `engine/db/schema_memories.sql` |
 | schema_agent_memory.sql | `engine/db/schema_agent_memory.sql` |
 | schema_knowledge.sql | `engine/db/schema_knowledge.sql` |
+| **Sync modules** | |
+| sync_scanner.py | `engine/sync_scanner.py` |
+| propagator.py | `engine/propagator.py` |
+| migrate_goals.py | `engine/db/migrate_goals.py` |
+| GOALS_SEEDING.md | `engine/docs/GOALS_SEEDING.md` |
+| **Phase 4 modules** | |
+| log_habit() | `engine/engine.py` |
+| store_context_snapshot() | `engine/db_manager.py` |
+| create_dependency / remove_dependency | `engine/agents/task_coordinator.py` |
+| _unblock_dependents | `engine/propagator.py` |

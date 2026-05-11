@@ -144,6 +144,14 @@ if HAS_RICH:
         e = get_engine()
         out(e.weekly_review())
 
+    # ── sync ──────────────────────────────────────────────────────────────
+
+    @cli.command()
+    def sync():
+        """Manually sync .md frontmatter with database."""
+        e = get_engine()
+        out(e.run_sync())
+
     # ── tasks ─────────────────────────────────────────────────────────────
 
     @cli.group()

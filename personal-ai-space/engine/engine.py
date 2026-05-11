@@ -35,6 +35,7 @@ class Engine:
         self.logger = get_logger("orchestrator")
         self._agents: dict = {}
         self._start_time = datetime.now()
+        self._interaction_count = 0
 
     # ── lifecycle ─────────────────────────────────────────────────────────
 
@@ -84,6 +85,26 @@ class Engine:
                 self.logger.error(f"  ✗ Agent failed to init: {cls.__name__}")
 
         audit(f"ENGINE_START version={self.VERSION} agents={len(self._agents)}")
+
+        # Phase 3: Auto-sync .md frontmatter with database
+        try:
+            from sync_scanner import run_scan, summarize
+            sync_stats = run_scan()
+            self.logger.info("Sync scan: %s", summarize(sync_stats).replace("\n", "; "))
+        except Exception as e:
+            self.logger.warning("Sync scan failed: %s", e)
+
+        # Phase 4: Initial context snapshot
+        try:
+            agent_states = {aid: a.state for aid, a in self._agents.items()}
+            db.store_context_snapshot(
+                session_id=f"session_{self._start_time.strftime('%Y%m%d_%H%M%S')}",
+                content={"event": "engine_start", "version": self.VERSION, "agents": agent_states},
+                relevance=1.0,
+            )
+        except Exception as e:
+            self.logger.debug("Context snapshot failed: %s", e)
+
         self.logger.info(f"Engine ready — {len(self._agents)}/{len(agent_classes)} agents active")
         return True
 
@@ -139,6 +160,18 @@ class Engine:
                         f"agent_{agent_id}_error", "warning"
                     )
 
+            # Context snapshot every 5th interaction
+            self._interaction_count += 1
+            if self._interaction_count % 5 == 0:
+                try:
+                    db.store_context_snapshot(
+                        session_id=f"session_{self._start_time.strftime('%Y%m%d_%H%M%S')}",
+                        content={"event": "interaction", "agent": agent_id, "command": command, "status": status},
+                        relevance=0.5,
+                    )
+                except Exception:
+                    pass
+
             return result
         except Exception as e:
             elapsed_ms = int((time.monotonic() - t0) * 1000)
@@ -185,25 +218,64 @@ class Engine:
         return r.get("payload", {}).get("task_id", "")
 
     def log_habit(self, habit_name: str, duration_min: int = 0, notes: str = "") -> bool:
-        """Find habit by name and log a completion entry."""
-        rows = db.query("self", "SELECT id FROM habits WHERE habit_name=? LIMIT 1", (habit_name,))
+        """Find habit by name, log completion, update streak, propagate."""
+        rows = db.query("self", "SELECT id, current_streak, last_completed, target_streak FROM habits WHERE habit_name=? LIMIT 1", (habit_name,))
         if not rows:
             self.logger.warning(f"Habit not found: {habit_name}")
             return False
-        habit_id = rows[0]["id"]
-        log_id   = uuid.uuid4().hex
+        habit = rows[0]
+        habit_id = habit["id"]
+        now_iso = datetime.now().isoformat()
+        today = datetime.now().date()
+
+        # Insert log
+        log_id = uuid.uuid4().hex
         db.execute(
             "self",
-            "INSERT INTO habit_logs (id, habit_id, completed_at, notes) VALUES (?,?,?,?)",
-            (log_id, habit_id, datetime.now().isoformat(), notes)
+            "INSERT INTO habit_logs (id, habit_id, completed_at, notes, confidence_level) VALUES (?,?,?,?,?)",
+            (log_id, habit_id, now_iso, notes, duration_min / 60.0 if duration_min else None)
         )
+
+        # Streak logic
+        last = habit.get("last_completed")
+        streak = habit.get("current_streak", 0)
+        if last:
+            try:
+                last_date = datetime.fromisoformat(last).date()
+                delta = (today - last_date).days
+                if delta == 1 or delta == 0:
+                    streak += 1
+                elif delta > 1:
+                    streak = 1
+            except ValueError:
+                streak = 1
+        else:
+            streak = 1
+
         db.execute(
             "self",
             "UPDATE habits SET total_completions = total_completions + 1, "
-            "last_completed = ? WHERE id = ?",
-            (datetime.now().isoformat(), habit_id)
+            "current_streak = ?, last_completed = ? WHERE id = ?",
+            (streak, now_iso, habit_id)
         )
-        audit(f"HABIT_LOG habit={habit_name} duration_min={duration_min}")
+
+        # Propagate
+        db.log_interaction(
+            agent_id="engine", action="log_habit",
+            input_data={"habit": habit_name, "duration_min": duration_min},
+            output_data={"streak": streak, "target": habit.get("target_streak")},
+            duration_ms=0, status="success",
+        )
+        try:
+            from memory.mcp_bridge import MCPMemoryBridge
+            MCPMemoryBridge().add_fact(f"habit.{habit_name}.streak", str(streak), confidence=0.8, category="habit", source="engine")
+        except Exception:
+            pass
+
+        if habit.get("target_streak") and streak >= habit["target_streak"]:
+            self.logger.info(f"Habit {habit_name} reached target streak {streak}!")
+
+        audit(f"HABIT_LOG habit={habit_name} streak={streak} duration_min={duration_min}")
         return True
 
     def add_note(self, title: str, content: str = "", tags: str = "", category: str = "general") -> str:
@@ -300,6 +372,15 @@ class Engine:
             "params": params,
             "agent_response": agent_resp,
         }
+
+    def run_sync(self) -> str:
+        """Manually trigger frontmatter sync scan."""
+        try:
+            from sync_scanner import run_scan, summarize
+            stats = run_scan()
+            return summarize(stats)
+        except Exception as e:
+            return f"Sync failed: {e}"
 
     def health(self) -> dict:
         uptime = (datetime.now() - self._start_time).seconds

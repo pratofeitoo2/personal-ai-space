@@ -133,6 +133,69 @@ class TaskCoordinator(BaseAgent):
             score += 8
         return min(100.0, score)
 
+    # ── task dependencies ────────────────────────────────────────────────
+
+    def create_dependency(self, task_id: str, depends_on: str, dep_type: str = "blocks") -> bool:
+        """Create a dependency: task_id depends_on depends_on.
+        If the source is not completed, auto-mark task_id as blocked.
+        """
+        dep_id = uuid.uuid4().hex
+        db.execute("tasks", """
+            INSERT OR IGNORE INTO task_dependencies
+            (id, task_id, depends_on, dependency_type, created_at)
+            VALUES (?,?,?,?,?)
+        """, (dep_id, task_id, depends_on, dep_type, datetime.now().isoformat()))
+        audit(f"DEPENDENCY task={task_id} depends_on={depends_on} type={dep_type}")
+        self._recheck_blocked(task_id)
+        return True
+
+    def remove_dependency(self, task_id: str, depends_on: str) -> bool:
+        """Remove a dependency between two tasks."""
+        rows = db.execute("tasks",
+            "DELETE FROM task_dependencies WHERE task_id=? AND depends_on=?",
+            (task_id, depends_on))
+        if rows:
+            audit(f"DEPENDENCY_REMOVED task={task_id} depends_on={depends_on}")
+            self._recheck_blocked(task_id)
+        return bool(rows)
+
+    def get_blockers(self, task_id: str) -> list[dict]:
+        """Return all tasks that block the given task."""
+        return db.query("tasks", """
+            SELECT t.* FROM tasks t
+            JOIN task_dependencies d ON d.depends_on = t.id
+            WHERE d.task_id = ?
+        """, (task_id,))
+
+    def get_dependents(self, task_id: str) -> list[dict]:
+        """Return all tasks that depend on the given task."""
+        return db.query("tasks", """
+            SELECT t.* FROM tasks t
+            JOIN task_dependencies d ON d.task_id = t.id
+            WHERE d.depends_on = ?
+        """, (task_id,))
+
+    def _recheck_blocked(self, task_id: str):
+        """If any blocker is not completed, mark task as blocked. Else pending."""
+        blockers = db.query("tasks", """
+            SELECT COUNT(*) as n FROM task_dependencies d
+            JOIN tasks t ON t.id = d.depends_on
+            WHERE d.task_id = ? AND t.status != 'completed'
+        """, (task_id,))
+        is_blocked = blockers[0]["n"] > 0
+        current = db.query("tasks", "SELECT status FROM tasks WHERE id=?", (task_id,))
+        if not current:
+            return
+        current_status = current[0]["status"]
+        if is_blocked and current_status != "blocked":
+            db.execute("tasks", "UPDATE tasks SET status=? WHERE id=?",
+                       ("blocked", task_id))
+            propagator.on_task_updated(task_id, {"status": current_status})
+        elif not is_blocked and current_status == "blocked":
+            db.execute("tasks", "UPDATE tasks SET status=? WHERE id=?",
+                       ("pending", task_id))
+            propagator.on_task_updated(task_id, {"status": "blocked"})
+
     # ── router ────────────────────────────────────────────────────────────
 
     def process(self, message: dict) -> dict:
@@ -150,5 +213,15 @@ class TaskCoordinator(BaseAgent):
             return self._ok({"updated": ok})
         if cmd == "summary":
             return self._ok(self.summary())
+        if cmd == "create_dependency":
+            ok = self.create_dependency(data["task_id"], data["depends_on"], data.get("dep_type", "blocks"))
+            return self._ok({"created": ok})
+        if cmd == "remove_dependency":
+            ok = self.remove_dependency(data["task_id"], data["depends_on"])
+            return self._ok({"removed": ok})
+        if cmd == "get_blockers":
+            return self._ok(self.get_blockers(data["task_id"]))
+        if cmd == "get_dependents":
+            return self._ok(self.get_dependents(data["task_id"]))
 
         return self._unknown(cmd)
