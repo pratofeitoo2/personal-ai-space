@@ -51,7 +51,7 @@ The engine is the AI nervous system. It orchestrates agents, manages memory, coo
 - **Vector**: Semantic search (embedding store)
 
 ### 3. Data Flows
-- **Ingestion**: Capture → Normalize → Index
+- **Ingestion**: Convert → Capture → Normalize → Index
 - **Processing**: Extract features → Analyze → Generate insights
 - **Reporting**: Query → Aggregate → Visualize
 - **Integration**: External systems ↔ Engine ↔ User

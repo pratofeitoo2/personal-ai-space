@@ -3,9 +3,10 @@
 Intake Processor — Routes files from staging to correct destinations.
 
 Pipeline:
-  1. Standardize YAML frontmatter on every file (mandatory pre-routing step)
-  2. Route file to destination directory based on metadata + filename patterns
-  3. Archive original in processed/
+  1. Convert non-markdown files (.txt, .pdf, .docx) → .md FIRST
+  2. Standardize YAML frontmatter on every file
+  3. Route file to destination directory based on metadata + filename patterns
+  4. Archive original in processed/
 
 Usage:
   python3 process_intake.py              # Process all files
@@ -23,6 +24,7 @@ import re
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "engine"))
 from frontmatter_apply import standardize_single_file, read_file
+from converters import convert_to_markdown, CONVERTERS
 
 INTAKE_DIR = Path(__file__).parent
 STAGING_DIR = INTAKE_DIR / "staging"
@@ -185,38 +187,55 @@ def process_file(file_path: Path, staging_relative: Path, dry_run: bool = False)
         print(f"  ✗ {staging_relative}: Not found")
         log_import(str(staging_relative), "N/A", "ERROR", {"reason": "not_found"})
         return False
-    
-    # Step 1: Standardize YAML frontmatter (mandatory pre-routing step)
-    metadata = {}
+
+    ext = file_path.suffix.lower()
+    original_path = file_path
+    conversion_metadata: dict = {}
+
+    # Step 0: Convert non-markdown formats to .md BEFORE any other processing
+    if ext in CONVERTERS:
+        try:
+            md_path, conversion_metadata = convert_to_markdown(file_path)
+            file_path = md_path  # All downstream logic now operates on the .md
+            staging_relative = staging_relative.with_suffix(".md")
+        except Exception as e:
+            print(f"  ✗ {staging_relative}: Conversion failed — {e}")
+            log_import(str(staging_relative), "N/A", "CONVERSION_ERROR", {"error": str(e)})
+            return False
+
+    # Step 1: Standardize YAML frontmatter
+    metadata = dict(conversion_metadata)
     if file_path.suffix == ".md":
         try:
-            metadata = standardize_single_file(file_path)
+            frontmatter_meta = standardize_single_file(file_path)
+            metadata.update(frontmatter_meta)
         except Exception as e:
             print(f"  ⚠ Frontmatter error: {e}")
-    
-    # Step 2: Route to destination
+
+    # Step 2: Route to destination — use .md name if we converted
+    dest_name = file_path.name
     dest_dir = determine_destination(file_path, staging_relative, metadata)
-    dest_path = dest_dir / file_path.name
-    
-    # Show what would happen (compact format)
-    print(f"  → {staging_relative}")
+    dest_path = dest_dir / dest_name
+
+    print(f"  → {staging_relative}", end="")
+    if ext in CONVERTERS:
+        print(f" [.{ext.lstrip('.')}→md]", end="")
+    print()
     print(f"     → {dest_path.relative_to(PROJECT_ROOT)}", end="")
-    
-    file_exists_at_dest = file_path.exists() and dest_path.exists()
+
+    file_exists_at_dest = dest_path.exists()
     if file_exists_at_dest:
         print(f" [exists, skipping copy]", end="")
-    
+
     if dry_run:
         print(f" [DRY RUN]")
         log_import(str(staging_relative), str(dest_path), "DRY_RUN", metadata)
         return True
-    
-    print()  # Newline after destination
-    
-    # Ensure destination directory exists
+
+    print()
+
     dest_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Copy file only if destination doesn't exist
+
     if not file_exists_at_dest:
         try:
             shutil.copy2(file_path, dest_path)
@@ -224,18 +243,17 @@ def process_file(file_path: Path, staging_relative: Path, dry_run: bool = False)
             print(f"     ✗ Error: {e}")
             log_import(str(staging_relative), str(dest_path), "ERROR", {"error": str(e)})
             return False
-    
-    # Archive original (always, for audit trail)
+
+    # Archive ORIGINAL file (the raw input, not the converted .md)
     try:
-        archive_path = PROCESSED_DIR / f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file_path.name}"
-        shutil.copy2(file_path, archive_path)
+        archive_name = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{original_path.name}"
+        shutil.copy2(original_path, PROCESSED_DIR / archive_name)
     except Exception as e:
-        print(f"     ⚠ Warning: Could not archive {file_path.name}: {e}")
-    
-    # Log (whether copied or already existed)
+        print(f"     ⚠ Warning: Could not archive {original_path.name}: {e}")
+
     status = "ALREADY_EXISTS" if file_exists_at_dest else "SUCCESS"
     log_import(str(staging_relative), str(dest_path), status, metadata)
-    
+
     return True
 
 
@@ -260,11 +278,18 @@ def process_all(dry_run: bool = False):
     
     success = 0
     processed_files = []
+    converted_md_files = set()
     for file_path, staging_relative in all_files:
-        if file_path.is_file():
-            if process_file(file_path, staging_relative, dry_run):
-                success += 1
-                processed_files.append(file_path)
+        if not file_path.is_file():
+            continue
+        ext = file_path.suffix.lower()
+        if ext not in {".md"} | set(CONVERTERS.keys()):
+            continue
+        if ext in CONVERTERS:
+            converted_md_files.add(file_path.with_suffix(".md"))
+        if process_file(file_path, staging_relative, dry_run):
+            success += 1
+            processed_files.append(file_path)
     
     print(f"\n✓ Processed {success}/{len(all_files)} files")
     
@@ -277,6 +302,12 @@ def process_all(dry_run: bool = False):
                 file_path.unlink()
             except Exception as e:
                 print(f"  ⚠ Warning: Could not delete {file_path.name}: {e}")
+        for md_file in converted_md_files:
+            try:
+                if md_file.exists():
+                    md_file.unlink()
+            except Exception as e:
+                print(f"  ⚠ Warning: Could not delete {md_file.name}: {e}")
         
         # Remove empty staging directories
         for root, dirs, files in os.walk(STAGING_DIR, topdown=False):

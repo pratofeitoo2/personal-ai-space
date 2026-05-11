@@ -1,6 +1,6 @@
 > **⚠️ Aspirational Design Document**
 > The ingestion, processing, and routing pipelines described below are **not yet fully implemented**.
-> Current capabilities: file intake via watcher → process_intake.py, basic agent routing via engine.
+> Current capabilities: file intake via watcher → process_intake.py, format conversion (.txt/.pdf/.docx → .md), basic agent routing via engine.
 > This document serves as a specification for future development.
 
 # Data Flow Architecture
@@ -9,6 +9,8 @@
 
 ```
 User Input
+    ↓
+Convert (non-markdown → .md)          ← NEW: .txt, .pdf, .docx auto-converted
     ↓
 Capture (inbox, import, API)
     ↓
@@ -31,6 +33,7 @@ Index (memories.db, vector DB)
 - Article → knowledge.db + knowledge_indexer
 - Event → tasks.db + calendar, reminder_system
 - Note → knowledge.db + notes_indexer
+- Converted file → knowledge.db (original_format + conversion_metadata stored)
 
 ---
 

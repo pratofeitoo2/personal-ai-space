@@ -1,6 +1,17 @@
 # Data Intake Workflow
 
-## Quick Start: Import from Obsidian
+## Quick Start: Import from Obsidian (or any source)
+
+### Supported Formats
+
+All non-markdown files are **automatically converted to `.md` first**, then processed through the standard pipeline. No manual conversion needed.
+
+| Extension | Converted? | Notes |
+|-----------|-----------|-------|
+| `.md` | No | Pass-through |
+| `.txt` | Yes | Filename → title header |
+| `.pdf` | Yes | Per-page text extraction (pdfplumber/PyPDF2) |
+| `.docx` | Yes | Text + tables + headings (python-docx) |
 
 ### Step 1: Prepare Your Files
 
@@ -22,6 +33,9 @@ Content here...
 ```bash
 # Copy individual files
 cp ~/Obsidian/vault/article.md ~/Personal_AI_powerhouse/personal-ai-space/intake/staging/
+
+# PDF, DOCX, TXT also supported — auto-converted to .md
+cp ~/Obsidian/vault/document.pdf ~/Personal_AI_powerhouse/personal-ai-space/intake/staging/
 
 # Or bulk copy
 cp ~/Obsidian/vault/knowledge/*.md ~/Personal_AI_powerhouse/personal-ai-space/intake/staging/

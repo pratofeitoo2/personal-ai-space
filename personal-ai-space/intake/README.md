@@ -49,13 +49,16 @@ ls -la intake/processed/
 
 ## File Types Supported
 
-| Extension | Destination | Processing |
-|-----------|-------------|-----------|
-| `.md` | knowledge/ | Parse frontmatter, extract links, index |
-| `.txt` | knowledge/notes | Convert to markdown |
-| `.pdf` | knowledge/reference | Store as attachment |
-| `.jpg/.png` | knowledge/reference | Store with metadata |
-| `.csv` | command/ or data/ | Parse + import |
+All non-markdown files are **automatically converted to `.md` first**, then processed through the standard pipeline (frontmatter, routing, indexing).
+
+| Extension | Conversion | Destination |
+|-----------|------------|-------------|
+| `.md` | — (pass-through) | knowledge/ (via frontmatter/routing) |
+| `.txt` | Plain text → markdown (filename as title) | knowledge/ |
+| `.pdf` | Text extracted per page (pdfplumber → PyPDF2 fallback) | knowledge/ |
+| `.docx` | Text + tables + headings extracted (python-docx) | knowledge/ |
+| `.csv` | Parse + import | command/ or data/ |
+| `.jpg/.png` | Store with metadata | knowledge/reference |
 
 ## Automatic Routing
 

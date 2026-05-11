@@ -23,7 +23,9 @@ CREATE TABLE IF NOT EXISTS notes (
   tags TEXT,
   linked_to TEXT,
   category TEXT,
-  importance_level INTEGER
+  importance_level INTEGER,
+  original_format TEXT DEFAULT 'md',
+  conversion_metadata TEXT
 );
 
 CREATE TABLE IF NOT EXISTS "references" (
@@ -72,3 +74,4 @@ CREATE INDEX IF NOT EXISTS idx_articles_tags ON articles(tags);
 CREATE INDEX IF NOT EXISTS idx_notes_category ON notes(category);
 CREATE INDEX IF NOT EXISTS idx_notes_created ON notes(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_knowledge_index_term ON knowledge_index(term);
+CREATE INDEX IF NOT EXISTS idx_notes_original_format ON notes(original_format);

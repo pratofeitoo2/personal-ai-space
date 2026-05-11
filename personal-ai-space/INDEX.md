@@ -93,6 +93,7 @@ personal-ai-space/
 │   │       └── data/memory.db
 │   ├── cli.py                        # CLI entry point (20+ commands)
 │   ├── comprehensive_extractor.py
+│   ├── converters.py                 # .txt/.pdf/.docx → .md converter
 │   ├── db_manager.py
 │   ├── engine.py                     # Main orchestrator
 │   ├── init_engine.py
