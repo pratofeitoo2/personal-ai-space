@@ -1,0 +1,75 @@
+when we add different files extension formats for ingestion on the folder /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/intake/staging, how are they processed and ingested?
+
+---
+
+<!-- OMO_INTERNAL_INITIATOR -->
+
+---
+
+now you need to edit this intake workflow to always convert .txt, .pdf and .dacx file formats to .md formats before any other step for extracting, classifying and routing. orchestrate the agents and subagents for this task
+
+---
+
+is some file pending to be ingested now?
+
+---
+
+update the documentation files with this change on intaking and ingesting, update sqlite database properly, and than commit changes and sync repo
+
+---
+
+You are generating a Conventional Commits subject line using session context and selected file paths.
+Return JSON with exactly this shape:
+{"subject": string, "highlights": string[]}
+
+Rules:
+- subject format: <type>: <summary>
+- allowed types: feat, fix, refactor, perf, docs, test, build, ci, chore, style, revert
+- no scope in subject
+- keep subject concise and user-facing
+- highlights: 0-3 concise user-facing points
+
+Selected files:
+- .obsidian/community-plugins.json
+- .obsidian/plugins/daily-dashboard/main.js
+- .obsidian/plugins/daily-dashboard/manifest.json
+- .obsidian/plugins/daily-dashboard/styles.css
+- .obsidian/plugins/obsidian42-brat/data.json
+- .obsidian/plugins/sql-notebook/main.js
+- .obsidian/plugins/sql-notebook/manifest.json
+- .obsidian/plugins/sql-notebook/styles.css
+- .obsidian/workspace.json
+- .sisyphus/run-continuation/ses_1e7738e6cffeDWyrx3OL9AbWpt.json
+- .sisyphus/run-continuation/ses_1e8fa75abffeeTGDkEY0DOfRs1.json
+- mcp-servers/mcp-whatsapp
+
+---
+
+<!-- OMO_INTERNAL_INITIATOR -->
+
+---
+
+[MEMORY]
+
+Project Knowledge:
+- [100%] Test memory - user name is Paul
+You are generating a Conventional Commits subject line using session context and selected file paths.
+Return JSON with exactly this shape:
+{"subject": string, "highlights": string[]}
+
+Rules:
+- subject format: <type>: <summary>
+- allowed types: feat, fix, refactor, perf, docs, test, build, ci, chore, style, revert
+- no scope in subject
+- keep subject concise and user-facing
+- highlights: 0-3 concise user-facing points
+
+Selected files:
+- .entire/.gitignore
+- .entire/settings.json
+- .opencode/opencode.json
+- .opencode/plugins/entire.ts
+- .sisyphus/run-continuation/ses_1e6ea4135ffeCP90Y7GbFRiKCg.json
+- .sisyphus/run-continuation/ses_1e7738e6cffeDWyrx3OL9AbWpt.json
+- mcp-servers/mcp-whatsapp
+- personal-ai-space/knowledge/notes/Entire CLI README.md
