@@ -48,3 +48,6 @@ htmlcov/
 # MemPalace per-project files (issue #185)
 mempalace.yaml
 entities.json
+
+# Sisyphus runtime state (transient)
+.sisyphus/run-continuation/
