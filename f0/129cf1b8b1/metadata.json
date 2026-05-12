@@ -3,7 +3,7 @@
   "checkpoint_id": "f0129cf1b8b1",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 4,
+  "checkpoints_count": 6,
   "files_touched": [
     ".sisyphus/plans/fix-mcp-memory-servers.md",
     "opencode.jsonc"
@@ -20,13 +20,19 @@
       "transcript": "/f0/129cf1b8b1/1/full.jsonl",
       "content_hash": "/f0/129cf1b8b1/1/content_hash.txt",
       "prompt": "/f0/129cf1b8b1/1/prompt.txt"
+    },
+    {
+      "metadata": "/f0/129cf1b8b1/2/metadata.json",
+      "transcript": "/f0/129cf1b8b1/2/full.jsonl",
+      "content_hash": "/f0/129cf1b8b1/2/content_hash.txt",
+      "prompt": "/f0/129cf1b8b1/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 37655,
+    "input_tokens": 74931,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 40832,
-    "output_tokens": 362,
-    "api_call_count": 3
+    "cache_read_tokens": 157760,
+    "output_tokens": 1071,
+    "api_call_count": 7
   }
 }

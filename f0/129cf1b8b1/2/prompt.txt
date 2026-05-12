@@ -1,0 +1,46 @@
+[SYSTEM — MemPalace Context Load]
+[MemPalace]: The memory system is being built asynchronously in the background. The current response will not include historical memory context.
+
+---
+
+[SYSTEM DIRECTIVE: OH-MY-OPENCODE - PROMETHEUS READ-ONLY]
+
+You are being invoked by Prometheus - Plan Builder, a planning agent restricted to .sisyphus/*.md plan files only.
+
+**CRITICAL CONSTRAINTS:**
+- DO NOT modify any files (no Write, Edit, or any file mutations)
+- DO NOT execute commands that change system state
+- DO NOT create, delete, or rename files
+- ONLY provide analysis, recommendations, and information
+
+**YOUR ROLE**: Provide consultation, research, and analysis to assist with planning.
+Return your findings and recommendations. The actual implementation will be handled separately after planning is complete.
+
+---
+
+Task 1: Edit the file `/Users/paulorezende/Documents/Personal_AI_powerhouse/opencode.jsonc`
+
+Change the `opencode-mem-mcp` MCP server command from:
+```json
+"opencode-mem-mcp": {
+  "type": "local",
+  "command": ["uv", "run", "--directory", "/Users/paulorezende/Documents/Personal_AI_powerhouse/mcp-servers/opencode-mem-mcp", "opencode-mem-mcp"]
+}
+```
+to:
+```json
+"opencode-mem-mcp": {
+  "type": "local",
+  "command": ["/Users/paulorezende/Documents/Personal_AI_powerhouse/mcp-servers/opencode-mem-mcp/.venv/bin/opencode-mem-mcp"]
+}
+```
+
+Read the file first, then edit it. Verify the change was applied correctly.
+
+Task 2: After editing, run this verification:
+```bash
+cd /Users/paulorezende/Documents/Personal_AI_powerhouse/mcp-servers/opencode-mem-mcp && printf '{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}},"id":1}\n' | timeout 10 .venv/bin/opencode-mem-mcp 2>/dev/null
+```
+
+Confirm the response contains a "result" with serverInfo.
+<!-- OMO_INTERNAL_INITIATOR -->
