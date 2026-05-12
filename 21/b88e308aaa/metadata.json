@@ -3,7 +3,7 @@
   "checkpoint_id": "21b88e308aaa",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 0,
+  "checkpoints_count": 2,
   "files_touched": [
     "personal-ai-space/engine/cli.py"
   ],
@@ -19,13 +19,19 @@
       "transcript": "/21/b88e308aaa/1/full.jsonl",
       "content_hash": "/21/b88e308aaa/1/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/21/b88e308aaa/2/metadata.json",
+      "transcript": "/21/b88e308aaa/2/full.jsonl",
+      "content_hash": "/21/b88e308aaa/2/content_hash.txt",
+      "prompt": "/21/b88e308aaa/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 0,
+    "input_tokens": 115320,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 0,
-    "output_tokens": 0,
-    "api_call_count": 0
+    "cache_read_tokens": 4169216,
+    "output_tokens": 15350,
+    "api_call_count": 56
   }
 }
