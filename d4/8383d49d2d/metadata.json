@@ -3,7 +3,7 @@
   "checkpoint_id": "d48383d49d2d",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 0,
+  "checkpoints_count": 1,
   "files_touched": [
     ".gitignore"
   ],
@@ -19,13 +19,19 @@
       "transcript": "/d4/8383d49d2d/1/full.jsonl",
       "content_hash": "/d4/8383d49d2d/1/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/d4/8383d49d2d/2/metadata.json",
+      "transcript": "/d4/8383d49d2d/2/full.jsonl",
+      "content_hash": "/d4/8383d49d2d/2/content_hash.txt",
+      "prompt": "/d4/8383d49d2d/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 0,
+    "input_tokens": 106294,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 0,
-    "output_tokens": 0,
-    "api_call_count": 0
+    "cache_read_tokens": 714752,
+    "output_tokens": 1676,
+    "api_call_count": 9
   }
 }
