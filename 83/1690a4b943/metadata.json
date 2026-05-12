@@ -3,7 +3,7 @@
   "checkpoint_id": "831690a4b943",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 1,
+  "checkpoints_count": 2,
   "files_touched": [
     "mcp-servers/opencode-mem-mcp/README.md",
     "mcp-servers/opencode-mem-mcp/pyproject.toml",
@@ -34,6 +34,12 @@
       "transcript": "/83/1690a4b943/2/full.jsonl",
       "content_hash": "/83/1690a4b943/2/content_hash.txt",
       "prompt": "/83/1690a4b943/2/prompt.txt"
+    },
+    {
+      "metadata": "/83/1690a4b943/3/metadata.json",
+      "transcript": "/83/1690a4b943/3/full.jsonl",
+      "content_hash": "/83/1690a4b943/3/content_hash.txt",
+      "prompt": "/83/1690a4b943/3/prompt.txt"
     }
   ],
   "token_usage": {
@@ -41,6 +47,6 @@
     "cache_creation_tokens": 0,
     "cache_read_tokens": 0,
     "output_tokens": 0,
-    "api_call_count": 1
+    "api_call_count": 2
   }
 }
