@@ -1,0 +1,34 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "831690a4b943",
+  "strategy": "manual-commit",
+  "branch": "feature/llm-integration",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "mcp-servers/opencode-mem-mcp/README.md",
+    "mcp-servers/opencode-mem-mcp/pyproject.toml",
+    "mcp-servers/opencode-mem-mcp/src/opencode_mem_mcp/__init__.py",
+    "mcp-servers/opencode-mem-mcp/src/opencode_mem_mcp/core/__init__.py",
+    "mcp-servers/opencode-mem-mcp/src/opencode_mem_mcp/core/database.py",
+    "mcp-servers/opencode-mem-mcp/src/opencode_mem_mcp/core/embedder.py",
+    "mcp-servers/opencode-mem-mcp/src/opencode_mem_mcp/server.py",
+    "mcp-servers/opencode-mem-mcp/src/opencode_mem_mcp/tools/__init__.py",
+    "mcp-servers/opencode-mem-mcp/src/opencode_mem_mcp/tools/memory.py",
+    "mcp-servers/opencode-mem-mcp/uv.lock"
+  ],
+  "sessions": [
+    {
+      "metadata": "/83/1690a4b943/0/metadata.json",
+      "transcript": "/83/1690a4b943/0/full.jsonl",
+      "content_hash": "/83/1690a4b943/0/content_hash.txt",
+      "prompt": "/83/1690a4b943/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 1
+  }
+}
