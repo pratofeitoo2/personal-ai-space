@@ -1,0 +1,4 @@
+[SYSTEM — MemPalace Context Load]
+[MemPalace]: The memory system is being built asynchronously in the background. The current response will not include historical memory context.
+
+Is the opencode-mem-mcp configured to a project or globally?
