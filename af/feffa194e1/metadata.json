@@ -3,9 +3,11 @@
   "checkpoint_id": "affeffa194e1",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 10,
+  "checkpoints_count": 13,
   "files_touched": [
     ".sisyphus/boulder.json",
+    ".sisyphus/notepads/github-specialist-agent/decisions.md",
+    ".sisyphus/notepads/github-specialist-agent/learnings.md",
     ".sisyphus/plans/github-specialist-agent.md",
     ".sisyphus/run-continuation/ses_1e30e171efferJallIvNCw6blM.json",
     ".sisyphus/run-continuation/ses_1e534dd81ffeA07IyHt1XtPKGV.json",
@@ -13,8 +15,18 @@
     "opencode.jsonc",
     "personal-ai-space/engine/agents/__init__.py",
     "personal-ai-space/engine/agents/agents.config.json",
+    "personal-ai-space/engine/agents/github_agent.py",
+    "personal-ai-space/engine/agents/github_config.py",
+    "personal-ai-space/engine/agents/github_discovery.py",
+    "personal-ai-space/engine/agents/github_gh_api.py",
+    "personal-ai-space/engine/agents/github_git_ops.py",
+    "personal-ai-space/engine/agents/github_sync.py",
+    "personal-ai-space/engine/db/schema_git_repos.sql",
     "personal-ai-space/engine/db_manager.py",
-    "personal-ai-space/engine/engine.py"
+    "personal-ai-space/engine/engine.py",
+    "personal-ai-space/engine/tests/test_github_config.py",
+    "personal-ai-space/engine/tests/test_github_discovery.py",
+    "personal-ai-space/engine/tests/test_github_git_ops.py"
   ],
   "sessions": [
     {
@@ -52,13 +64,19 @@
       "transcript": "/af/feffa194e1/5/full.jsonl",
       "content_hash": "/af/feffa194e1/5/content_hash.txt",
       "prompt": "/af/feffa194e1/5/prompt.txt"
+    },
+    {
+      "metadata": "/af/feffa194e1/6/metadata.json",
+      "transcript": "/af/feffa194e1/6/full.jsonl",
+      "content_hash": "/af/feffa194e1/6/content_hash.txt",
+      "prompt": "/af/feffa194e1/6/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 0,
+    "input_tokens": 428664,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 0,
-    "output_tokens": 0,
-    "api_call_count": 6
+    "cache_read_tokens": 15172864,
+    "output_tokens": 86729,
+    "api_call_count": 137
   }
 }
