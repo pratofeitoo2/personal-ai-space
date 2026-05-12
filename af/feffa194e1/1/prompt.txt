@@ -1,0 +1,21 @@
+[CONTEXT] Project at /Users/paulorezende/Documents/Personal_AI_powerhouse — Personal AI Powerhouse. Search ALL databases and structured data files for any project plans, instructions, tasks, or notes.
+
+[GOAL] Find all data stored in databases and JSON files related to project planning.
+
+[DOWNSTREAM] Complete picture of documented plans.
+
+[REQUEST] Be extremely thorough:
+
+1. Read ALL contents of personal-ai-space/engine/db/tasks.db — list tables, query all rows from all tables including tasks, projects, goals if they exist
+2. Read personal-ai-space/engine/db/self.db — list tables, query all rows
+3. Read personal-ai-space/engine/db/knowledge.db — list tables, query all rows
+4. Read personal-ai-space/engine/db/memories.db — list tables, query all rows
+5. Read personal-ai-space/engine/db/agent_memory.db — list tables, query all rows
+6. Read personal-ai-space/command/tasks/active_tasks.json — full contents
+7. Read personal-ai-space/command/activities/disciplined_routines.json — full contents
+8. Read personal-ai-space/command/calendar/upcoming.csv — full contents
+9. Read personal-ai-space/self/needs/current_needs.json — full contents
+10. Search for any other .json files in the project that might contain task/plan data
+11. Search for any .csv, .yaml, .yml files that might contain planning data
+12. Check personal-ai-space/logs/ or engine/logs/ for any log entries about plans/tasks
+<!-- OMO_INTERNAL_INITIATOR -->
