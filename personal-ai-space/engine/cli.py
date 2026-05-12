@@ -919,6 +919,322 @@ if HAS_RICH:
             for desc, conf in result.alternatives[:3]:
                 console.print(f"  {desc} ({conf:.0%})")
 
+    # ── github ────────────────────────────────────────────────────────────────
+
+    @cli.group()
+    def github():
+        """GitHub Specialist Agent — git operations, repo management, sync."""
+        pass
+
+    @github.command("status")
+    @click.option("--repo-path", "-r", help="Path to git repository")
+    def github_status(repo_path):
+        """Get git status for a repo."""
+        e = get_engine()
+        r = e.send("github-agent", "status", {"repo_path": repo_path})
+        if r["status"] == "success":
+            payload = r.get("payload", {})
+            if not repo_path:
+                console.print(f"[green]GitHub Agent ready[/green] — {payload.get('repos_tracked', 0)} repos tracked")
+                return
+            t = Table(title=f"Git Status: {repo_path}", show_header=True)
+            t.add_column("Field")
+            t.add_column("Value")
+            t.add_row("Branch", payload.get("branch", "?"))
+            t.add_row("Staged", str(len(payload.get("staged", []))))
+            t.add_row("Modified", str(len(payload.get("modified", []))))
+            t.add_row("Untracked", str(len(payload.get("untracked", []))))
+            t.add_row("Ahead/Behind", f"{payload.get('ahead', 0)}/{payload.get('behind', 0)}")
+            console.print(t)
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("clone")
+    @click.argument("url")
+    @click.option("--path", "-p", help="Local clone path (default: auto)")
+    def github_clone(url, path):
+        """Clone a repository."""
+        e = get_engine()
+        r = e.send("github-agent", "clone", {"url": url, "path": path or url.split("/")[-1].replace(".git", "")})
+        if r["status"] == "success":
+            console.print(f"[green]✓ Cloned:[/green] {r['payload'].get('path')}")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("init")
+    @click.argument("path")
+    def github_init(path):
+        """Initialize a git repository."""
+        e = get_engine()
+        r = e.send("github-agent", "init", {"path": path})
+        if r["status"] == "success":
+            console.print(f"[green]✓ Initialized:[/green] {path}")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("branch-list")
+    @click.option("--repo-path", "-r", required=True, help="Path to git repository")
+    def github_branch_list(repo_path):
+        """List branches in a repository."""
+        e = get_engine()
+        r = e.send("github-agent", "branch_list", {"repo_path": repo_path})
+        if r["status"] == "success":
+            branches = r["payload"].get("branches", [])
+            t = Table(title=f"Branches in {repo_path}", show_header=True)
+            t.add_column("Branch")
+            t.add_column("Current")
+            for b in branches:
+                current = "✓" if b.get("current") else ""
+                t.add_row(b.get("name", ""), current)
+            console.print(t)
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("branch-create")
+    @click.option("--repo-path", "-r", required=True, help="Path to git repository")
+    @click.option("--branch-name", "-b", required=True, help="Branch name")
+    @click.option("--base", help="Base branch (default: HEAD)")
+    def github_branch_create(repo_path, branch_name, base):
+        """Create a new branch."""
+        e = get_engine()
+        r = e.send("github-agent", "branch_create", {"repo_path": repo_path, "branch_name": branch_name, "base": base})
+        if r["status"] == "success":
+            console.print(f"[green]✓ Branch created:[/green] {branch_name}")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("branch-delete")
+    @click.option("--repo-path", "-r", required=True, help="Path to git repository")
+    @click.option("--branch-name", "-b", required=True, help="Branch name")
+    @click.option("--force", "-f", is_flag=True, help="Force delete")
+    def github_branch_delete(repo_path, branch_name, force):
+        """Delete a branch."""
+        e = get_engine()
+        r = e.send("github-agent", "branch_delete", {"repo_path": repo_path, "branch_name": branch_name, "force": force})
+        if r["status"] == "success":
+            console.print(f"[green]✓ Branch deleted:[/green] {branch_name}")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("commit")
+    @click.option("--repo-path", "-r", required=True, help="Path to git repository")
+    @click.option("--message", "-m", required=True, help="Commit message")
+    def github_commit(repo_path, message):
+        """Commit changes."""
+        e = get_engine()
+        r = e.send("github-agent", "commit", {"repo_path": repo_path, "message": message})
+        if r["status"] == "success":
+            payload = r["payload"]
+            console.print(f"[green]✓ Committed:[/green] {payload.get('hash', '')[:7]} — {message}")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("log")
+    @click.option("--repo-path", "-r", required=True, help="Path to git repository")
+    @click.option("-n", default=10, type=int, help="Number of commits")
+    def github_log(repo_path, n):
+        """Show commit log."""
+        e = get_engine()
+        r = e.send("github-agent", "log", {"repo_path": repo_path, "n": n})
+        if r["status"] == "success":
+            commits = r["payload"].get("commits", [])
+            if not commits:
+                console.print("[dim]No commits yet[/dim]")
+                return
+            t = Table(title=f"Recent Commits in {repo_path}", show_header=True)
+            t.add_column("Hash")
+            t.add_column("Author")
+            t.add_column("Message")
+            for c in commits:
+                t.add_row(c.get("hash", "")[:7], c.get("author", ""), c.get("message", "")[:50])
+            console.print(t)
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("pull")
+    @click.option("--repo-path", "-r", required=True, help="Path to git repository")
+    def github_pull(repo_path):
+        """Pull from remote."""
+        e = get_engine()
+        r = e.send("github-agent", "pull", {"repo_path": repo_path})
+        if r["status"] == "success":
+            console.print(f"[green]✓ Pulled:[/green] {repo_path}")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("push")
+    @click.option("--repo-path", "-r", required=True, help="Path to git repository")
+    @click.option("--force", "-f", is_flag=True, help="Force push")
+    def github_push(repo_path, force):
+        """Push to remote."""
+        e = get_engine()
+        r = e.send("github-agent", "push", {"repo_path": repo_path, "force": force})
+        if r["status"] == "success":
+            console.print(f"[green]✓ Pushed:[/green] {repo_path}")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("worktree-add")
+    @click.option("--repo-path", "-r", required=True, help="Path to git repository")
+    @click.option("--path", "-p", required=True, help="Worktree path")
+    @click.option("--branch", "-b", required=True, help="Branch for worktree")
+    def github_worktree_add(repo_path, path, branch):
+        """Add a worktree."""
+        e = get_engine()
+        r = e.send("github-agent", "worktree_add", {"repo_path": repo_path, "path": path, "branch": branch})
+        if r["status"] == "success":
+            console.print(f"[green]✓ Worktree added:[/green] {path} ({branch})")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("worktree-list")
+    @click.option("--repo-path", "-r", required=True, help="Path to git repository")
+    def github_worktree_list(repo_path):
+        """List worktrees."""
+        e = get_engine()
+        r = e.send("github-agent", "worktree_list", {"repo_path": repo_path})
+        if r["status"] == "success":
+            trees = r["payload"].get("worktrees", [])
+            if not trees:
+                console.print("[dim]No worktrees[/dim]")
+                return
+            t = Table(title=f"Worktrees in {repo_path}", show_header=True)
+            t.add_column("Path")
+            t.add_column("Branch")
+            t.add_column("HEAD")
+            for w in trees:
+                t.add_row(w.get("path", ""), w.get("branch", ""), w.get("head", ""))
+            console.print(t)
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("repo-discover")
+    @click.option("--paths", "-p", multiple=True, help="Paths to scan (default: current dir)")
+    def github_repo_discover(paths):
+        """Discover git repositories."""
+        e = get_engine()
+        r = e.send("github-agent", "repo_discover", {"paths": list(paths) if paths else ["."]})
+        if r["status"] == "success":
+            repos = r["payload"].get("repos", [])
+            console.print(f"[green]✓ Found:[/green] {len(repos)} repos")
+            for repo in repos:
+                console.print(f"  • {repo.get('path')} ({repo.get('branch', '?')})")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("repo-register")
+    @click.option("--repo-path", "-r", required=True, help="Path to git repository")
+    def github_repo_register(repo_path):
+        """Register a repo for tracking."""
+        e = get_engine()
+        r = e.send("github-agent", "repo_register", {"repo_path": repo_path})
+        if r["status"] == "success":
+            console.print(f"[green]✓ Registered:[/green] {repo_path}")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("repo-list")
+    def github_repo_list():
+        """List registered/tracked repos."""
+        e = get_engine()
+        r = e.send("github-agent", "repo_list", {})
+        if r["status"] == "success":
+            repos = r["payload"].get("repos", [])
+            if not repos:
+                console.print("[dim]No repos registered. Run: github repo-discover[/dim]")
+                return
+            t = Table(title="Registered Repos", show_header=True)
+            t.add_column("Path")
+            t.add_column("Branch")
+            for repo in repos:
+                t.add_row(repo.get("path", ""), repo.get("branch", "?"))
+            console.print(t)
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("sync-now")
+    def github_sync_now():
+        """Trigger immediate sync."""
+        e = get_engine()
+        r = e.send("github-agent", "sync_now", {})
+        if r["status"] == "success":
+            console.print(f"[green]✓ Sync triggered[/green]")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("gh-repo-info")
+    @click.argument("repo")
+    def github_gh_repo_info(repo):
+        """Get GitHub repository info."""
+        e = get_engine()
+        r = e.send("github-agent", "gh_repo_info", {"repo": repo})
+        if r["status"] == "success":
+            info = r["payload"]
+            t = Table(title=f"GitHub: {repo}", show_header=True)
+            t.add_column("Field")
+            t.add_column("Value")
+            for k, v in info.items():
+                t.add_row(k, str(v)[:60])
+            console.print(t)
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("gh-pr-list")
+    @click.argument("repo")
+    @click.option("--state", default="open", type=click.Choice(["open", "closed", "all"]))
+    def github_gh_pr_list(repo, state):
+        """List pull requests."""
+        e = get_engine()
+        r = e.send("github-agent", "gh_pr_list", {"repo": repo, "state": state})
+        if r["status"] == "success":
+            prs = r["payload"].get("prs", [])
+            if not prs:
+                console.print(f"[dim]No {state} PRs[/dim]")
+                return
+            t = Table(title=f"PRs: {repo} ({state})", show_header=True)
+            t.add_column("Number")
+            t.add_column("Title")
+            t.add_column("Author")
+            t.add_column("State")
+            for pr in prs:
+                t.add_row(str(pr.get("number", "")), pr.get("title", "")[:40], pr.get("author", ""), pr.get("state", ""))
+            console.print(t)
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("gh-ci-status")
+    @click.argument("repo")
+    def github_gh_ci_status(repo):
+        """Get CI status."""
+        e = get_engine()
+        r = e.send("github-agent", "gh_ci_status", {"repo": repo})
+        if r["status"] == "success":
+            status = r["payload"]
+            console.print(f"[bold]CI Status:[/bold] {repo}")
+            console.print(f"  Runs: {status.get('total_runs', '?')}")
+            console.print(f"  Passing: {status.get('passing', '?')}")
+            console.print(f"  Failing: {status.get('failing', '?')}")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
+    @github.command("event")
+    @click.option("--agent", "-a", required=True, help="Agent ID (e.g., 'task-coordinator')")
+    @click.option("--command", "-c", required=True, help="Command executed")
+    @click.option("--data", "-d", default="{}", help="JSON data")
+    def github_event(agent, command, data):
+        """Track cross-agent event (for agent work tracking)."""
+        e = get_engine()
+        try:
+            data_obj = json.loads(data)
+        except json.JSONDecodeError:
+            console.print("[red]Invalid JSON in --data[/red]")
+            return
+        r = e.send("github-agent", "event", {"agent_id": agent, "command": command, "data": data_obj})
+        if r["status"] == "success":
+            console.print(f"[green]✓ Event tracked:[/green] {agent} -> {command}")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
 else:
     # Plain fallback if rich/click not installed
     def cli():
