@@ -44,3 +44,7 @@ logs/
 htmlcov/
 *.db-shm
 *.db-wal
+
+# MemPalace per-project files (issue #185)
+mempalace.yaml
+entities.json
