@@ -3,7 +3,7 @@
   "checkpoint_id": "61ccc49d405f",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 8,
+  "checkpoints_count": 9,
   "files_touched": [
     "mempalace_dashboard.py",
     "personal-ai-space/engine/llm_bridge.py"
@@ -20,13 +20,19 @@
       "transcript": "/61/ccc49d405f/1/full.jsonl",
       "content_hash": "/61/ccc49d405f/1/content_hash.txt",
       "prompt": "/61/ccc49d405f/1/prompt.txt"
+    },
+    {
+      "metadata": "/61/ccc49d405f/2/metadata.json",
+      "transcript": "/61/ccc49d405f/2/full.jsonl",
+      "content_hash": "/61/ccc49d405f/2/content_hash.txt",
+      "prompt": "/61/ccc49d405f/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 3226129,
+    "input_tokens": 3260553,
     "cache_creation_tokens": 0,
     "cache_read_tokens": 5632384,
-    "output_tokens": 14566,
-    "api_call_count": 106
+    "output_tokens": 14581,
+    "api_call_count": 107
   }
 }
