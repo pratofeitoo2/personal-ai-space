@@ -11,7 +11,7 @@
     },
     "opencode-mem-mcp": {
       "type": "local",
-      "command": ["uv", "run", "--directory", "/Users/paulorezende/Documents/Personal_AI_powerhouse/mcp-servers/opencode-mem-mcp", "opencode-mem-mcp"]
+      "command": ["/Users/paulorezende/Documents/Personal_AI_powerhouse/mcp-servers/opencode-mem-mcp/.venv/bin/opencode-mem-mcp"]
     }
   }
 }
