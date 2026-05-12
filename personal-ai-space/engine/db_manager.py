@@ -20,6 +20,7 @@ DB_PATHS = {
     "self":     DB_DIR / "self.db",
     "tasks":    DB_DIR / "tasks.db",
     "knowledge": DB_DIR / "knowledge.db",
+    "git":      DB_DIR / "git.db",
 }
 
 
@@ -69,6 +70,19 @@ def execute_many(db_name: str, sql: str, params_list: list) -> int:
         return cur.rowcount
 
 
+def init_git_db():
+    """Initialize git.db from schema file."""
+    schema_file = DB_DIR / "schema_git_repos.sql"
+    if not schema_file.exists():
+        logger.warning(f"Schema missing: {schema_file}")
+        return
+    conn = sqlite3.connect(str(DB_PATHS["git"]))
+    with open(schema_file) as f:
+        conn.executescript(f.read())
+    conn.close()
+    logger.info("Initialized: git.db")
+
+
 def init_all():
     """Initialize all databases from schema files."""
     schema_dir = DB_DIR
@@ -82,6 +96,7 @@ def init_all():
             conn.executescript(f.read())
         conn.close()
         logger.info(f"Initialized: {db_name}.db")
+    init_git_db()
 
 
 def log_interaction(

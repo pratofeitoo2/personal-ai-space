@@ -25,6 +25,7 @@ from agents.knowledge_indexer import KnowledgeIndexer
 from agents.behavior_observer import BehaviorObserver
 from agents.pattern_learner import PatternLearner
 from agents.mcp_agent import MCPAgent
+from agents.github_agent import GitHubAgent
 
 
 class Engine:
@@ -60,6 +61,7 @@ class Engine:
             ReportGenerator,
             KnowledgeIndexer,
             MCPAgent,
+            GitHubAgent,
         ]
         # Initialize observer (autonomous learning)
         from memory.mcp_bridge import MCPMemoryBridge
@@ -159,6 +161,10 @@ class Engine:
                     self._observer.observe_anomaly_detected(
                         f"agent_{agent_id}_error", "warning"
                     )
+
+            # Fire-and-forget notification to GitHub agent (non-blocking)
+            if agent_id != "github-agent" and status == "success":
+                self._notify_github_agent(agent_id, command, data)
 
             # Context snapshot every 5th interaction
             self._interaction_count += 1
@@ -413,3 +419,51 @@ class Engine:
         if not hasattr(self, '_pattern_learner') or not self._pattern_learner:
             return "No workflow recommendation available yet"
         return self._pattern_learner.get_workflow_recommendation()
+
+    # ── GitHub Agent convenience wrappers ──────────────────────────────────
+
+    def git_status(self, repo_path: str = None) -> dict:
+        """Get git status from GitHub agent."""
+        params = {"repo_path": repo_path} if repo_path else {}
+        return self.send("github-agent", "status", params)
+
+    def git_sync_now(self, repo_path: str = None, message: str = None) -> dict:
+        """Trigger immediate sync from GitHub agent."""
+        params = {}
+        if repo_path:
+            params["repo_path"] = repo_path
+        if message:
+            params["message"] = message
+        return self.send("github-agent", "sync_now", params)
+
+    def git_repo_list(self) -> dict:
+        """List all registered repos from GitHub agent."""
+        return self.send("github-agent", "repo_list")
+
+    def _notify_github_agent(self, agent_id: str, action: str, data: dict) -> None:
+        """Fire-and-forget notification to GitHub agent about agent activity."""
+        gh = self._agents.get("github-agent")
+        if not gh or gh.state != "ready":
+            return
+        try:
+            gh.handle({
+                "id": uuid.uuid4().hex,
+                "timestamp": datetime.now().isoformat(),
+                "sender": "orchestrator",
+                "recipients": ["github-agent"],
+                "action": "request",
+                "payload": {
+                    "command": "event",
+                    "parameters": {
+                        "event_type": "agent_work_completed",
+                        "data": {
+                            "agent_id": agent_id,
+                            "action": action,
+                            "timestamp": datetime.now().isoformat(),
+                            "details": data,
+                        },
+                    },
+                },
+            })
+        except Exception as e:
+            self.logger.debug(f"GitHub agent notification failed: {e}")

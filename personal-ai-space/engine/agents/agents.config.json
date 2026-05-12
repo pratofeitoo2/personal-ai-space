@@ -98,5 +98,22 @@
     "triggers": ["scheduled_report", "on_request"],
     "outputs": ["report", "visualization"],
     "error_handling": "log_and_continue"
+  },
+  {
+    "id": "github-agent",
+    "name": "GitHub Specialist",
+    "description": "Manages git repositories, branches, worktrees, commits, and syncs. Tracks agent work across the system via cross-agent communication.",
+    "priority": "high",
+    "dependencies": ["git.db", "gh CLI", "git CLI"],
+    "capabilities": [
+      "git operations (clone, branch, commit, merge, log, worktree)",
+      "GitHub API (repo info, PRs, issues)",
+      "Repo auto-discovery",
+      "Auto-commit and sync",
+      "Agent work tracking"
+    ],
+    "triggers": ["scheduled_sync", "agent_work_completed", "on_startup", "on_command"],
+    "outputs": ["git_status", "sync_report", "commit_log", "repo_discovery"],
+    "error_handling": "retry_with_backoff"
   }
 ]
