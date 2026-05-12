@@ -1,1 +1,1 @@
-commit changes and sync
+add them and enable @ for invoking the agent and its properly configured tools
