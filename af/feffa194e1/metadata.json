@@ -3,7 +3,7 @@
   "checkpoint_id": "affeffa194e1",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 17,
+  "checkpoints_count": 19,
   "files_touched": [
     ".sisyphus/boulder.json",
     ".sisyphus/notepads/github-specialist-agent/decisions.md",
@@ -82,6 +82,12 @@
       "transcript": "/af/feffa194e1/8/full.jsonl",
       "content_hash": "/af/feffa194e1/8/content_hash.txt",
       "prompt": "/af/feffa194e1/8/prompt.txt"
+    },
+    {
+      "metadata": "/af/feffa194e1/9/metadata.json",
+      "transcript": "/af/feffa194e1/9/full.jsonl",
+      "content_hash": "/af/feffa194e1/9/content_hash.txt",
+      "prompt": "/af/feffa194e1/9/prompt.txt"
     }
   ],
   "token_usage": {
@@ -89,6 +95,6 @@
     "cache_creation_tokens": 0,
     "cache_read_tokens": 15172864,
     "output_tokens": 86729,
-    "api_call_count": 139
+    "api_call_count": 140
   }
 }
