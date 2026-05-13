@@ -3,7 +3,7 @@
   "checkpoint_id": "129c6e609203",
   "strategy": "manual-commit",
   "branch": "memory-layer-refactory",
-  "checkpoints_count": 31,
+  "checkpoints_count": 32,
   "files_touched": [
     ".mempalace",
     ".sisyphus/boulder.json",
@@ -81,13 +81,19 @@
       "transcript": "/12/9c6e609203/10/full.jsonl",
       "content_hash": "/12/9c6e609203/10/content_hash.txt",
       "prompt": "/12/9c6e609203/10/prompt.txt"
+    },
+    {
+      "metadata": "/12/9c6e609203/11/metadata.json",
+      "transcript": "/12/9c6e609203/11/full.jsonl",
+      "content_hash": "/12/9c6e609203/11/content_hash.txt",
+      "prompt": "/12/9c6e609203/11/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 1929215,
+    "input_tokens": 6361484,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 6053682,
-    "output_tokens": 29241,
-    "api_call_count": 98
+    "cache_read_tokens": 21765781,
+    "output_tokens": 61660,
+    "api_call_count": 281
   }
 }

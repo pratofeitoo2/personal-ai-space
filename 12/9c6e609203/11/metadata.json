@@ -1,0 +1,41 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "129c6e609203",
+  "session_id": "ses_1e1b824aaffegA1guuy7JjP1N3",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-13T09:42:24.457317Z",
+  "branch": "memory-layer-refactory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opencode.jsonc.openchamber.backup",
+    "personal-ai-space/engine/cli.py",
+    "personal-ai-space/engine/config/engine.config.json",
+    "personal-ai-space/engine/config/presets.json",
+    "personal-ai-space/engine/engine.py"
+  ],
+  "agent": "OpenCode",
+  "model": "nemotron-3-super-free",
+  "turn_id": "a1c9bff6af74",
+  "token_usage": {
+    "input_tokens": 4432269,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 15712099,
+    "output_tokens": 32419,
+    "api_call_count": 183
+  },
+  "session_metrics": {
+    "turn_count": 20
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-13T09:42:24.434996Z",
+    "agent_lines": 124,
+    "agent_removed": 11,
+    "human_added": 4947,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 5071,
+    "total_lines_changed": 5091,
+    "agent_percentage": 2.6517383618149677,
+    "metric_version": 2
+  }
+}
