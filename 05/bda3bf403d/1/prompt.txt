@@ -1,0 +1,22 @@
+You are generating a Conventional Commits subject line using session context and selected file paths.
+Return JSON with exactly this shape:
+{"subject": string, "highlights": string[]}
+
+Rules:
+- subject format: <type>: <summary>
+- allowed types: feat, fix, refactor, perf, docs, test, build, ci, chore, style, revert
+- no scope in subject
+- keep subject concise and user-facing
+- highlights: 0-3 concise user-facing points
+
+Selected files:
+- .mempalace
+- .sisyphus/boulder.json
+- mcp-servers/mcp-whatsapp
+- opencode.jsonc
+- opencode.jsonc.openchamber.backup
+- personal-ai-space/engine/cli.py
+- personal-ai-space/engine/config/engine.config.json
+- personal-ai-space/engine/config/presets.json
+- personal-ai-space/engine/engine.py
+- session-ses_1e1b.md
