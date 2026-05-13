@@ -3,7 +3,7 @@
   "checkpoint_id": "e84fbadd47cc",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 10,
+  "checkpoints_count": 22,
   "files_touched": [
     "opencode.jsonc"
   ],
@@ -25,13 +25,19 @@
       "transcript": "/e8/4fbadd47cc/2/full.jsonl",
       "content_hash": "/e8/4fbadd47cc/2/content_hash.txt",
       "prompt": "/e8/4fbadd47cc/2/prompt.txt"
+    },
+    {
+      "metadata": "/e8/4fbadd47cc/3/metadata.json",
+      "transcript": "/e8/4fbadd47cc/3/full.jsonl",
+      "content_hash": "/e8/4fbadd47cc/3/content_hash.txt",
+      "prompt": "/e8/4fbadd47cc/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 859582,
+    "input_tokens": 976913,
     "cache_creation_tokens": 0,
     "cache_read_tokens": 4655226,
-    "output_tokens": 11471,
-    "api_call_count": 48
+    "output_tokens": 12184,
+    "api_call_count": 51
   }
 }
