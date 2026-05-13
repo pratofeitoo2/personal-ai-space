@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "05bda3bf403d",
+  "strategy": "manual-commit",
+  "branch": "feature/llm-integration",
+  "checkpoints_count": 11,
+  "files_touched": [
+    "opencode.jsonc"
+  ],
+  "sessions": [
+    {
+      "metadata": "/05/bda3bf403d/0/metadata.json",
+      "transcript": "/05/bda3bf403d/0/full.jsonl",
+      "content_hash": "/05/bda3bf403d/0/content_hash.txt",
+      "prompt": "/05/bda3bf403d/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 8838927,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 17407,
+    "api_call_count": 122
+  }
+}
