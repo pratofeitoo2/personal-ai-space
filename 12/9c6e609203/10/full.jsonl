@@ -11802,7 +11802,15 @@
         "id": "msg_e20b01130001v0EgQA5aRqBNtC",
         "sessionID": "ses_1dfc6fdc3ffevx7wm3jOWdiUIl"
       },
-      "parts": []
+      "parts": [
+        {
+          "snapshot": "84367e7e6a23fbf21af525dfea783f2e073b2c8f",
+          "type": "step-start",
+          "id": "prt_e20b9418c001FY0pZPE0g8rX85",
+          "sessionID": "ses_1dfc6fdc3ffevx7wm3jOWdiUIl",
+          "messageID": "msg_e20b01130001v0EgQA5aRqBNtC"
+        }
+      ]
     }
   ]
 }
