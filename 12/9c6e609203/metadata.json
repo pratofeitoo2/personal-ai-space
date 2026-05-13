@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "129c6e609203",
+  "strategy": "manual-commit",
+  "branch": "memory-layer-refactory",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".mempalace",
+    ".sisyphus/boulder.json",
+    "opencode.jsonc",
+    "opencode.jsonc.openchamber.backup",
+    "personal-ai-space/engine/cli.py",
+    "personal-ai-space/engine/config/engine.config.json",
+    "personal-ai-space/engine/config/presets.json",
+    "personal-ai-space/engine/engine.py",
+    "session-ses_1e1b.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/12/9c6e609203/0/metadata.json",
+      "transcript": "/12/9c6e609203/0/full.jsonl",
+      "content_hash": "/12/9c6e609203/0/content_hash.txt",
+      "prompt": "/12/9c6e609203/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 1
+  }
+}
