@@ -1,6 +1,7 @@
 {
   "engine_version": "0.1.0",
   "mode": "development",
+  "preset": "full",
   "agents_enabled": [
     "context-manager",
     "task-coordinator",

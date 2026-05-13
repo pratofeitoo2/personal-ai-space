@@ -38,6 +38,29 @@ class Engine:
         self._start_time = datetime.now()
         self._interaction_count = 0
 
+    def _load_config(self):
+        config_path = ROOT / "config/engine.config.json"
+        presets_path = ROOT / "config/presets.json"
+        
+        config = {}
+        if config_path.exists():
+            with open(config_path) as f:
+                config = json.load(f)
+        
+        presets = {}
+        if presets_path.exists():
+            with open(presets_path) as f:
+                presets = json.load(f)
+                
+        enabled_ids = config.get("agents_enabled", [])
+        preset_name = config.get("preset")
+        
+        if preset_name and preset_name in presets:
+            enabled_ids = presets[preset_name]
+            self.logger.info(f"Using agent preset: {preset_name}")
+            
+        return enabled_ids
+
     # ── lifecycle ─────────────────────────────────────────────────────────
 
     def start(self) -> bool:
@@ -52,17 +75,28 @@ class Engine:
             else:
                 self.logger.error(f"  ✗ {name}.db — {result.get('error')}")
 
-        # Load agents
-        agent_classes = [
-            ContextManager,
-            TaskCoordinator,
-            InsightGenerator,
-            ReminderSystem,
-            ReportGenerator,
-            KnowledgeIndexer,
-            MCPAgent,
-            GitHubAgent,
-        ]
+        enabled_ids = self._load_config()
+        agent_map = {
+            "context-manager": ContextManager,
+            "task-coordinator": TaskCoordinator,
+            "insight-generator": InsightGenerator,
+            "reminder-system": ReminderSystem,
+            "report-generator": ReportGenerator,
+            "knowledge-indexer": KnowledgeIndexer,
+            "mcp-agent": MCPAgent,
+            "github-agent": GitHubAgent,
+        }
+        
+        agent_classes = []
+        if enabled_ids:
+            for aid in enabled_ids:
+                if aid in agent_map:
+                    agent_classes.append(agent_map[aid])
+                else:
+                    self.logger.warning(f"Unknown agent ID in config: {aid}")
+        else:
+            agent_classes = list(agent_map.values())
+
         # Initialize observer (autonomous learning)
         from memory.mcp_bridge import MCPMemoryBridge
         try:

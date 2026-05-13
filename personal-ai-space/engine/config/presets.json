@@ -1,0 +1,29 @@
+{
+  "minimal": [
+    "context-manager",
+    "task-coordinator"
+  ],
+  "standard": [
+    "context-manager",
+    "task-coordinator",
+    "knowledge-indexer",
+    "mcp-agent"
+  ],
+  "full": [
+    "context-manager",
+    "task-coordinator",
+    "insight-generator",
+    "reminder-system",
+    "report-generator",
+    "knowledge-indexer",
+    "mcp-agent",
+    "github-agent"
+  ],
+  "developer": [
+    "context-manager",
+    "task-coordinator",
+    "knowledge-indexer",
+    "mcp-agent",
+    "github-agent"
+  ]
+}

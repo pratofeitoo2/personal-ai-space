@@ -108,6 +108,44 @@ if HAS_RICH:
         """🧠 Personal AI Space — your engine."""
         pass
 
+    @cli.group()
+    def config():
+        """Manage engine configuration."""
+        pass
+
+    @config.command("preset")
+    @click.argument("name", required=False)
+    def config_preset(name):
+        """View or change agent preset."""
+        config_path = ROOT / "config/engine.config.json"
+        presets_path = ROOT / "config/presets.json"
+        
+        with open(presets_path) as f:
+            presets = json.load(f)
+            
+        if not name:
+            with open(config_path) as f:
+                config = json.load(f)
+            current = config.get("preset", "none")
+            console.print(f"Current preset: [bold cyan]{current}[/bold cyan]")
+            console.print("\nAvailable presets:")
+            for p, agents in presets.items():
+                console.print(f"  [bold]{p:10}[/bold] ({len(agents)} agents)")
+            return
+
+        if name not in presets:
+            console.print(f"[red]Error: Unknown preset '{name}'[/red]")
+            return
+
+        with open(config_path) as f:
+            config = json.load(f)
+        
+        config["preset"] = name
+        with open(config_path, "w") as f:
+            json.dump(config, f, indent=2)
+            
+        console.print(f"Preset switched to [bold green]{name}[/bold green]. Restart engine to apply.")
+
     # ── health ────────────────────────────────────────────────────────────
 
     @cli.command()
