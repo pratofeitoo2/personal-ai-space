@@ -1,0 +1,25 @@
+You are writing the root-level codemap.md for the repository at /Users/paulorezende/Documents/Personal_AI_powerhouse.
+
+The root codemap.md already exists as an empty file at ./codemap.md. Write the complete atlas.
+
+Repository overview: "Personal AI Powerhouse" - a personal AI augmentation system with a Python engine, MCP memory server, auto-intake pipeline, and self-modeling capabilities. It runs on macOS with OpenCode as the AI interface.
+
+Cover these root-level assets:
+- `opencode.jsonc` - OpenCode MCP configuration (opencode-mem-mcp, aivectormemory)
+- `.opencode/opencode.json` - OpenCode plugin/MCP config (duplicate/hierarchy)
+- `.opencode/openwork.json` - OpenCode workspace config
+- `.opencode/plugins/entire.ts` - Entire CLI lifecycle plugin for OpenCode (session management, hooks for turn-start/turn-end/session-end)
+- `.github/workflows/engine-ci.yml` - CI pipeline (Python 3.13, ruff lint, pytest, trufflehog secrets scan)
+- `BMO/Profiles/BMO.md` - BMO AI assistant Obsidian profile config
+- `mempalace_dashboard.py` - MemPalace dashboard script
+- `mempalace.yaml` - MemPalace configuration
+- `.sisyphus/` - Sisyphus workflow runtime state directory
+
+Write to ./codemap.md with sections:
+- # Repository Atlas: Personal AI Powerhouse
+- ## Project Responsibility
+- ## System Entry Points (opencode.jsonc, .opencode/plugins/entire.ts, .github/workflows/)
+- ## Directory Map (table with all subdirectories, their responsibility, and link to their codemap.md)
+
+Be concise and technical. Use exact file paths. Do NOT use emojis.
+<!-- OMO_INTERNAL_INITIATOR -->
