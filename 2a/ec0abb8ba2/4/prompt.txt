@@ -1,0 +1,27 @@
+You are writing the codemap.md for the db/ subdirectory at /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine/db.
+
+The file personal-ai-space/engine/db/codemap.md already exists as empty. Write its content.
+
+Read the SQL schema files and migration scripts:
+- personal-ai-space/engine/db/schema_agent_memory.sql
+- personal-ai-space/engine/db/schema_git_repos.sql
+- personal-ai-space/engine/db/schema_knowledge.sql
+- personal-ai-space/engine/db/schema_memories.sql
+- personal-ai-space/engine/db/schema_self.sql
+- personal-ai-space/engine/db/schema_tasks.sql
+- personal-ai-space/engine/db/migrate_cleanup.py
+- personal-ai-space/engine/db/migrate_goals.py
+- personal-ai-space/engine/db/migrate_knowledge.py
+- personal-ai-space/engine/db/migrate_schema_v2.py
+- personal-ai-space/engine/db/migrate_tasks.py
+- personal-ai-space/engine/db/DATABASE_ARCHITECTURE.md
+
+Write to personal-ai-space/engine/db/codemap.md with:
+- ## Responsibility (SQLite persistence layer)
+- ## Database Catalog (table: database file, schema file, purpose, key tables)
+- ## Migration Strategy
+- ## Schema Overview (key tables and relationships)
+- ## Integration Points (consumed by db_manager.py, agents, mcp_bridge.py)
+
+Be technical, no emojis.
+<!-- OMO_INTERNAL_INITIATOR -->
