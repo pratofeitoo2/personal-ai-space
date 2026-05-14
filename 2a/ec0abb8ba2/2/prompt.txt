@@ -1,0 +1,18 @@
+You are writing the codemap.md for the intake/ directory at /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/intake.
+
+The file personal-ai-space/intake/codemap.md already exists as empty. Write its content.
+
+Read these files:
+- personal-ai-space/intake/watcher.py - macOS launchd file watcher
+- personal-ai-space/intake/process_intake.py - File router and processor
+- personal-ai-space/intake/processed/ (directory listing - archive of processed files)
+
+Write to personal-ai-space/intake/codemap.md with:
+- ## Responsibility (zero-touch file import pipeline)
+- ## Architecture (watcher.py monitors staging directory every 10s triggers process_intake.py)
+- ## Routing Rules (filename keywords → destinations: "Daily Notes" → inbox, "PF"/"financial" → finances, frontmatter tags)
+- ## Files (table: file, role, key functions)
+- ## Integration Points (outputs to command/inbox, command/finances, knowledge/)
+
+Be technical, no emojis. Reference specific function/class names.
+<!-- OMO_INTERNAL_INITIATOR -->
