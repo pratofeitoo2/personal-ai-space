@@ -1,0 +1,32 @@
+You are writing the codemap.md for the engine/ directory at /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine.
+
+The file personal-ai-space/engine/codemap.md already exists as empty. Write its content.
+
+Read these key files first:
+- personal-ai-space/engine/engine.py - Main orchestrator
+- personal-ai-space/engine/cli.py - CLI entry point (click + rich, 20+ commands)
+- personal-ai-space/engine/db_manager.py - SQLite connection management
+- personal-ai-space/engine/log_manager.py - Structured logging
+- personal-ai-space/engine/init_engine.py - Database initialization
+- personal-ai-space/engine/comprehensive_extractor.py - Data extraction
+- personal-ai-space/engine/converters.py - .txt/.pdf/.docx to .md converter
+- personal-ai-space/engine/llm_bridge.py - LLM integration
+- personal-ai-space/engine/synthesis_loop.py - Synthesis loop
+- personal-ai-space/engine/synthesis_run.py - Synthesis runner
+- personal-ai-space/engine/propagator.py - Data propagation
+- personal-ai-space/engine/sync_scanner.py - Sync scanner
+- personal-ai-space/engine/backup.py - Backup system
+- personal-ai-space/engine/requirements.txt - Dependencies
+- personal-ai-space/engine/start_engine.py - Engine startup
+- personal-ai-space/engine/stop_engine.py - Engine stop
+- personal-ai-space/engine/config/engine.config.json
+- personal-ai-space/engine/config/system.config.json
+
+Write to personal-ai-space/engine/codemap.md with:
+- ## Responsibility
+- ## Core Files (table of each major .py file with responsibility)
+- ## CLI Architecture (command tree)
+- ## Subdirectory Map (agents, db, extractors, mcp_tools, memory, tests, config, logs)
+
+Be technical, no emojis. Use exact paths. Reference specific function/class names where possible.
+<!-- OMO_INTERNAL_INITIATOR -->
