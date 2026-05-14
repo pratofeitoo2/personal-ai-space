@@ -3,7 +3,7 @@
   "checkpoint_id": "fef5c6710381",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 10,
+  "checkpoints_count": 12,
   "files_touched": [
     ".sisyphus/boulder.json",
     ".sisyphus/plans/github-specialist-agent.md",
@@ -61,6 +61,12 @@
       "transcript": "/fe/f5c6710381/7/full.jsonl",
       "content_hash": "/fe/f5c6710381/7/content_hash.txt",
       "prompt": "/fe/f5c6710381/7/prompt.txt"
+    },
+    {
+      "metadata": "/fe/f5c6710381/8/metadata.json",
+      "transcript": "/fe/f5c6710381/8/full.jsonl",
+      "content_hash": "/fe/f5c6710381/8/content_hash.txt",
+      "prompt": "/fe/f5c6710381/8/prompt.txt"
     }
   ],
   "token_usage": {
@@ -68,6 +74,6 @@
     "cache_creation_tokens": 0,
     "cache_read_tokens": 704832,
     "output_tokens": 24727,
-    "api_call_count": 86
+    "api_call_count": 87
   }
 }
