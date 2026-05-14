@@ -1,0 +1,19 @@
+[CONTEXT] A Python personal AI project that currently uses standard JSON for all config files. The user is considering migrating to JSON5 or YAML. They have 12+ config files scattered across directories at multiple levels.
+
+[GOAL] Research best practices for configuration management in Python projects, specifically:
+1. What do well-structured Python AI/agent projects use for config? (search GitHub for similar projects)
+2. What are the pros/cons of centralized vs distributed config files?
+3. What patterns exist for config hierarchy (e.g., single source of truth with overrides)?
+4. How do projects like LangChain, AutoGPT, or similar agent frameworks handle configuration?
+5. What's the convention for config file placement in Python projects?
+
+[DOWNSTREAM] This research will inform whether JSON5, YAML, or a different approach is best for consolidating this project's configs.
+
+[REQUEST] 
+1. Search GitHub for Python AI agent projects and their config file patterns
+2. Look up Python packaging/config conventions (pyproject.toml vs separate config files)
+3. Search for "python project configuration best practices" on the web
+4. Find examples of how agent frameworks handle per-agent configuration vs global configuration
+
+Return synthesized findings with source references.
+<!-- OMO_INTERNAL_INITIATOR -->
