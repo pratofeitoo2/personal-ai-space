@@ -1,0 +1,26 @@
+[search-mode]
+MAXIMIZE SEARCH EFFORT. Launch multiple background agents IN PARALLEL:
+- explore agents (codebase patterns, file structures, ast-grep)
+- librarian agents (remote repos, official docs, GitHub examples)
+Plus direct tools: Grep, ripgrep (rg), ast-grep (sg)
+NEVER stop at first result - be exhaustive.
+
+---
+
+@personal-ai-space/self take a look on this level directory and under subdirs, and do some scan over the structure and the architecture used to connect the user with the databases, and the databases with the rest of this agentic system codebase. Im very suspicious that this links, connections and most of all the data management and the databases sqlite have a very fragile backend that can damage a big data load at once
+Called the Read tool with the following input: {"filePath":"/Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/self"}
+<path>/Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/self</path>
+<type>directory</type>
+<entries>
+.DS_Store
+codemap.md
+goals/
+habits/
+needs/
+profile.json
+profile/
+relationships/
+traits/
+
+(9 entries)
+</entries>
