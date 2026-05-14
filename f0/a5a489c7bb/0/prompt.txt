@@ -1,0 +1,41 @@
+[analyze-mode]
+ANALYSIS MODE. Gather context before diving deep:
+CONTEXT GATHERING (parallel):
+- 1-2 explore agents (codebase patterns, implementations)
+- 1-2 librarian agents (if external library involved)
+- Direct tools: Grep, AST-grep, LSP for targeted searches
+
+IF COMPLEX - DO NOT STRUGGLE ALONE. Consult specialists:
+- **Oracle**: Conventional problems (architecture, debugging, complex logic)
+- **Artistry**: Non-conventional problems (different approach needed)
+
+SYNTHESIZE findings before proceeding.
+---
+MANDATORY delegate_task params: ALWAYS include load_skills and run_in_background when calling delegate_task. Evaluate available skills before dispatch - pass task-appropriate skills when relevant, pass [] ONLY when no skill matches the task domain.
+Example: delegate_task(subagent_type="explore", prompt="...", run_in_background=true, load_skills=[])
+
+---
+
+This message comes from an AI assistant in another session. The user wants you to respond according to its content: if it is an implementation plan, your task is to implement that plan; if it is a conclusion or summary, your task is to verify it, explain whether you agree or disagree, and correct it if needed. Always clearly state what you understand your task to be, and wait for the user's approval of your conclusions before taking any further actions.
+The `using-superpowers` skill has been successfully installed and is available in your system. Here's what you need to know:
+## Summary of the `using-superpowers` Skill
+This is a **meta-skill** that establishes the fundamental workflow for using skills in your agent. It's designed to be used at the start of conversations to ensure proper skill invocation discipline.
+### Key Principles:
+1. **Mandatory Skill Checking**: You must check for applicable skills before ANY response or action
+2. **1% Rule**: If there's even a 1% chance a skill might apply, you must invoke it
+3. **Priority Order**: User instructions > Superpowers skills > Default system behavior
+### How It Works:
+- **Process skills first** (brainstorming, debugging) → **Implementation skills second** (domain-specific)
+- Follow skills exactly for rigid workflows (TDD, debugging)
+- Adapt flexibly for pattern-based skills
+### Red Flags to Watch For:
+The skill includes a table of "red flag" thoughts that indicate you're rationalizing away skill usage, such as:
+- "This is just a simple question"
+- "I need more context first"
+- "The skill is overkill"
+## Next Steps
+The skill is installed at `~/.agents/skills/using-superpowers/` and will be available in new sessions. Since this is a meta-skill about skill usage workflows, it will automatically guide how you approach tasks in future sessions.
+Would you like me to:
+1. Show you how to use this skill in practice with an example?
+2. Explain any specific part of the skill in more detail?
+3. Help you start a new session to test the skill?
