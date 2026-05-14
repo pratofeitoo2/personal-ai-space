@@ -155,32 +155,31 @@ class DataHub:
             now_iso = datetime.now(timezone.utc).isoformat()
             today = datetime.now(timezone.utc).date()
 
-            # Insert log entry
-            log_id = uuid.uuid4().hex
-            db.execute("self",
-                "INSERT INTO habit_logs (id, habit_id, completed_at, notes, confidence_level) VALUES (?,?,?,?,?)",
-                (log_id, habit_id, now_iso, notes, duration_min / 60.0 if duration_min else None))
-
-            # Update streak
+            # Compute streak before starting the transaction
             last = habit.get("last_completed")
             streak = habit.get("current_streak", 0)
             if last:
                 try:
                     last_date = datetime.fromisoformat(last).date()
                     delta = (today - last_date).days
-                    if delta <= 1:
-                        streak += 1
-                    else:
-                        streak = 1
+                    streak = streak + 1 if delta <= 1 else 1
                 except ValueError:
                     streak = 1
             else:
                 streak = 1
 
-            db.execute("self",
-                "UPDATE habits SET total_completions = total_completions + 1, "
-                "current_streak = ?, last_completed = ? WHERE id = ?",
-                (streak, now_iso, habit_id))
+            # Wrap INSERT + UPDATE in a single atomic transaction
+            with db.transaction("self") as conn:
+                log_id = uuid.uuid4().hex
+                conn.execute(
+                    "INSERT INTO habit_logs (id, habit_id, completed_at, notes, confidence_level) VALUES (?,?,?,?,?)",
+                    (log_id, habit_id, now_iso, notes, duration_min / 60.0 if duration_min else None),
+                )
+                conn.execute(
+                    "UPDATE habits SET total_completions = total_completions + 1, "
+                    "current_streak = ?, last_completed = ? WHERE id = ?",
+                    (streak, now_iso, habit_id),
+                )
 
             audit(f"[datahub] log_habit_completion: {habit_name}, streak={streak}")
             return True

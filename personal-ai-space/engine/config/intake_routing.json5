@@ -1,0 +1,74 @@
+{
+  "version": "1.0",
+  "description": "Intake routing rules — maps file type, tags, folder, and filename patterns to destination directories. Relative to personal-ai-space/",
+
+  "destinations": {
+    "command_inbox": "command/inbox",
+    "command_finances": "command/finances",
+    "command_tasks": "command/tasks",
+    "knowledge_articles": "knowledge/articles",
+    "knowledge_notes": "knowledge/notes",
+    "knowledge_references": "knowledge/references",
+    "knowledge_projects": "knowledge/projects",
+    "self_goals": "self/goals",
+    "self_relationships": "self/relationships",
+    "self_profile": "self/profile"
+  },
+
+  "type_routes": {
+    "cv": "command_finances",
+    "cover-letter": "command_finances",
+    "profile": "command_finances",
+    "job-posting": "command_finances",
+    "linkedin": "command_finances",
+    "writing-sample": "command_finances",
+    "financial": "command_finances",
+    "daily-note": "command_inbox",
+    "quick-capture": "command_inbox",
+    "person": "self_relationships",
+    "study-plan": "self_goals",
+    "career-plan": "self_goals",
+    "life-plan": "self_goals",
+    "research-article": "knowledge_articles",
+    "analysis": "knowledge_articles",
+    "transcript": "knowledge_articles",
+    "guide": "knowledge_articles",
+    "tool-note": "knowledge_notes",
+    "personal-note": "knowledge_notes",
+    "note": "knowledge_notes"
+  },
+
+  "tag_routes": [
+    { "tags": ["article", "research"], "destination": "knowledge_articles" },
+    { "tags": ["project"], "destination": "knowledge_projects" },
+    { "tags": ["reference"], "destination": "knowledge_references" },
+    { "tags": ["task", "todo"], "destination": "command_tasks" }
+  ],
+
+  "folder_routes": [
+    { "pattern": "Daily Notes", "destination": "command_inbox" },
+    { "pattern": "Life Plans", "destination": "self_goals" },
+    { "pattern": "People", "destination": "self_relationships" },
+    { "pattern": "PF", "destination": "command_finances" },
+    { "pattern": "About me", "destination": "self_profile" }
+  ],
+
+  "filename_routes": [
+    { "prefix": "project_", "destination": "knowledge_projects" },
+    { "prefix": "note_", "destination": "knowledge_notes" },
+    { "prefix": "idea_", "destination": "knowledge_notes" },
+    { "prefix": "article_", "destination": "knowledge_articles" },
+    { "prefix": "research_", "destination": "knowledge_articles" }
+  ],
+
+  "date_patterns": [
+    "^\\d{4}-\\d{2}-\\d{2}",
+    "^\\d{4}-\\d{1,2}-\\d{1,2}",
+    "^[A-Za-z]{3}\\s\\d{1,2}",
+    "^\\d{1,2}h\\d{2}"
+  ],
+
+  "default_destination": "knowledge_notes",
+
+  "financial_keywords": ["PF", "financial", "finance"]
+}

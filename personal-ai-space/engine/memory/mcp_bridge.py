@@ -57,6 +57,42 @@ def _run(op: str, *args: str, timeout: int = 8) -> dict:
         return {"ok": False, "error": str(exc)}
 
 
+def _run_stdin(op: str, payload: str, timeout: int = 15) -> dict:
+    """Execute headless.js <op> with JSON payload sent via stdin.
+
+    Used for batch operations where passing many items as CLI args
+    would be impractical. Spawns one subprocess per batch instead of
+    one per item, dramatically reducing overhead.
+
+    Returns the parsed JSON response.
+    """
+    cmd = [NODE, str(HEADLESS_SCRIPT), op]
+    try:
+        result = subprocess.run(
+            cmd,
+            cwd=MCP_SERVER_DIR,
+            input=payload,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            env={**__import__("os").environ, "NODE_NO_WARNINGS": "1"},
+        )
+        raw = result.stdout.strip()
+        if not raw:
+            err = result.stderr.strip()
+            return {"ok": False, "error": err or "no output"}
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError:
+            return {"ok": result.returncode == 0, "output": raw}
+    except subprocess.TimeoutExpired:
+        logger.error("MCP bridge timeout (stdin): %s", op)
+        return {"ok": False, "error": "timeout"}
+    except Exception as exc:
+        logger.error("MCP bridge error (stdin): %s — %s", op, exc)
+        return {"ok": False, "error": str(exc)}
+
+
 class MCPMemoryBridge:
     """
     High-level interface to the pi-memory MemoryStore via headless.js.
@@ -116,6 +152,44 @@ class MCPMemoryBridge:
         result = _run("delete-fact", key)
         return result.get("deleted", False)
 
+    def batch_add_facts(
+        self,
+        facts: list[dict],
+        timeout: int = 15,
+    ) -> int:
+        """Add multiple facts in a single subprocess call.
+
+        Each dict must have at least 'key' and 'value'.
+        Optional: confidence, category, source.
+
+        Returns number of facts stored.
+        """
+        payload = json.dumps(facts)
+        result = _run_stdin("batch-add-facts", payload, timeout=timeout)
+        stored = result.get("stored", 0)
+        total = result.get("total", len(facts))
+        logger.info("MCP batch_add_facts: stored %d/%d facts", stored, total)
+        return stored
+
+    def batch_add_lessons(
+        self,
+        lessons: list[dict],
+        timeout: int = 15,
+    ) -> int:
+        """Add multiple lessons in a single subprocess call.
+
+        Each dict must have at least 'text'.
+        Optional: negative (bool), category, source.
+
+        Returns number of lessons stored.
+        """
+        payload = json.dumps(lessons)
+        result = _run_stdin("batch-add-lessons", payload, timeout=timeout)
+        stored = result.get("stored", 0)
+        total = result.get("total", len(lessons))
+        logger.info("MCP batch_add_lessons: stored %d/%d lessons", stored, total)
+        return stored
+
     # ── Lessons ───────────────────────────────────────────────────────────────
 
     def add_lesson(
@@ -163,16 +237,26 @@ class MCPMemoryBridge:
     # ── Context helpers ───────────────────────────────────────────────────────
 
     def sync_profile_facts(self, profile: dict) -> int:
-        """Push flat profile dict as semantic facts under 'user.' namespace."""
-        count = 0
-        for key, value in profile.items():
-            if value is None:
-                continue
-            mcp_key = f"user.{key}" if not key.startswith("user.") else key
-            if self.add_fact(mcp_key, str(value), confidence=0.9, category="profile", source="system"):
-                count += 1
-        logger.info("Synced %d profile facts to MCP memory", count)
-        return count
+        """Push flat profile dict as semantic facts under 'user.' namespace.
+
+        Uses batch subprocess call for efficiency.
+        """
+        facts = [
+            {
+                "key": f"user.{key}" if not key.startswith("user.") else key,
+                "value": str(value),
+                "confidence": 0.9,
+                "category": "profile",
+                "source": "system",
+            }
+            for key, value in profile.items()
+            if value is not None
+        ]
+        if not facts:
+            return 0
+        stored = self.batch_add_facts(facts)
+        logger.info("Synced %d profile facts to MCP memory", stored)
+        return stored
 
     def get_context_snapshot(self, prefix: str = "user.") -> dict[str, str]:
         """Return flat dict of facts under prefix — for agent prompt injection."""

@@ -81,7 +81,7 @@ class Engine:
 
         # Phase 3: Auto-sync .md frontmatter with database
         try:
-            from sync_scanner import run_scan, summarize
+            from sync.sync_scanner import run_scan, summarize
             sync_stats = run_scan()
             self.logger.info("Sync scan: %s", summarize(sync_stats).replace("\n", "; "))
         except Exception as e:
@@ -303,7 +303,7 @@ class Engine:
     def run_sync(self) -> str:
         """Manually trigger frontmatter sync scan."""
         try:
-            from sync_scanner import run_scan, summarize
+            from sync.sync_scanner import run_scan, summarize
             stats = run_scan()
             return summarize(stats)
         except Exception as e:

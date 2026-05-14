@@ -59,7 +59,7 @@ class AppConfig(BaseModel):
 
     # MCP configuration
     mcp_registry_path: Path = Field(
-        default=_PROJECT_ROOT / "personal-ai-space" / "engine" / "mcp_tools" / "registry.json",
+        default=_PROJECT_ROOT / "personal-ai-space" / "engine" / "config" / "mcp_registry.json5",
         description="Path to MCP server registry JSON",
     )
     mcp_server_dir: Path = Field(
@@ -134,7 +134,7 @@ class AppConfig(BaseModel):
             ollama_model=os.environ.get("OLLAMA_MODEL", "nomic-embed-text:137m-v1.5-fp16"),
             memory_db_dir=Path(os.environ.get("MEMORY_DB_DIR", str(_PROJECT_ROOT / "personal-ai-space" / "engine" / "db"))),
             data_dir=Path(os.environ.get("DATA_DIR", str(_PROJECT_ROOT / "personal-ai-space"))),
-            mcp_registry_path=Path(os.environ.get("MCP_REGISTRY_PATH", str(_PROJECT_ROOT / "personal-ai-space" / "engine" / "mcp_tools" / "registry.json"))),
+            mcp_registry_path=Path(os.environ.get("MCP_REGISTRY_PATH", str(_PROJECT_ROOT / "personal-ai-space" / "engine" / "config" / "mcp_registry.json5"))),
             mcp_server_dir=Path(os.environ.get("MCP_SERVER_DIR", str(_PROJECT_ROOT / "personal-ai-space" / "engine" / "memory" / "mcp-server"))),
             profile_path=Path(os.environ.get("PROFILE_PATH", str(_PROJECT_ROOT / "personal-ai-space" / "self" / "profile.json"))),
             log_level=os.environ.get("LOG_LEVEL", "INFO"),

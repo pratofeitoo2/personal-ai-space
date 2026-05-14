@@ -8,7 +8,7 @@
  * All output is newline-delimited JSON on stdout.
  * Errors are written to stderr; exit code 1 on failure.
  *
- * Operations:
+ * Operations (single):
  *   add-fact  <key> <value> [confidence] [category] [source]
  *   get-fact  <key>
  *   list-facts [prefix] [limit] [orderBy]
@@ -17,6 +17,10 @@
  *   list-lessons [category] [negative:0|1] [limit]
  *   delete-lesson <id>
  *   stats
+ *
+ * Operations (batch — reads JSON array from stdin):
+ *   batch-add-facts   [{"key","value","confidence","category","source"}, ...]
+ *   batch-add-lessons [{"text","negative","category","source"}, ...]
  */
 
 import { createRequire } from "node:module";
@@ -57,6 +61,17 @@ function fail(msg) {
   process.stderr.write(`ERROR: ${msg}\n`);
   process.stdout.write(JSON.stringify({ ok: false, error: msg }) + "\n");
   process.exit(1);
+}
+
+/** Read all of stdin as a single string. */
+function readStdin() {
+  return new Promise((resolve) => {
+    if (process.stdin.isTTY) return resolve("");
+    let data = "";
+    process.stdin.setEncoding("utf-8");
+    process.stdin.on("data", (chunk) => { data += chunk; });
+    process.stdin.on("end", () => resolve(data));
+  });
 }
 
 const [,, op, ...args] = process.argv;
@@ -116,8 +131,38 @@ switch (op) {
     ok(stats);
     break;
   }
+  case "batch-add-facts": {
+    const raw = await readStdin();
+    if (!raw) fail("batch-add-facts requires JSON array on stdin");
+    let facts;
+    try { facts = JSON.parse(raw); } catch { fail("Invalid JSON on stdin"); }
+    if (!Array.isArray(facts)) fail("Expected JSON array on stdin");
+    let stored = 0;
+    for (const f of facts) {
+      if (!f.key || f.value === undefined) continue;
+      store.addFact(f.key, String(f.value), parseFloat(f.confidence ?? "0.8"), f.category || undefined, f.source || "engine");
+      stored++;
+    }
+    ok({ stored, total: facts.length });
+    break;
+  }
+  case "batch-add-lessons": {
+    const raw = await readStdin();
+    if (!raw) fail("batch-add-lessons requires JSON array on stdin");
+    let lessons;
+    try { lessons = JSON.parse(raw); } catch { fail("Invalid JSON on stdin"); }
+    if (!Array.isArray(lessons)) fail("Expected JSON array on stdin");
+    let stored = 0;
+    for (const l of lessons) {
+      if (!l.text) continue;
+      store.addLesson(l.text, (parseInt(l.negative ?? "0") === 1) ? 1 : 0, l.category || undefined, l.source || "engine");
+      stored++;
+    }
+    ok({ stored, total: lessons.length });
+    break;
+  }
   default:
-    fail(`Unknown operation: ${op}. Valid: add-fact, get-fact, list-facts, delete-fact, add-lesson, list-lessons, delete-lesson, stats`);
+    fail(`Unknown operation: ${op}. Valid: add-fact, get-fact, list-facts, delete-fact, add-lesson, list-lessons, delete-lesson, stats, batch-add-facts, batch-add-lessons`);
 }
 
 store.close();

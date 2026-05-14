@@ -17,6 +17,7 @@ Usage:
     client.close()
 """
 import json
+import json5
 import logging
 import os
 import subprocess
@@ -333,9 +334,9 @@ class MCPClient:
 def load_registry(path: str = None) -> list[dict]:
     """Load MCP server configurations from registry.json."""
     if path is None:
-        path = os.path.join(os.path.dirname(__file__), "registry.json")
+        path = os.path.join(os.path.dirname(__file__), "..", "config", "mcp_registry.json5")
     with open(path) as f:
-        data = json.load(f)
+        data = json5.load(f)
     return data.get("servers", [])
 
 

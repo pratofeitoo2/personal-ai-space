@@ -1,0 +1,10 @@
+{
+  "sync_interval": 900,
+  "idle_timeout": 120,
+  "auto_sync": true,
+  "auto_push": false,
+  "allow_main_commit": false,
+  "discovery_paths": [],
+  "max_discovery_depth": 5,
+  "log_level": "INFO"
+}

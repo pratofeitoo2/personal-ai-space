@@ -5,6 +5,7 @@ Run once before first engine start.
 """
 import sys
 import json
+import json5
 import uuid
 from pathlib import Path
 from datetime import datetime, date
@@ -14,12 +15,21 @@ sys.path.insert(0, str(ROOT))
 
 import db_manager as db
 from log_manager import setup_logging, get_logger
-import propagator
+from synthesis import propagator
 
 setup_logging("INFO")
 logger = get_logger("init")
 
 SELF_PROFILE_PATH = ROOT.parent / "self" / "profile.json"
+SEEDS_CONFIG_PATH = ROOT / "config" / "seeds.json5"
+
+
+def _load_seeds():
+    if SEEDS_CONFIG_PATH.exists():
+        with open(SEEDS_CONFIG_PATH) as f:
+            return json5.load(f)
+    print(f"  ⚠ Seeds config not found at {SEEDS_CONFIG_PATH}")
+    return {}
 
 
 def init_databases():
@@ -71,23 +81,19 @@ def seed_habits():
         print("  Habits already exist — skipping")
         return
 
-    starter_habits = [
-        ("morning_standup",  "Morning standup",      "productivity", "daily",   0, 0, 30),
-        ("deep_work",        "Deep work block",       "productivity", "daily",   0, 0, 30),
-        ("reading",          "Read technical articles","learning",    "3x_week", 0, 0, 20),
-        ("exercise",         "Exercise",              "health",       "4x_week", 0, 0, 20),
-        ("weekly_review",    "Weekly review",         "meta",         "weekly",  0, 0, 12),
-    ]
-    for h in starter_habits:
+    seeds = _load_seeds()
+    habits = seeds.get("habits", [])
+    for h in habits:
         db.execute(
             "self",
             "INSERT OR IGNORE INTO habits "
             "(id, habit_name, category, frequency, current_streak, total_completions, "
             "start_date, target_streak, status) "
             "VALUES (?,?,?,?,?,?,?,?,?)",
-            (uuid.uuid4().hex, h[1], h[2], h[3], h[4], h[5], date.today().isoformat(), h[6], "active")
+            (uuid.uuid4().hex, h["name"], h["category"], h["frequency"],
+             0, 0, date.today().isoformat(), h.get("target_streak", 30), "active")
         )
-    print(f"  ✓ {len(starter_habits)} habits seeded")
+    print(f"  ✓ {len(habits)} habits seeded")
 
 
 def seed_needs():
@@ -97,18 +103,15 @@ def seed_needs():
         print("  Needs already exist — skipping")
         return
 
-    needs = [
-        ("professional", "Functional AI system",    "critical", "in_progress", "Build personal AI space"),
-        ("personal",     "Time clarity",            "high",     "active",      "Better time tracking"),
-        ("professional", "Knowledge management",    "high",     "active",      "Systematic knowledge org"),
-        ("health",       "Consistent routines",     "medium",   "active",      "Daily habits"),
-    ]
+    seeds = _load_seeds()
+    needs = seeds.get("needs", [])
     for n in needs:
         db.execute(
             "self",
             "INSERT OR IGNORE INTO needs (id, category, name, priority, status, description, created_at) "
             "VALUES (?,?,?,?,?,?,?)",
-            (uuid.uuid4().hex, n[0], n[1], n[2], n[3], n[4], datetime.now().isoformat())
+            (uuid.uuid4().hex, n["category"], n["name"], n["priority"],
+             n["status"], n["description"], datetime.now().isoformat())
         )
     print(f"  ✓ {len(needs)} needs seeded")
 
@@ -120,20 +123,18 @@ def seed_tasks():
         print("  Tasks already exist — skipping")
         return
 
+    seeds = _load_seeds()
+    tasks = seeds.get("tasks", [])
     now = datetime.now().isoformat()
-    for tid, title, pid, priority, status, desc, hours in [
-        ("task_001", "Initialize engine databases",       "personal-ai", "critical", "completed", "Initialize all databases and seed starter data", 2.0),
-        ("task_002", "Design agent communication protocol", "personal-ai", "high", "pending", "Define message format and routing between agents", 15.0),
-        ("task_003", "Build habit tracking system",       "personal-ai", "high",     "pending", "Implement habit logging and streak tracking", 12.0),
-        ("task_004", "Connect first integration",         "personal-ai", "medium",   "pending", "Set up first external tool integration via MCP", 8.0),
-        ("task_005", "Review and curate knowledge base",  "knowledge",   "medium",   "pending", "Organize and deduplicate knowledge notes", 4.0),
-    ]:
+    for t in tasks:
+        tid = t["id"]
         db.execute(
             "tasks",
             "INSERT OR IGNORE INTO tasks "
             "(id, title, description, project_id, priority, status, created_at, estimated_hours, category) "
             "VALUES (?,?,?,?,?,?,?,?,?)",
-            (tid, title, desc, pid, priority, status, now, hours, "general")
+            (tid, t["title"], t["description"], t["project_id"],
+             t["priority"], t["status"], now, t.get("estimated_hours"), t.get("category", "general"))
         )
         propagator.on_task_created(tid)
     print(f"  ✓ {len(tasks)} tasks seeded")
@@ -146,22 +147,26 @@ def seed_projects():
         print("  Projects already exist — skipping")
         return
 
-    db.execute(
-        "tasks",
-        "INSERT OR IGNORE INTO projects "
-        "(id, name, description, status, start_date, total_tasks, completed_tasks, created_at) "
-        "VALUES (?,?,?,?,?,?,?,?)",
-        (
-            "personal-ai",
-            "Personal AI Powerhouse",
-            "Build the personal agentic AI system",
-            "active",
-            date.today().isoformat(),
-            0, 0,
-            datetime.now().isoformat(),
+    seeds = _load_seeds()
+    projects = seeds.get("projects", [])
+    now = datetime.now().isoformat()
+    for p in projects:
+        db.execute(
+            "tasks",
+            "INSERT OR IGNORE INTO projects "
+            "(id, name, description, status, start_date, total_tasks, completed_tasks, created_at) "
+            "VALUES (?,?,?,?,?,?,?,?)",
+            (
+                p["id"],
+                p["name"],
+                p["description"],
+                p["status"],
+                date.today().isoformat(),
+                0, 0,
+                now,
+            )
         )
-    )
-    print("  ✓ 1 project seeded")
+    print(f"  ✓ {len(projects)} projects seeded")
 
 
 def ensure_dirs():

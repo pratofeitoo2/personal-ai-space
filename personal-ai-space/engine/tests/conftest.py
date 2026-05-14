@@ -25,6 +25,7 @@ def temp_db_dir():
         for name in db_manager.DB_PATHS:
             db_manager.DB_PATHS[name] = Path(tmpdir) / f"{name}.db"
         yield tmpdir
+        db_manager.clear_pool()
         db_manager.DB_PATHS.clear()
         db_manager.DB_PATHS.update(orig_paths)
 

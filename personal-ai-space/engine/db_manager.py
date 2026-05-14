@@ -1,10 +1,17 @@
 """
 Engine core: database connection manager.
 Handles all SQLite connections and queries.
+Features:
+  - Connection pooling (reuse connections across callers)
+  - Transaction context manager for atomic multi-table operations
+  - WAL checkpoint management to prevent unbounded WAL growth
+  - WAL mode + foreign keys on all connections
 """
 import sqlite3
 import json
 import logging
+import queue
+import threading
 from pathlib import Path
 from contextlib import contextmanager
 from datetime import datetime
@@ -23,6 +30,89 @@ DB_PATHS = {
     "git":      DB_DIR / "git.db",
 }
 
+# ── Connection Pool ──────────────────────────────────────────────────────────
+# Thread-safe, path-keyed pool of reusable SQLite connections.
+# Each database gets its own pool of up to MAX_POOL_SIZE connections.
+# Connections are validated on checkout and replaced if stale.
+
+MAX_POOL_SIZE = 8
+_pools: dict[str, queue.Queue] = {}
+_pool_sizes: dict[str, int] = {}
+_pool_lock = threading.Lock()
+
+
+def _pool_key(path: Path) -> str:
+    return str(path.resolve())
+
+
+def _create_conn(path: Path) -> sqlite3.Connection:
+    """Create a new SQLite connection with standard settings."""
+    conn = sqlite3.connect(str(path))
+    conn.row_factory = dict_factory
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA foreign_keys=ON")
+    return conn
+
+
+def acquire_conn(path: Path) -> sqlite3.Connection:
+    """Acquire a connection from the pool, creating one if needed."""
+    key = _pool_key(path)
+    pool = _pools.get(key)
+    if pool is None:
+        pool = queue.Queue()
+        _pools[key] = pool
+        _pool_sizes[key] = 0
+
+    # Try cached connection first
+    try:
+        conn = pool.get_nowait()
+        conn.execute("SELECT 1")  # validate
+        return conn
+    except queue.Empty:
+        pass
+    except (sqlite3.Error, AttributeError):
+        pass  # stale conn, create new one below
+
+    # Create new if pool not full
+    with _pool_lock:
+        if _pool_sizes.get(key, 0) < MAX_POOL_SIZE:
+            conn = _create_conn(path)
+            _pool_sizes[key] = _pool_sizes.get(key, 0) + 1
+            return conn
+
+    # Pool full — block until a connection is released
+    conn = pool.get(timeout=30)
+    return conn
+
+
+def release_conn(path: Path, conn: sqlite3.Connection) -> None:
+    """Return a connection to the pool, or close if stale."""
+    key = _pool_key(path)
+    pool = _pools.get(key)
+    if pool is None:
+        conn.close()
+        return
+    try:
+        conn.execute("SELECT 1")
+        pool.put(conn)
+    except (sqlite3.Error, AttributeError):
+        with _pool_lock:
+            _pool_sizes[key] = max(0, _pool_sizes.get(key, 0) - 1)
+        conn.close()
+
+
+def clear_pool() -> None:
+    """Close all pooled connections and reset. Used during testing."""
+    for key, pool in list(_pools.items()):
+        while True:
+            try:
+                conn = pool.get_nowait()
+                conn.close()
+            except queue.Empty:
+                break
+    _pools.clear()
+    _pool_sizes.clear()
+
 
 def dict_factory(cursor, row):
     """Return rows as dicts instead of tuples."""
@@ -31,14 +121,15 @@ def dict_factory(cursor, row):
 
 @contextmanager
 def get_conn(db_name: str):
-    """Context manager for database connections."""
+    """Context manager for pooled database connections.
+    
+    Acquires a connection from the pool, commits on success,
+    rolls back on exception, and returns the connection to the pool.
+    """
     path = DB_PATHS.get(db_name)
     if not path:
         raise ValueError(f"Unknown database: {db_name}")
-    conn = sqlite3.connect(str(path))
-    conn.row_factory = dict_factory
-    conn.execute("PRAGMA journal_mode=WAL")
-    conn.execute("PRAGMA foreign_keys=ON")
+    conn = acquire_conn(path)
     try:
         yield conn
         conn.commit()
@@ -46,7 +137,31 @@ def get_conn(db_name: str):
         conn.rollback()
         raise
     finally:
-        conn.close()
+        release_conn(path, conn)
+
+
+@contextmanager
+def transaction(db_name: str):
+    """Context manager for atomic transactions.
+    
+    Wraps operations in BEGIN IMMEDIATE / COMMIT / ROLLBACK.
+    Use for multi-table operations that need atomicity.
+    
+    Example:
+        with transaction(\"self\") as conn:
+            conn.execute(\"INSERT INTO habit_logs ...\", ...)
+            conn.execute(\"UPDATE habits SET ...\", ...)
+    
+    Note: Use ``conn.execute()`` (not the module-level ``query()/execute()``)
+    inside this block to share the same connection + transaction.
+    """
+    with get_conn(db_name) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        try:
+            yield conn
+        except Exception:
+            conn.rollback()
+            raise
 
 
 def query(db_name: str, sql: str, params: tuple = ()) -> list[dict]:
@@ -68,6 +183,31 @@ def execute_many(db_name: str, sql: str, params_list: list) -> int:
     with get_conn(db_name) as conn:
         cur = conn.executemany(sql, params_list)
         return cur.rowcount
+
+
+def wal_checkpoint(db_name: str) -> dict:
+    """Run WAL checkpoint (TRUNCATE) on a database.
+    
+    Returns checkpoint result dict with keys like 'busy', 'log', 'checkpointed'.
+    Call periodically or after bulk writes to keep WAL files bounded.
+    """
+    with get_conn(db_name) as conn:
+        conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        row = conn.execute("PRAGMA wal_checkpoint(TRUNCATE)").fetchone()
+        result = dict(row) if row else {}
+        if result.get("busy", 0) > 0:
+            logger.warning("WAL checkpoint blocked on %s: %s busy frames", db_name, result["busy"])
+        return result
+
+
+def checkpoint_all():
+    """Run WAL checkpoint on all databases."""
+    for db_name in DB_PATHS:
+        try:
+            result = wal_checkpoint(db_name)
+            logger.debug("WAL checkpoint %s: %s", db_name, result)
+        except Exception as e:
+            logger.warning("WAL checkpoint failed for %s: %s", db_name, e)
 
 
 def init_git_db():
@@ -97,6 +237,8 @@ def init_all():
         conn.close()
         logger.info(f"Initialized: {db_name}.db")
     init_git_db()
+    checkpoint_all()
+    logger.info("All databases initialized, WAL checkpoints done")
 
 
 def log_interaction(

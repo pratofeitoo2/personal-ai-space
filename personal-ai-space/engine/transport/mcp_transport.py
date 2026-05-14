@@ -383,9 +383,9 @@ class MCPTransportManager:
             logger.warning("Registry file not found: %s", self._registry_path)
             return
 
-        import json
+        import json5
         with open(self._registry_path) as f:
-            data = json.load(f)
+            data = json5.load(f)
 
         for server_cfg in data.get("servers", []):
             cfg = MCPServerConfig(

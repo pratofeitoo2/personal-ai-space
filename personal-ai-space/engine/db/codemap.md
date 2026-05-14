@@ -5,13 +5,13 @@ SQLite persistence layer — 5 databases with dedicated schemas, migration scrip
 
 ## Database Catalog
 
-| Database File | Schema File | Purpose | Key Tables |
-|--------------|-------------|---------|------------|
-| `memories.db` | `schema_memories.sql` | Agent interactions and context | `interactions`, `contexts`, `embeddings` |
-| `self.db` | `schema_self.sql` | Profile, habits, traits, needs (9 tables) | `profile`, `habits`, `traits`, `needs`, `goals`, `relationships` |
-| `tasks.db` | `schema_tasks.sql` | Tasks, projects, calendar (5 tables) | `tasks`, `projects`, `calendar_events`, `dependencies` |
-| `knowledge.db` | `schema_knowledge.sql` | Articles, notes, references (6 tables) | `articles`, `notes`, `references`, `tags`, `links` |
-| `git.db` | `schema_git_repos.sql` | Git repository tracking | `repos`, `commits`, `branches` |
+| Database File  | Schema File            | Purpose                                   | Key Tables                                                       |
+|----------------|------------------------|-------------------------------------------|------------------------------------------------------------------|
+| `memories.db`  | `schema_memories.sql`  | Agent interactions and context            | `interactions`, `contexts`, `embeddings`                         |
+| `self.db`      | `schema_self.sql`      | Profile, habits, traits, needs (9 tables) | `profile`, `habits`, `traits`, `needs`, `goals`, `relationships` |
+| `tasks.db`     | `schema_tasks.sql`     | Tasks, projects, calendar (5 tables)      | `tasks`, `projects`, `calendar_events`, `dependencies`           |
+| `knowledge.db` | `schema_knowledge.sql` | Articles, notes, references (6 tables)    | `articles`, `notes`, `references`, `tags`, `links`               |
+| `git.db`       | `schema_git_repos.sql` | Git repository tracking                   | `repos`, `commits`, `branches`                                   |
 
 ## Migration Strategy
 - Migration scripts run on engine startup if detected schema version mismatch

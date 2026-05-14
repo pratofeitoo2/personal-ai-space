@@ -162,20 +162,20 @@ Returns memory usage and statistics.
 
 The router detects certainty modifiers in user input:
 
-| Modifier | Level | Score |
-|----------|-------|-------|
-| "I'm sure" | VERY_HIGH | 0.95 |
-| "I'm certain" | VERY_HIGH | 0.95 |
-| "definitely" | VERY_HIGH | 0.95 |
-| "sure" | HIGH | 0.85 |
-| "confident" | HIGH | 0.85 |
-| "pretty" | HIGH | 0.85 |
-| "think" | MEDIUM | 0.75 |
-| "likely" | MEDIUM | 0.75 |
-| "maybe" | LOW | 0.6 |
-| "perhaps" | LOW | 0.6 |
-| "uncertain" | LOW | 0.6 |
-| (default) | HIGH | 0.85 |
+| Modifier      | Level     | Score |
+|---------------|-----------|-------|
+| "I'm sure"    | VERY_HIGH | 0.95  |
+| "I'm certain" | VERY_HIGH | 0.95  |
+| "definitely"  | VERY_HIGH | 0.95  |
+| "sure"        | HIGH      | 0.85  |
+| "confident"   | HIGH      | 0.85  |
+| "pretty"      | HIGH      | 0.85  |
+| "think"       | MEDIUM    | 0.75  |
+| "likely"      | MEDIUM    | 0.75  |
+| "maybe"       | LOW       | 0.6   |
+| "perhaps"     | LOW       | 0.6   |
+| "uncertain"   | LOW       | 0.6   |
+| (default)     | HIGH      | 0.85  |
 
 **Example**:
 ```typescript

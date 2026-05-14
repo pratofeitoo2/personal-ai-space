@@ -1,5 +1,6 @@
 import os
 import json
+import json5
 from pathlib import Path
 
 
@@ -34,7 +35,7 @@ class GitHubConfig:
         if self._config_path and self._config_path.exists():
             try:
                 with open(self._config_path) as f:
-                    file_data = json.load(f)
+                    file_data = json5.load(f)
                 self._data.update(file_data)
             except (json.JSONDecodeError, OSError):
                 pass

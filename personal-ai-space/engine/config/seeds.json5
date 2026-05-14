@@ -1,0 +1,135 @@
+{
+  "version": "1.0",
+  "description": "Seed data for initializing databases — habits, needs, tasks, projects. Only loaded on first run.",
+
+  "habits": [
+    {
+      "id": "morning_standup",
+      "name": "Morning standup",
+      "category": "productivity",
+      "frequency": "daily",
+      "target_streak": 30
+    },
+    {
+      "id": "deep_work",
+      "name": "Deep work block",
+      "category": "productivity",
+      "frequency": "daily",
+      "target_streak": 30
+    },
+    {
+      "id": "reading",
+      "name": "Read technical articles",
+      "category": "learning",
+      "frequency": "3x_week",
+      "target_streak": 20
+    },
+    {
+      "id": "exercise",
+      "name": "Exercise",
+      "category": "health",
+      "frequency": "4x_week",
+      "target_streak": 20
+    },
+    {
+      "id": "weekly_review",
+      "name": "Weekly review",
+      "category": "meta",
+      "frequency": "weekly",
+      "target_streak": 12
+    }
+  ],
+
+  "needs": [
+    {
+      "category": "professional",
+      "name": "Functional AI system",
+      "priority": "critical",
+      "status": "in_progress",
+      "description": "Build personal AI space"
+    },
+    {
+      "category": "personal",
+      "name": "Time clarity",
+      "priority": "high",
+      "status": "active",
+      "description": "Better time tracking"
+    },
+    {
+      "category": "professional",
+      "name": "Knowledge management",
+      "priority": "high",
+      "status": "active",
+      "description": "Systematic knowledge org"
+    },
+    {
+      "category": "health",
+      "name": "Consistent routines",
+      "priority": "medium",
+      "status": "active",
+      "description": "Daily habits"
+    }
+  ],
+
+  "tasks": [
+    {
+      "id": "task_001",
+      "title": "Initialize engine databases",
+      "project_id": "personal-ai",
+      "priority": "critical",
+      "status": "completed",
+      "description": "Initialize all databases and seed starter data",
+      "estimated_hours": 2.0,
+      "category": "general"
+    },
+    {
+      "id": "task_002",
+      "title": "Design agent communication protocol",
+      "project_id": "personal-ai",
+      "priority": "high",
+      "status": "pending",
+      "description": "Define message format and routing between agents",
+      "estimated_hours": 15.0,
+      "category": "general"
+    },
+    {
+      "id": "task_003",
+      "title": "Build habit tracking system",
+      "project_id": "personal-ai",
+      "priority": "high",
+      "status": "pending",
+      "description": "Implement habit logging and streak tracking",
+      "estimated_hours": 12.0,
+      "category": "general"
+    },
+    {
+      "id": "task_004",
+      "title": "Connect first integration",
+      "project_id": "personal-ai",
+      "priority": "medium",
+      "status": "pending",
+      "description": "Set up first external tool integration via MCP",
+      "estimated_hours": 8.0,
+      "category": "general"
+    },
+    {
+      "id": "task_005",
+      "title": "Review and curate knowledge base",
+      "project_id": "knowledge",
+      "priority": "medium",
+      "status": "pending",
+      "description": "Organize and deduplicate knowledge notes",
+      "estimated_hours": 4.0,
+      "category": "general"
+    }
+  ],
+
+  "projects": [
+    {
+      "id": "personal-ai",
+      "name": "Personal AI Powerhouse",
+      "description": "Build the personal agentic AI system",
+      "status": "active"
+    }
+  ]
+}

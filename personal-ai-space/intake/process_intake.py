@@ -21,23 +21,43 @@ from pathlib import Path
 from datetime import datetime
 import yaml
 import re
+import json5
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "engine"))
-from frontmatter_apply import standardize_single_file, read_file
-from converters import convert_to_markdown, CONVERTERS
+from sync.frontmatter_apply import standardize_single_file, read_file
+from extractors.converters import convert_to_markdown, CONVERTERS
 
 INTAKE_DIR = Path(__file__).parent
 STAGING_DIR = INTAKE_DIR / "staging"
 PROCESSED_DIR = INTAKE_DIR / "processed"
 PROJECT_ROOT = INTAKE_DIR.parent
-KNOWLEDGE_DIR = PROJECT_ROOT / "knowledge"
-COMMAND_DIR = PROJECT_ROOT / "command"
-SELF_DIR = PROJECT_ROOT / "self"
 LOG_FILE = INTAKE_DIR / "intake.log"
 
 # Create directories if they don't exist
 STAGING_DIR.mkdir(exist_ok=True)
 PROCESSED_DIR.mkdir(exist_ok=True)
+
+# Load routing config
+ROUTING_CONFIG_PATH = PROJECT_ROOT / "engine" / "config" / "intake_routing.json5"
+if ROUTING_CONFIG_PATH.exists():
+    with open(ROUTING_CONFIG_PATH) as f:
+        _ROUTING = json5.load(f)
+else:
+    _ROUTING = {}
+    print(f"Warning: Routing config not found at {ROUTING_CONFIG_PATH}")
+
+_DEST_DIRS = {
+    "command_inbox": PROJECT_ROOT / "command" / "inbox",
+    "command_finances": PROJECT_ROOT / "command" / "finances",
+    "command_tasks": PROJECT_ROOT / "command" / "tasks",
+    "knowledge_articles": PROJECT_ROOT / "knowledge" / "articles",
+    "knowledge_notes": PROJECT_ROOT / "knowledge" / "notes",
+    "knowledge_references": PROJECT_ROOT / "knowledge" / "references",
+    "knowledge_projects": PROJECT_ROOT / "knowledge" / "projects",
+    "self_goals": PROJECT_ROOT / "self" / "goals",
+    "self_relationships": PROJECT_ROOT / "self" / "relationships",
+    "self_profile": PROJECT_ROOT / "self" / "profile",
+}
 
 
 def log_import(filename: str, destination: str, status: str, metadata: dict = None):
@@ -83,102 +103,110 @@ def extract_frontmatter(file_path: Path) -> dict:
 
 def is_daily_note(file_path: Path, relative_source: Path) -> bool:
     """Check if this is a daily note based on path and name."""
-    if "Daily Notes" in str(relative_source):
-        return True
-    
-    # Check for date patterns in filename
-    date_patterns = [
-        r'^\d{4}-\d{2}-\d{2}',  # 2025-01-05
-        r'^\d{4}-\d{1,2}-\d{1,2}',  # 2025-1-5
-        r'^[A-Za-z]{3}\s\d{1,2}',  # Jan 5
-        r'^\d{1,2}h\d{2}',  # 17h 50
-    ]
-    
+    folder_routes = _ROUTING.get("folder_routes", [])
+    for fr in folder_routes:
+        if fr.get("pattern") in str(relative_source):
+            dest_key = fr.get("destination", "")
+            if dest_key and _DEST_DIRS.get(dest_key) == _DEST_DIRS.get("command_inbox"):
+                return True
+
+    date_patterns = _ROUTING.get("date_patterns", [
+        r'^\d{4}-\d{2}-\d{2}',
+        r'^\d{4}-\d{1,2}-\d{1,2}',
+        r'^[A-Za-z]{3}\s\d{1,2}',
+        r'^\d{1,2}h\d{2}',
+    ])
+
     for pattern in date_patterns:
         if re.match(pattern, file_path.stem):
             return True
-    
+
     return False
 
 
+def _match_tags(tags: list, tag_routes: list) -> Path | None:
+    for route in tag_routes:
+        route_tags = route.get("tags", [])
+        if any(t in tags for t in route_tags):
+            dest_key = route.get("destination")
+            if dest_key and dest_key in _DEST_DIRS:
+                return _DEST_DIRS[dest_key]
+    return None
+
+
+def _match_folder(source_str: str, folder_routes: list) -> Path | None:
+    for route in folder_routes:
+        if route.get("pattern") in source_str:
+            dest_key = route.get("destination")
+            if dest_key and dest_key in _DEST_DIRS:
+                return _DEST_DIRS[dest_key]
+    return None
+
+
+def _match_filename(filename: str, filename_routes: list) -> Path | None:
+    for route in filename_routes:
+        prefix = route.get("prefix", "")
+        if filename.startswith(prefix):
+            dest_key = route.get("destination")
+            if dest_key and dest_key in _DEST_DIRS:
+                return _DEST_DIRS[dest_key]
+    return None
+
+
+def _resolve_dest(dest_key: str) -> Path | None:
+    return _DEST_DIRS.get(dest_key)
+
+
 def determine_destination(file_path: Path, relative_source: Path, frontmatter: dict = None) -> Path:
-    """Determine destination based on Obsidian structure + metadata."""
+    """Determine destination using routing config from engine/config/intake_routing.json."""
+    routing = _ROUTING
     frontmatter = frontmatter or {}
     filename = file_path.name.lower()
-    source_str = str(relative_source).lower()
-    
-    # Route by standardized type field (set by frontmatter_apply)
+    source_str = str(relative_source)
+
+    # 1. Route by standardized type field (set by frontmatter_apply)
     file_type = (frontmatter.get("type") or "").lower()
-    type_routes = {
-        "cv": COMMAND_DIR / "finances",
-        "cover-letter": COMMAND_DIR / "finances",
-        "profile": COMMAND_DIR / "finances",
-        "job-posting": COMMAND_DIR / "finances",
-        "linkedin": COMMAND_DIR / "finances",
-        "writing-sample": COMMAND_DIR / "finances",
-        "financial": COMMAND_DIR / "finances",
-        "daily-note": COMMAND_DIR / "inbox",
-        "quick-capture": COMMAND_DIR / "inbox",
-        "person": SELF_DIR / "relationships",
-        "study-plan": SELF_DIR / "goals",
-        "career-plan": SELF_DIR / "goals",
-        "life-plan": SELF_DIR / "goals",
-        "research-article": KNOWLEDGE_DIR / "articles",
-        "analysis": KNOWLEDGE_DIR / "articles",
-        "transcript": KNOWLEDGE_DIR / "articles",
-        "guide": KNOWLEDGE_DIR / "articles",
-        "tool-note": KNOWLEDGE_DIR / "notes",
-        "personal-note": KNOWLEDGE_DIR / "notes",
-        "note": KNOWLEDGE_DIR / "notes",
-    }
+    type_routes = routing.get("type_routes", {})
     if file_type in type_routes:
-        return type_routes[file_type]
-    
-    # Check explicit frontmatter tags
+        dest = _resolve_dest(type_routes[file_type])
+        if dest:
+            return dest
+
+    # 2. Route by frontmatter tags
     tags = frontmatter.get("tags", [])
     if isinstance(tags, str):
         tags = [tags]
-    
-    # Route by explicit tag
-    if "article" in tags or "research" in tags:
-        return KNOWLEDGE_DIR / "articles"
-    if "project" in tags:
-        return KNOWLEDGE_DIR / "projects"
-    if "reference" in tags:
-        return KNOWLEDGE_DIR / "references"
-    if "task" in tags or "todo" in tags:
-        return COMMAND_DIR / "tasks"
-    
-    # Route by Obsidian folder structure
-    if "Daily Notes" in str(relative_source):
-        return COMMAND_DIR / "inbox"
-    
-    if "Life Plans" in str(relative_source):
-        return SELF_DIR / "goals"
-    
-    if "People" in str(relative_source):
-        return SELF_DIR / "relationships"
-    
-    if "PF" in str(relative_source) or "financial" in source_str or "finance" in source_str:
-        return COMMAND_DIR / "finances"
-    
-    if "About me" in str(relative_source):
-        return SELF_DIR / "profile"
-    
-    # Route by filename conventions
-    if filename.startswith("project_"):
-        return KNOWLEDGE_DIR / "projects"
-    if filename.startswith("note_") or filename.startswith("idea_"):
-        return KNOWLEDGE_DIR / "notes"
-    if filename.startswith("article_") or filename.startswith("research_"):
-        return KNOWLEDGE_DIR / "articles"
-    
-    # Default based on Daily Notes pattern
+    result = _match_tags(tags, routing.get("tag_routes", []))
+    if result:
+        return result
+
+    # 3. Route by source folder structure
+    result = _match_folder(source_str, routing.get("folder_routes", []))
+    if result:
+        return result
+
+    # 4. Route by filename conventions
+    result = _match_filename(filename, routing.get("filename_routes", []))
+    if result:
+        return result
+
+    # 5. Check financial keywords in source path
+    source_lower = source_str.lower()
+    for kw in routing.get("financial_keywords", []):
+        if kw.lower() in source_lower:
+            dest = _resolve_dest("command_finances")
+            if dest:
+                return dest
+
+    # 6. Default based on Daily Notes pattern
     if is_daily_note(file_path, relative_source):
-        return COMMAND_DIR / "inbox"
-    
-    # Default fallback
-    return KNOWLEDGE_DIR / "notes"
+        dest = _resolve_dest("command_inbox")
+        if dest:
+            return dest
+
+    # 7. Default fallback
+    default_key = routing.get("default_destination", "knowledge_notes")
+    return _resolve_dest(default_key) or PROJECT_ROOT / "knowledge" / "notes"
 
 
 def process_file(file_path: Path, staging_relative: Path, dry_run: bool = False) -> bool:

@@ -11,9 +11,9 @@ from datetime import datetime, timedelta
 import yaml
 from collections import defaultdict
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from db_manager import execute, query
-import propagator
+from synthesis import propagator
 
 PROJECT_ROOT = Path(__file__).parent.parent
 

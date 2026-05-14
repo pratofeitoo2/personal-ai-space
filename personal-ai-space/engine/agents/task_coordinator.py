@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from agents.base_agent import BaseAgent
 from log_manager import audit
 import db_manager as db
-import propagator
+from synthesis import propagator
 
 
 PRIORITY_WEIGHTS = {"critical": 40, "high": 30, "normal": 20, "low": 10}
