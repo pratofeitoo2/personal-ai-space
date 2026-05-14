@@ -7,7 +7,7 @@ Maintains bidirectional communication with all other agents to track work.
 Registered commands (defined in agents.config.json):
   status, branch_list, branch_create, branch_delete, commit, log,
   pull, push, clone, init, worktree_add, worktree_list,
-  repo_discover, repo_register, repo_list, sync_now,
+  repo_discover, repo_register, repo_list, sync_now, sync_metadata,
   gh_repo_info, gh_pr_list, gh_ci_status
 """
 import sys
@@ -123,6 +123,7 @@ class GitHubAgent(BaseAgent):
             "repo_register": self._cmd_repo_register,
             "repo_list": self._cmd_repo_list,
             "sync_now": self._cmd_sync_now,
+            "sync_metadata": self._cmd_sync_metadata,
             "gh_repo_info": self._cmd_gh_repo_info,
             "gh_pr_list": self._cmd_gh_pr_list,
             "gh_ci_status": self._cmd_gh_ci_status,
@@ -258,6 +259,25 @@ class GitHubAgent(BaseAgent):
                 return self._sync_engine.sync_repo(repo_path, params.get("message"))
             return self._sync_engine.sync_all_registered()
         return {"synced": False, "note": "Sync engine not wired (T10)"}
+
+    def _cmd_sync_metadata(self, params: dict) -> dict:
+        if not self._discovery:
+            return {"error": "Discovery helper not wired"}
+        repo_path = params.get("repo_path")
+        if not repo_path:
+            # Sync all registered
+            repos = self._discovery.get_registered_repos()
+            for r in repos:
+                self._discovery.sync_repo_metadata(r["id"], r["path"])
+            return {"synced_count": len(repos)}
+        
+        # Sync specific repo
+        path = str(Path(repo_path).resolve())
+        rows = self._discovery._db.query("git", "SELECT id FROM repos WHERE path=?", (path,))
+        if rows:
+            self._discovery.sync_repo_metadata(rows[0]["id"], path)
+            return {"synced": True, "path": path}
+        return {"error": f"Repo not registered: {repo_path}"}
 
     def _cmd_repo_discover(self, params: dict) -> dict:
         if self._discovery:

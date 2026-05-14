@@ -23,11 +23,11 @@ logger = logging.getLogger("engine.db")
 DB_DIR = Path(__file__).parent / "db"
 
 DB_PATHS = {
-    "memories": DB_DIR / "memories.db",
-    "self":     DB_DIR / "self.db",
-    "tasks":    DB_DIR / "tasks.db",
-    "knowledge": DB_DIR / "knowledge.db",
-    "git":      DB_DIR / "git.db",
+    "memories": DB_DIR / "memories" / "memories.db",
+    "self":     DB_DIR / "self" / "self.db",
+    "tasks":    DB_DIR / "tasks" / "tasks.db",
+    "knowledge": DB_DIR / "knowledge" / "knowledge.db",
+    "git":      DB_DIR / "git" / "git.db",
 }
 
 # ── Connection Pool ──────────────────────────────────────────────────────────
@@ -212,7 +212,7 @@ def checkpoint_all():
 
 def init_git_db():
     """Initialize git.db from schema file."""
-    schema_file = DB_DIR / "schema_git_repos.sql"
+    schema_file = DB_DIR / "git" / "schema_git_repos.sql"
     if not schema_file.exists():
         logger.warning(f"Schema missing: {schema_file}")
         return
@@ -225,9 +225,8 @@ def init_git_db():
 
 def init_all():
     """Initialize all databases from schema files."""
-    schema_dir = DB_DIR
     for db_name, db_path in DB_PATHS.items():
-        schema_file = schema_dir / f"schema_{db_name}.sql"
+        schema_file = db_path.parent / f"schema_{db_name}.sql"
         if not schema_file.exists():
             logger.warning(f"Schema missing: {schema_file}")
             continue

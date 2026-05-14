@@ -135,7 +135,7 @@ class SyncEngine:
         return {"synced": len(results), "results": results}
 
     def _log_sync(self, repo_path: str, action: str, status: str, detail: str = None):
-        """Record a sync operation in git.db."""
+        """Record a sync operation in git.db and update last_synced_at."""
         if not self._db:
             return
         try:
@@ -143,14 +143,21 @@ class SyncEngine:
             if not repo_rows:
                 return
             repo_id = repo_rows[0]["id"]
+            now = datetime.now().isoformat()
             self._db.execute(
                 "git",
                 "INSERT INTO sync_log (repo_id, action, status, commit_hash, details, started_at, completed_at) "
                 "VALUES (?, ?, ?, ?, ?, ?, ?)",
                 (repo_id, action, status, detail if status == "success" else None,
                  detail if status != "success" else None,
-                 datetime.now().isoformat(), datetime.now().isoformat()),
+                 now, now),
             )
+            if status == "success":
+                self._db.execute(
+                    "git",
+                    "UPDATE repos SET last_synced_at=?, updated_at=? WHERE id=?",
+                    (now, now, repo_id)
+                )
         except Exception:
             pass
 

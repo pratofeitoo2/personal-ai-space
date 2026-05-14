@@ -1162,6 +1162,21 @@ if HAS_RICH:
         else:
             console.print(f"[red]✗ {r.get('error')}[/red]")
 
+    @github.command("sync-metadata")
+    @click.option("--repo-path", "-r", help="Path to git repository (optional, syncs all if omitted)")
+    def github_sync_metadata(repo_path):
+        """Sync metadata (branches, worktrees, default branch) for repositories."""
+        e = get_engine()
+        r = e.send("github-agent", "sync_metadata", {"repo_path": repo_path})
+        if r["status"] == "success":
+            payload = r.get("payload", {})
+            if repo_path:
+                console.print(f"[green]✓ Metadata synced for:[/green] {repo_path}")
+            else:
+                console.print(f"[green]✓ Metadata synced for[/green] {payload.get('synced_count', 0)} [green]repos[/green]")
+        else:
+            console.print(f"[red]✗ {r.get('error')}[/red]")
+
     @github.command("gh-repo-info")
     @click.argument("repo")
     def github_gh_repo_info(repo):
