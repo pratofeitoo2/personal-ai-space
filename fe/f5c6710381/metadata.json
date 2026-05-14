@@ -1,0 +1,29 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "fef5c6710381",
+  "strategy": "manual-commit",
+  "branch": "feature/llm-integration",
+  "checkpoints_count": 3,
+  "files_touched": [
+    ".sisyphus/boulder.json",
+    ".sisyphus/plans/github-specialist-agent.md",
+    "docs/obsidian-plugins-audit.md",
+    "mcp-servers/mcp-gateway-documentation.md",
+    "personal-ai-space/engine/agents/pattern_learner.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/fe/f5c6710381/0/metadata.json",
+      "transcript": "/fe/f5c6710381/0/full.jsonl",
+      "content_hash": "/fe/f5c6710381/0/content_hash.txt",
+      "prompt": "/fe/f5c6710381/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
