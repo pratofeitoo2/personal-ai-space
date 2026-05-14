@@ -1,0 +1,19 @@
+[CONTEXT] Project at /Users/paulorezende/Documents/Personal_AI_powerhouse. I need to understand how tightly coupled the files are - specifically which files could be grouped together.
+
+[GOAL] Analyze the dependency/coupling structure:
+1. Which Python files import from each other? (import graph)
+2. Do files in agents/ import from files in engine/ root? 
+3. Does transport/ depend on config/ or mcp_tools/?
+4. Does intake/ depend on engine/?
+5. Are there circular dependency risks?
+
+[DOWNSTREAM] This determines the valid boundaries for regrouping files - which files MUST stay together, which CAN be split.
+
+[REQUEST] Search personal-ai-space/engine/ - look at import statements in ALL Python files (excluding node_modules, tests, __pycache__):
+1. grep for `from.*import` and `import ` patterns
+2. Map which modules import from which other modules
+3. Identify any circular import chains
+4. Check if engine.py imports from ALL agents (central hub pattern)
+
+Return the import dependency graph organized by module.
+<!-- OMO_INTERNAL_INITIATOR -->
