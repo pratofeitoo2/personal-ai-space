@@ -1,23 +1,9 @@
 {
-  "active_plan": "/Users/paulorezende/Documents/Personal_AI_powerhouse/.sisyphus/plans/github-specialist-agent.md",
-  "started_at": "2026-05-12T18:40:58.912Z",
-  "session_ids": [
-    "ses_1e2dc9498ffeZilkotZOOUezqB"
-  ],
-  "session_origins": {
-    "ses_1e2dc9498ffeZilkotZOOUezqB": "direct"
-  },
-  "plan_name": "github-specialist-agent",
-  "agent": "atlas",
-  "task_sessions": {
-    "todo:1": {
-      "task_key": "todo:1",
-      "task_label": "1",
-      "task_title": "Create git.db schema and initialization",
-      "session_id": "ses_1e280a779ffe0aHW1kfDz5b5sQ",
-      "agent": "Sisyphus-Junior",
-      "category": "unspecified-high",
-      "updated_at": "2026-05-12T18:43:04.169Z"
-    }
-  }
+  "active_plan": "/Users/paulorezende/Documents/Personal_AI_powerhouse/.sisyphus/plans/fix-mcp-memory-servers.md",
+  "started_at": "2026-05-13T17:00:00.000Z",
+  "session_ids": [],
+  "session_origins": {},
+  "plan_name": "fix-mcp-memory-servers",
+  "agent": "sisyphus",
+  "task_sessions": {}
 }

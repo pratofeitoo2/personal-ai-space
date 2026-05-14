@@ -1,0 +1,26 @@
+MCP Server Direct Test Results
+Date: 2026-05-13T19:28:00-03:00
+
+Server: opencode-mem-mcp
+Binary: /Users/paulorezende/Documents/Personal_AI_powerhouse/mcp-servers/opencode-mem-mcp/.venv/bin/opencode-mem-mcp
+Framework: FastMCP 3.2.4
+Transport: stdio
+Status: WORKING
+
+Initialize Response:
+- serverInfo.name: "opencode-mem-mcp"
+- serverInfo.version: "3.2.4"
+- protocolVersion: "2024-11-05"
+- tools.listChanged: true
+
+Tools Available (6):
+1. store_memory - Store memories with Ollama nomic-embed-text
+2. search_memories - Semantic search via cosine similarity
+3. list_memories - List stored memories, newest first
+4. delete_memory - Delete by memory_id
+5. get_memory_stats - Aggregate statistics
+6. list_projects - List project shards
+
+Processes:
+- 2 active MCP server instances (one per OpenCode session)
+- Both using negligible CPU (0.0-0.1%) and memory (~4MB)
