@@ -1,0 +1,26 @@
+You are writing the codemap.md for the agents/ subdirectory at /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine/agents.
+
+The file personal-ai-space/engine/agents/codemap.md already exists as empty. Write its content.
+
+Read these files:
+- personal-ai-space/engine/agents/base_agent.py - Base agent class
+- personal-ai-space/engine/agents/behavior_observer.py - Logs user actions
+- personal-ai-space/engine/agents/context_manager.py - Profile loading, session state
+- personal-ai-space/engine/agents/insight_generator.py - Habit analysis, pattern detection
+- personal-ai-space/engine/agents/knowledge_indexer.py - Index/search knowledge base
+- personal-ai-space/engine/agents/pattern_learner.py - Infers time patterns, preferences
+- personal-ai-space/engine/agents/reminder_system.py - Time/event-based reminders
+- personal-ai-space/engine/agents/report_generator.py - Daily/weekly/monthly reports
+- personal-ai-space/engine/agents/task_coordinator.py - Task CRUD, priorities
+- personal-ai-space/engine/agents/agents.config.json - Agent configuration
+- personal-ai-space/engine/agents/__init__.py
+
+Write to personal-ai-space/engine/agents/codemap.md with:
+- ## Responsibility (agent system for personal AI augmentation)
+- ## Architecture (BaseAgent pattern - class hierarchy, inheritance)
+- ## Agent Registry (table: agent name, file, responsibility, key methods)
+- ## Flow (how agents are loaded, how they communicate)
+- ## Integration Points (consumed by engine.py, depends on db/)
+
+Be technical, no emojis.
+<!-- OMO_INTERNAL_INITIATOR -->
