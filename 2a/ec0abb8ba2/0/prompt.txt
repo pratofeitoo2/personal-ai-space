@@ -1,0 +1,29 @@
+You are writing codemap.md files for the TaskNotes/ directory at /Users/paulorezende/Documents/Personal_AI_powerhouse/TaskNotes.
+
+Write to TWO files that already exist as empty:
+
+1. TaskNotes/codemap.md - TaskNotes root overview
+2. TaskNotes/Views/codemap.md - TaskNotes Views
+
+Read these files:
+- TaskNotes/Views/agenda-default.base
+- TaskNotes/Views/calendar-default.base
+- TaskNotes/Views/kanban-default.base
+- TaskNotes/Views/mini-calendar-default.base
+- TaskNotes/Views/relationships.base
+- TaskNotes/Views/tasks-default.base
+
+TaskNotes appears to be a task management view system with template .base files for different view types (agenda, calendar, kanban, mini-calendar, relationships, tasks). 
+
+For TaskNotes/codemap.md write:
+- ## Responsibility (task view templates and configurations)
+- ## Structure
+- ## View Types
+
+For TaskNotes/Views/codemap.md write:
+- ## Responsibility (view template definitions)
+- ## View Catalog (table: template file, purpose)
+- ## Template Format (describe .base format)
+
+Be technical, no emojis.
+<!-- OMO_INTERNAL_INITIATOR -->
