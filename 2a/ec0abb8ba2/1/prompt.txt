@@ -1,0 +1,22 @@
+You are writing the codemap.md for the self/ directory at /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/self.
+
+The file personal-ai-space/self/codemap.md already exists as empty. Write its content.
+
+Read these files:
+- personal-ai-space/self/profile.json - Master personal profile
+- personal-ai-space/self/traits/inferred_personality.json - Inferred personality patterns
+
+List directory contents for:
+- personal-ai-space/self/goals/ - Career/study/life planning files
+- personal-ai-space/self/habits/tracking.csv - Habit tracking data
+- personal-ai-space/self/needs/current_needs.json - Active needs
+- personal-ai-space/self/relationships/ - People network files
+
+Write to personal-ai-space/self/codemap.md with:
+- ## Responsibility (digital twin - what the system knows about the user)
+- ## Data Model (profile.json structure, inferred_personality.json)
+- ## Subdirectory Map (goals, habits, needs, traits, relationships, behaviors, insights)
+- ## Integration Points (consumed by context_manager agent, db/schema_self.sql, mcp_bridge)
+
+Be technical, no emojis.
+<!-- OMO_INTERNAL_INITIATOR -->
