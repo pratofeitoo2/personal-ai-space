@@ -3,12 +3,26 @@
   "checkpoint_id": "33deb92a1698",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 2,
+  "checkpoints_count": 7,
   "files_touched": [
+    ".sisyphus/evidence/task-1-valid-envelope.txt",
+    ".sisyphus/notepads/modular-data-transport/issues.md",
+    ".sisyphus/notepads/modular-data-transport/learnings.md",
+    ".sisyphus/plans/modular-data-transport.md",
     "personal-ai-space/engine/agents/behavior_observer.py",
     "personal-ai-space/engine/agents/context_manager.py",
     "personal-ai-space/engine/agents/mcp_agent.py",
-    "personal-ai-space/engine/engine.py"
+    "personal-ai-space/engine/engine.py",
+    "personal-ai-space/engine/memory/fallback_bridge.py",
+    "personal-ai-space/engine/transport/__init__.py",
+    "personal-ai-space/engine/transport/config.py",
+    "personal-ai-space/engine/transport/data_hub.py",
+    "personal-ai-space/engine/transport/event_bus.py",
+    "personal-ai-space/engine/transport/mcp_transport.py",
+    "personal-ai-space/engine/transport/registry.py",
+    "personal-ai-space/engine/transport/tests/test_registry.py",
+    "personal-ai-space/engine/transport/tests/test_transport.py",
+    "personal-ai-space/engine/transport/types.py"
   ],
   "sessions": [
     {
@@ -16,13 +30,19 @@
       "transcript": "/33/deb92a1698/0/full.jsonl",
       "content_hash": "/33/deb92a1698/0/content_hash.txt",
       "prompt": "/33/deb92a1698/0/prompt.txt"
+    },
+    {
+      "metadata": "/33/deb92a1698/1/metadata.json",
+      "transcript": "/33/deb92a1698/1/full.jsonl",
+      "content_hash": "/33/deb92a1698/1/content_hash.txt",
+      "prompt": "/33/deb92a1698/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 2421217,
+    "input_tokens": 3156925,
     "cache_creation_tokens": 0,
     "cache_read_tokens": 0,
-    "output_tokens": 11567,
-    "api_call_count": 37
+    "output_tokens": 12720,
+    "api_call_count": 51
   }
 }
