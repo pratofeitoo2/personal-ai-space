@@ -1,0 +1,40 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "fef5c6710381",
+  "session_id": "ses_1da59aef1ffeEG7MpJJ92boYnl",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-14T13:12:11.640222Z",
+  "branch": "feature/llm-integration",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".sisyphus/boulder.json",
+    "docs/archive/reports/obsidian-plugins-audit.md",
+    "mcp-servers/docker-mcp-gateway-documentation.md",
+    "personal-ai-space/engine/agents/pattern_learner.py"
+  ],
+  "agent": "OpenCode",
+  "model": "google/gemini-3-flash-preview",
+  "turn_id": "299150c5e69c",
+  "token_usage": {
+    "input_tokens": 3198301,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 11883268,
+    "output_tokens": 69635,
+    "api_call_count": 128
+  },
+  "session_metrics": {
+    "turn_count": 34
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-14T13:12:11.575568Z",
+    "agent_lines": 217,
+    "agent_removed": 98,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 217,
+    "total_lines_changed": 1816,
+    "agent_percentage": 17.345814977973568,
+    "metric_version": 2
+  }
+}

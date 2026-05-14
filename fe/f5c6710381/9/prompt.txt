@@ -1,0 +1,1 @@
+current codebase project have some directories that seems out of place due to regular changes and new folders being added. But i want to task you now on understanding how are the mcp servers being organized and managed on thus codebase
