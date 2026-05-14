@@ -1,0 +1,19 @@
+[CONTEXT] Project at /Users/paulorezende/Documents/Personal_AI_powerhouse. I need to understand how config files are CONSUMED by the code.
+
+[GOAL] Find EVERY reference to config file paths in Python code. I need to know:
+1. Which Python files OPEN/READ JSON config files (look for open(), json.load(), etc.)
+2. Which Python files reference config file paths as strings
+3. Which Python files have hardcoded paths that SHOULD be in config files
+4. What config loading patterns exist (singleton, direct read, env var, etc.)
+
+[DOWNSTREAM] This informs which configs can be consolidated and which are tightly coupled to specific code locations.
+
+[REQUEST] Search the entire personal-ai-space/ directory (excluding node_modules, .git, __pycache__, .pytest_cache, .venv, mcp-server/node_modules):
+1. ast-grep for `json.load` pattern in Python
+2. ast-grep for `open($$$)` pattern in Python
+3. grep for `".json"` string literals in Python files
+4. grep for `.env` or `os.environ` in Python files for env-based config
+5. Look at how engine.py, cli.py, and any __init__.py load configuration
+
+Return ALL findings organized by file.
+<!-- OMO_INTERNAL_INITIATOR -->
