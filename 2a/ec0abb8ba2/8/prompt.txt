@@ -1,0 +1,22 @@
+You are writing the codemap.md for personal-ai-space/ directory at /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space.
+
+The file personal-ai-space/codemap.md already exists as empty. Write its content.
+
+This directory is the root of the Personal AI Space system. It contains:
+- `command/` - Control center: activities (disciplined_routines.json), calendar (upcoming.csv), finances (CVs, cover letters, profiles), inbox (30+ timestamped daily notes), tasks (active_tasks.json)
+- `engine/` - AI engine core (see sub-codemaps: agents/, db/, extractors/, mcp_tools/, memory/, tests/)
+- `intake/` - Auto-processing pipeline (watcher.py, process_intake.py)
+- `knowledge/` - Personal library (articles/, notes/)
+- `self/` - Digital twin (profile.json, goals/, habits/, traits/, relationships/)
+- `docs/` - System documentation (ARCHITECTURE.md, COMPLETE_OVERVIEW.md, etc.)
+- `vault/` - Secrets (git-ignored)
+- `INDEX.md` - Complete directory index with data flow diagrams
+
+Write to personal-ai-space/codemap.md with:
+- ## Responsibility
+- ## Directory Structure (table of subdirectories with responsibility and link to sub-codemaps)
+- ## Data Flow (brief description of how data moves from intake → engine → memory → self)
+- ## Integration Points
+
+Be concise, technical, no emojis. Use exact paths.
+<!-- OMO_INTERNAL_INITIATOR -->
