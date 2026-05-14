@@ -7,6 +7,15 @@
         "/Users/paulorezende/Documents/Personal_AI_powerhouse/mcp-servers/opencode-mem-mcp/.venv/bin/opencode-mem-mcp"
       ],
       "enabled": true
+    },
+    "aivectormemory": {
+      "type": "local",
+      "command": [
+        "aivectormemory",
+        "--project-dir",
+        "/Users/paulorezende/Documents/Personal_AI_powerhouse"
+      ],
+      "enabled": true
     }
   }
 }
