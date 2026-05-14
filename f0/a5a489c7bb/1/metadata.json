@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "f0a5a489c7bb",
+  "session_id": "ses_1da59aef1ffeEG7MpJJ92boYnl",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-14T10:27:15.719281Z",
+  "branch": "feature/llm-integration",
+  "checkpoints_count": 0,
+  "files_touched": [],
+  "agent": "OpenCode",
+  "model": "google/gemini-3-flash-preview",
+  "turn_id": "299150c5e69c",
+  "checkpoint_transcript_start": 160,
+  "transcript_lines_at_start": 160,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 34
+  }
+}
