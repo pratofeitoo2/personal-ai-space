@@ -1,0 +1,20 @@
+You are writing the codemap.md for small engine submodules at /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine. Write to THREE separate files:
+
+1. personal-ai-space/engine/extractors/codemap.md (extractors package - currently just __init__.py, extension point)
+2. personal-ai-space/engine/mcp_tools/codemap.md (MCP tools layer)
+3. personal-ai-space/engine/memory/codemap.md (Memory bridge)
+
+Read these files first:
+- personal-ai-space/engine/extractors/__init__.py
+- personal-ai-space/engine/mcp_tools/__init__.py
+- personal-ai-space/engine/mcp_tools/base_client.py
+- personal-ai-space/engine/mcp_tools/registry.json
+- personal-ai-space/engine/mcp_tools/claude_bridges_config.json
+- personal-ai-space/engine/memory/__init__.py
+- personal-ai-space/engine/memory/mcp_bridge.py
+
+For each file, write a minimal but accurate codemap.md with:
+## Responsibility, ## Files, ## Integration Points
+
+Be technical, no emojis.
+<!-- OMO_INTERNAL_INITIATOR -->
