@@ -3,18 +3,17 @@ Engine orchestrator.
 Loads all agents, routes messages, runs scheduled jobs.
 """
 import uuid
-import sys
 import time
 import json
 from pathlib import Path
 from datetime import datetime
 
 ROOT = Path(__file__).parent
-sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "agents"))
 
 from log_manager import setup_logging, get_logger, audit
-import db_manager as db
+from transport.data_hub import DataHub
+from transport.event_bus import EventBus
+from transport.config import AppConfig
 
 from agents.context_manager   import ContextManager
 from agents.task_coordinator  import TaskCoordinator
@@ -34,6 +33,9 @@ class Engine:
     def __init__(self, log_level: str = "INFO"):
         setup_logging(log_level)
         self.logger = get_logger("orchestrator")
+        self._config = AppConfig.instance()
+        self._hub = DataHub(self._config)
+        self._bus = EventBus()
         self._agents: dict = {}
         self._start_time = datetime.now()
         self._interaction_count = 0
@@ -41,16 +43,7 @@ class Engine:
     # ── lifecycle ─────────────────────────────────────────────────────────
 
     def start(self) -> bool:
-        self.logger.info(f"Engine v{self.VERSION} starting…")
-
-        # Initialize databases
-        db.init_all()
-        health = db.health_check()
-        for name, result in health.items():
-            if result["ok"]:
-                self.logger.info(f"  ✓ {name}.db ({result['tables']} tables)")
-            else:
-                self.logger.error(f"  ✗ {name}.db — {result.get('error')}")
+        self.logger.info(f"Engine v{self.VERSION} starting...")
 
         # Load agents
         agent_classes = [
@@ -63,17 +56,15 @@ class Engine:
             MCPAgent,
             GitHubAgent,
         ]
+
         # Initialize observer (autonomous learning)
-        from memory.mcp_bridge import MCPMemoryBridge
         try:
-            mcp = MCPMemoryBridge()
-            self._observer = BehaviorObserver(mcp)
-            self._pattern_learner = PatternLearner(mcp)
+            self._observer = BehaviorObserver()
+            self._pattern_learner = PatternLearner()
         except Exception as e:
             self.logger.warning(f"Observer initialization failed: {e}")
             self._observer = None
             self._pattern_learner = None
-        
 
         for cls in agent_classes:
             agent = cls()
@@ -99,7 +90,7 @@ class Engine:
         # Phase 4: Initial context snapshot
         try:
             agent_states = {aid: a.state for aid, a in self._agents.items()}
-            db.store_context_snapshot(
+            self._hub.store_context_snapshot(
                 session_id=f"session_{self._start_time.strftime('%Y%m%d_%H%M%S')}",
                 content={"event": "engine_start", "version": self.VERSION, "agents": agent_states},
                 relevance=1.0,
@@ -111,7 +102,7 @@ class Engine:
         return True
 
     def stop(self) -> None:
-        self.logger.info("Engine stopping…")
+        self.logger.info("Engine stopping...")
         for agent in self._agents.values():
             agent.shutdown()
         audit("ENGINE_STOP")
@@ -147,7 +138,7 @@ class Engine:
             status = "success" if result.get("status") == "success" else "error"
             error_msg = result.get("error") if status == "error" else None
 
-            db.log_interaction(
+            self._hub.log_interaction(
                 agent_id=agent_id, action=command,
                 input_data={"data": data, "extra": extra},
                 output_data=result.get("payload"),
@@ -170,7 +161,7 @@ class Engine:
             self._interaction_count += 1
             if self._interaction_count % 5 == 0:
                 try:
-                    db.store_context_snapshot(
+                    self._hub.store_context_snapshot(
                         session_id=f"session_{self._start_time.strftime('%Y%m%d_%H%M%S')}",
                         content={"event": "interaction", "agent": agent_id, "command": command, "status": status},
                         relevance=0.5,
@@ -181,7 +172,7 @@ class Engine:
             return result
         except Exception as e:
             elapsed_ms = int((time.monotonic() - t0) * 1000)
-            db.log_interaction(
+            self._hub.log_interaction(
                 agent_id=agent_id, action=command,
                 input_data={"data": data, "extra": extra},
                 duration_ms=elapsed_ms,
@@ -224,65 +215,8 @@ class Engine:
         return r.get("payload", {}).get("task_id", "")
 
     def log_habit(self, habit_name: str, duration_min: int = 0, notes: str = "") -> bool:
-        """Find habit by name, log completion, update streak, propagate."""
-        rows = db.query("self", "SELECT id, current_streak, last_completed, target_streak FROM habits WHERE habit_name=? LIMIT 1", (habit_name,))
-        if not rows:
-            self.logger.warning(f"Habit not found: {habit_name}")
-            return False
-        habit = rows[0]
-        habit_id = habit["id"]
-        now_iso = datetime.now().isoformat()
-        today = datetime.now().date()
-
-        # Insert log
-        log_id = uuid.uuid4().hex
-        db.execute(
-            "self",
-            "INSERT INTO habit_logs (id, habit_id, completed_at, notes, confidence_level) VALUES (?,?,?,?,?)",
-            (log_id, habit_id, now_iso, notes, duration_min / 60.0 if duration_min else None)
-        )
-
-        # Streak logic
-        last = habit.get("last_completed")
-        streak = habit.get("current_streak", 0)
-        if last:
-            try:
-                last_date = datetime.fromisoformat(last).date()
-                delta = (today - last_date).days
-                if delta == 1 or delta == 0:
-                    streak += 1
-                elif delta > 1:
-                    streak = 1
-            except ValueError:
-                streak = 1
-        else:
-            streak = 1
-
-        db.execute(
-            "self",
-            "UPDATE habits SET total_completions = total_completions + 1, "
-            "current_streak = ?, last_completed = ? WHERE id = ?",
-            (streak, now_iso, habit_id)
-        )
-
-        # Propagate
-        db.log_interaction(
-            agent_id="engine", action="log_habit",
-            input_data={"habit": habit_name, "duration_min": duration_min},
-            output_data={"streak": streak, "target": habit.get("target_streak")},
-            duration_ms=0, status="success",
-        )
-        try:
-            from memory.mcp_bridge import MCPMemoryBridge
-            MCPMemoryBridge().add_fact(f"habit.{habit_name}.streak", str(streak), confidence=0.8, category="habit", source="engine")
-        except Exception:
-            pass
-
-        if habit.get("target_streak") and streak >= habit["target_streak"]:
-            self.logger.info(f"Habit {habit_name} reached target streak {streak}!")
-
-        audit(f"HABIT_LOG habit={habit_name} streak={streak} duration_min={duration_min}")
-        return True
+        """Find habit by name, log completion, update streak, propagate via DataHub."""
+        return self._hub.log_habit_completion(habit_name, duration_min, notes)
 
     def add_note(self, title: str, content: str = "", tags: str = "", category: str = "general") -> str:
         r = self.send("knowledge-indexer", "add_note", {
@@ -291,16 +225,6 @@ class Engine:
         return r.get("payload", {}).get("note_id", "")
 
     def process_natural(self, text: str) -> dict:
-        """Route natural language input through the intent classifier.
-
-        Returns a dict with:
-          - intent: matched IntentDef or None
-          - confidence: float
-          - command: executable agent command (or None if unclear)
-          - params: extracted parameters
-          - alternatives: list of other possible intents
-          - text: the original input
-        """
         from llm_bridge import IntentClassifier
         classifier = IntentClassifier()
         result = classifier.classify(text)
@@ -314,7 +238,6 @@ class Engine:
                 "message": "I'm not sure what you mean. Try being more specific.",
             }
 
-        # Execute the matched command
         agent = result.intent.agent
         cmd = result.intent.command
         params = result.extracted_params
@@ -335,7 +258,6 @@ class Engine:
             })
         elif cmd == "mcp_route":
             from llm_bridge import llm_route_mcp_tool
-            # Fetch available tools from MCP agent
             tools_resp = self.send("mcp-agent", "mcp_tools")
             tools = tools_resp.get("payload", {}).get("tools", [])
             if not tools:
@@ -353,7 +275,6 @@ class Engine:
                             "arguments": route.arguments,
                         }
                     )
-                    # Attach routing info for transparency
                     if isinstance(agent_resp, dict):
                         agent_resp["_route"] = {
                             "tool": route.tool_name,
@@ -390,13 +311,13 @@ class Engine:
 
     def health(self) -> dict:
         uptime = (datetime.now() - self._start_time).seconds
-        dbs    = db.health_check()
+        db_stats = self._hub.health_check()
         agents = {aid: a.state for aid, a in self._agents.items()}
         return {
             "version": self.VERSION,
             "uptime_seconds": uptime,
             "agents": agents,
-            "databases": dbs,
+            "databases": db_stats,
             "checked_at": datetime.now().isoformat(),
         }
 
@@ -423,12 +344,10 @@ class Engine:
     # ── GitHub Agent convenience wrappers ──────────────────────────────────
 
     def git_status(self, repo_path: str = None) -> dict:
-        """Get git status from GitHub agent."""
         params = {"repo_path": repo_path} if repo_path else {}
         return self.send("github-agent", "status", params)
 
     def git_sync_now(self, repo_path: str = None, message: str = None) -> dict:
-        """Trigger immediate sync from GitHub agent."""
         params = {}
         if repo_path:
             params["repo_path"] = repo_path
@@ -437,11 +356,9 @@ class Engine:
         return self.send("github-agent", "sync_now", params)
 
     def git_repo_list(self) -> dict:
-        """List all registered repos from GitHub agent."""
         return self.send("github-agent", "repo_list")
 
     def _notify_github_agent(self, agent_id: str, action: str, data: dict) -> None:
-        """Fire-and-forget notification to GitHub agent about agent activity."""
         gh = self._agents.get("github-agent")
         if not gh or gh.state != "ready":
             return
