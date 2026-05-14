@@ -1,0 +1,5 @@
+explain the structure used to write this agent config markdown file
+
+---
+
+#add_memory  add the full content of your last output to a new memory
