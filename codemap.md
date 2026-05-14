@@ -21,7 +21,7 @@ Personal AI augmentation system — a persistent cognitive layer that observes, 
 | Directory | Responsibility | Detailed Map |
 |-----------|---------------|--------------|
 | `personal-ai-space/` | AI augmentation system root — engine, agents, memory, self-model, intake pipeline | [View Map](personal-ai-space/codemap.md) |
-| `personal-ai-space/engine/` | Core orchestrator, CLI, agent system, databases, memory bridge | [View Map](personal-ai-space/engine/codemap.md) |
+| `personal-ai-space/engine/` | Core orchestrator, CLI, agent system, databases, memory bridge, and modular transport layer | [View Map](personal-ai-space/engine/codemap.md) |
 | `personal-ai-space/engine/agents/` | 8 autonomous agents (BaseAgent pattern) | [View Map](personal-ai-space/engine/agents/codemap.md) |
 | `personal-ai-space/engine/db/` | 5 SQLite databases with schema definitions and migration scripts | [View Map](personal-ai-space/engine/db/codemap.md) |
 | `personal-ai-space/engine/extractors/` | Data extraction extension point | [View Map](personal-ai-space/engine/extractors/codemap.md) |

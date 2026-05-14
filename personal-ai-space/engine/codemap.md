@@ -47,6 +47,7 @@ cli.py
 | `extractors/` | Data extraction extension point | [View Map](extractors/codemap.md) |
 | `mcp_tools/` | MCP tool client abstraction layer | [View Map](mcp_tools/codemap.md) |
 | `memory/` | Python-to-Node.js MCP bridge | [View Map](memory/codemap.md) |
+| `transport/` | Modular data transport layer — EventBus, DataHub, SafeMCPTransport | [View Map](transport/codemap.md) |
 | `tests/` | Pytest suite for engine components | [View Map](tests/codemap.md) |
 | `config/` | Engine and system configuration JSON files | — |
 | `logs/` | Rotating system, error, audit, and performance logs | — |
