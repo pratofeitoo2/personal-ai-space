@@ -1,0 +1,50 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "fef5c6710381",
+  "session_id": "ses_1da094248ffe9s9wk3D5Rgf4wD",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-14T13:12:07.210042Z",
+  "branch": "feature/llm-integration",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".sisyphus/boulder.json",
+    ".sisyphus/plans/github-specialist-agent.md",
+    "docs/obsidian-plugins-audit.md",
+    "mcp-servers/mcp-gateway-documentation.md",
+    "personal-ai-space/engine/agents/pattern_learner.py"
+  ],
+  "agent": "OpenCode",
+  "model": "devstral-2512",
+  "turn_id": "3c8450e39093",
+  "token_usage": {
+    "input_tokens": 4333663,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 17396,
+    "api_call_count": 56
+  },
+  "session_metrics": {
+    "turn_count": 5
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-14T13:12:07.195986Z",
+    "agent_lines": 155,
+    "agent_removed": 1646,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 155,
+    "total_lines_changed": 1801,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    }
+  ]
+}
