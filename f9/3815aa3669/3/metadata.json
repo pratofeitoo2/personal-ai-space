@@ -1,0 +1,56 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "f93815aa3669",
+  "session_id": "ses_1de3f720fffePj4h14sSRwWYZw",
+  "strategy": "manual-commit",
+  "created_at": "2026-05-14T04:51:39.426876Z",
+  "branch": "feature/llm-integration",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".sisyphus/boulder.json",
+    ".sisyphus/plans/fix-mcp-memory-servers.md"
+  ],
+  "agent": "OpenCode",
+  "model": "devstral-medium-latest",
+  "turn_id": "e90506a26349",
+  "checkpoint_transcript_start": 135,
+  "transcript_lines_at_start": 135,
+  "token_usage": {
+    "input_tokens": 1014802,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 1263,
+    "api_call_count": 9
+  },
+  "session_metrics": {
+    "turn_count": 13
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-05-14T04:51:39.401154Z",
+    "agent_lines": 27,
+    "agent_removed": 77,
+    "human_added": 128,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 155,
+    "total_lines_changed": 233,
+    "agent_percentage": 44.63519313304721,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 26627,
+      "agent_lines_removed": 78
+    }
+  ]
+}
