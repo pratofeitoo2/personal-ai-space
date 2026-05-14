@@ -3,13 +3,14 @@
   "checkpoint_id": "f93815aa3669",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 7,
+  "checkpoints_count": 19,
   "files_touched": [
     ".sisyphus/BRANCH_CONTEXT.md",
     ".sisyphus/boulder.json",
     ".sisyphus/evidence/config-source-map.txt",
     ".sisyphus/evidence/fix-mcp-docker-command.txt",
     ".sisyphus/evidence/mcp-server-direct-test.txt",
+    ".sisyphus/evidence/mempalace-added-globally.txt",
     ".sisyphus/evidence/subtask2-removal-verification.txt",
     ".sisyphus/plans/fix-mcp-memory-servers.md"
   ],
@@ -25,13 +26,19 @@
       "transcript": "/f9/3815aa3669/1/full.jsonl",
       "content_hash": "/f9/3815aa3669/1/content_hash.txt",
       "prompt": "/f9/3815aa3669/1/prompt.txt"
+    },
+    {
+      "metadata": "/f9/3815aa3669/2/metadata.json",
+      "transcript": "/f9/3815aa3669/2/full.jsonl",
+      "content_hash": "/f9/3815aa3669/2/content_hash.txt",
+      "prompt": "/f9/3815aa3669/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 1394041,
+    "input_tokens": 1812631,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 1791104,
-    "output_tokens": 7594,
-    "api_call_count": 50
+    "cache_read_tokens": 9776512,
+    "output_tokens": 29214,
+    "api_call_count": 124
   }
 }
