@@ -1,0 +1,22 @@
+You are writing the codemap.md for the tests/ subdirectory at /Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/engine/tests.
+
+The file personal-ai-space/engine/tests/codemap.md already exists as empty. Write its content.
+
+Read these files:
+- personal-ai-space/engine/tests/conftest.py
+- personal-ai-space/engine/tests/test_base_agent.py
+- personal-ai-space/engine/tests/test_db_manager.py
+- personal-ai-space/engine/tests/test_engine.py
+- personal-ai-space/engine/tests/test_github_config.py
+- personal-ai-space/engine/tests/test_github_discovery.py
+- personal-ai-space/engine/tests/test_github_git_ops.py
+- personal-ai-space/engine/tests/test_llm_bridge.py
+
+Write to personal-ai-space/engine/tests/codemap.md with:
+- ## Responsibility (test suite for engine components)
+- ## Test Catalog (table: test file, component tested, key test cases)
+- ## Test Infrastructure (pytest, conftest fixtures)
+- ## Coverage Overview
+
+Be technical, no emojis.
+<!-- OMO_INTERNAL_INITIATOR -->
