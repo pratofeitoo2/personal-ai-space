@@ -3,8 +3,9 @@
   "checkpoint_id": "ab9a28ef4aea",
   "strategy": "manual-commit",
   "branch": "feature/llm-integration",
-  "checkpoints_count": 7,
+  "checkpoints_count": 10,
   "files_touched": [
+    ".sisyphus/plans/codebase-restructuring-framework.md",
     "personal-ai-space/engine/db/DATABASE_ARCHITECTURE.md",
     "personal-ai-space/engine/db/codemap.md",
     "personal-ai-space/engine/db_manager.py",
@@ -45,6 +46,12 @@
       "transcript": "/ab/9a28ef4aea/4/full.jsonl",
       "content_hash": "/ab/9a28ef4aea/4/content_hash.txt",
       "prompt": "/ab/9a28ef4aea/4/prompt.txt"
+    },
+    {
+      "metadata": "/ab/9a28ef4aea/5/metadata.json",
+      "transcript": "/ab/9a28ef4aea/5/full.jsonl",
+      "content_hash": "/ab/9a28ef4aea/5/content_hash.txt",
+      "prompt": "/ab/9a28ef4aea/5/prompt.txt"
     }
   ],
   "token_usage": {
@@ -52,6 +59,6 @@
     "cache_creation_tokens": 0,
     "cache_read_tokens": 0,
     "output_tokens": 0,
-    "api_call_count": 2
+    "api_call_count": 3
   }
 }

@@ -1,0 +1,13 @@
+[CONTEXT] I need a complete, exhaustive map of the project at /Users/paulorezende/Documents/Personal_AI_powerhouse. This is a "Personal AI Powerhouse" system.
+
+[GOAL] Create an exhaustive directory tree of ALL files under personal-ai-space/ (excluding node_modules, .git, __pycache__, .pytest_cache, .venv). Show every file.
+
+Then ALSO do a targeted analysis:
+1. Which directories have only 1-3 files? (potential candidates for regrouping)
+2. Which directories exist at depth 3+ from personal-ai-space/? (potential nesting issues)
+3. Which JSON/config files exist at every level, and at what depth are they?
+
+[DOWNSTREAM] This data will be used to design a restructuring plan that groups loose files, consolidates config files, and reorganizes the project hierarchy.
+
+[REQUEST] Run `find personal-ai-space/ -type f -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/__pycache__/*" -not -path "*/.pytest_cache/*" -not -path "*/.venv/*" -not -path "*/mcp-server/node_modules/*" | sort` and then analyze the results for the 3 points above. Return the full tree AND your analysis.
+<!-- OMO_INTERNAL_INITIATOR -->
