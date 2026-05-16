@@ -10,6 +10,7 @@ from datetime import datetime
 
 ROOT = Path(__file__).parent
 
+import db_manager
 from log_manager import setup_logging, get_logger, audit
 from transport.data_hub import DataHub
 from transport.event_bus import EventBus
@@ -44,6 +45,12 @@ class Engine:
 
     def start(self) -> bool:
         self.logger.info(f"Engine v{self.VERSION} starting...")
+
+        # Initialize databases before loading agents (agents query DBs at startup)
+        try:
+            db_manager.init_all()
+        except Exception as e:
+            self.logger.warning(f"Database initialization failed: {e}")
 
         # Load agents
         agent_classes = [
@@ -167,7 +174,7 @@ class Engine:
                         relevance=0.5,
                     )
                 except Exception:
-                    pass
+                    self.logger.debug("Periodic context snapshot failed")
 
             return result
         except Exception as e:

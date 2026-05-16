@@ -8,6 +8,21 @@
       ],
       "enabled": true
     },
+    "task-management-mcp": {
+      "type": "local",
+      "command": ["task-management-mcp"],
+      "enabled": true
+    },
+    "appointment-mcp": {
+      "type": "local",
+      "command": ["appointment-mcp"],
+      "enabled": true
+    },
+    "project-context-mcp": {
+      "type": "local",
+      "command": ["project-context-mcp"],
+      "enabled": true
+    },
     "aivectormemory": {
       "type": "local",
       "command": [

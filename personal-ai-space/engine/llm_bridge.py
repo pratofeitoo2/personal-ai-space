@@ -465,8 +465,8 @@ def _detect_best_model(hint: str = None) -> str:
                 return instruct_models[0]
             if names:
                 return names[0]
-    except (requests.ConnectionError, json.JSONDecodeError):
-        pass
+    except (requests.ConnectionError, json.JSONDecodeError) as e:
+        logger.debug("Ollama model fetch failed: %s", e)
     return "smollm2:1.7b"  # fallback default
 
 
@@ -630,8 +630,8 @@ def _detect_embedding_model() -> str:
                 for n in names:
                     if n.startswith(preferred):
                         return n
-    except (requests.ConnectionError, json.JSONDecodeError):
-        pass
+    except (requests.ConnectionError, json.JSONDecodeError) as e:
+        logger.debug("Ollama embedding model fetch failed: %s", e)
     return "nomic-embed-text"
 
 

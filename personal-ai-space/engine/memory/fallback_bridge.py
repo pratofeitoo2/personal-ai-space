@@ -142,7 +142,7 @@ class FallbackMemoryBridge:
                 if result is not None:
                     return result
             except Exception:
-                pass
+                logger.debug("MCP get_fact unavailable, using fallback")
 
         # Fallback: look up in agent_memory
         try:
@@ -156,7 +156,7 @@ class FallbackMemoryBridge:
                     "category": data.get("category"),
                 }
         except Exception:
-            pass
+            logger.debug("Fallback get_fact lookup failed")
         return None
 
     def list_facts(
@@ -171,7 +171,7 @@ class FallbackMemoryBridge:
                 if result:
                     return result
             except Exception:
-                pass
+                logger.debug("MCP list_facts unavailable, using fallback")
 
         # Fallback
         try:
@@ -191,7 +191,7 @@ class FallbackMemoryBridge:
                             "category": data.get("category"),
                         })
                     except Exception:
-                        pass
+                        logger.debug("Failed to parse fallback fact JSON")
             return results[:limit]
         except Exception as e:
             logger.error("Fallback list_facts failed: %s", e)
@@ -202,7 +202,7 @@ class FallbackMemoryBridge:
             try:
                 return self._mcp.delete_fact(key)
             except Exception:
-                pass
+                logger.debug("MCP delete_fact unavailable, skipping")
         return False
 
     # ── Lessons ───────────────────────────────────────────────────────────
@@ -249,7 +249,7 @@ class FallbackMemoryBridge:
                 if result:
                     return result
             except Exception:
-                pass
+                logger.debug("MCP list_lessons unavailable, using fallback")
         return []
 
     def delete_lesson(self, lesson_id: str) -> bool:
@@ -257,7 +257,7 @@ class FallbackMemoryBridge:
             try:
                 return self._mcp.delete_lesson(lesson_id)
             except Exception:
-                pass
+                logger.debug("MCP delete_lesson unavailable, skipping")
         return False
 
     # ── Stats & context helpers ───────────────────────────────────────────
@@ -267,7 +267,7 @@ class FallbackMemoryBridge:
             try:
                 return self._mcp.get_stats()
             except Exception:
-                pass
+                logger.debug("MCP get_stats unavailable, returning fallback stats")
         return {"ok": True, "mode": "fallback", "queue_size": len(self._fallback_queue)}
 
     def sync_profile_facts(self, profile: dict) -> int:

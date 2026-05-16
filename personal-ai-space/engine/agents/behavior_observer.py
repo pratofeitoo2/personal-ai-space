@@ -16,11 +16,12 @@ from datetime import datetime, timedelta
 
 from log_manager import get_logger
 from transport.data_hub import DataHub
+from agents.base_agent import BaseAgent
 
 logger = get_logger("engine.observer")
 
 
-class BehaviorObserver:
+class BehaviorObserver(BaseAgent):
     """
     Tracks user behavior and agent decisions autonomously.
 
@@ -30,10 +31,31 @@ class BehaviorObserver:
     """
 
     def __init__(self):
+        super().__init__("behavior-observer")
         self._hub = DataHub()
         self.observation_buffer = []
         self.session_start = datetime.now()
+        self.state = "ready"
         logger.info("BehaviorObserver initialized")
+
+    # ── BaseAgent interface ───────────────────────────────────────────
+
+    def get_capabilities(self) -> list:
+        return ["observe", "get_buffer_stats", "dump_observations"]
+
+    def get_metadata(self) -> dict:
+        return {"name": "Behavior Observer", "version": "1.0", "type": "observer"}
+
+    def process(self, message: dict) -> dict:
+        command = message.get("payload", {}).get("command", "")
+        data = message.get("payload", {}).get("data", {})
+        if command == "observe":
+            return self._ok(self.observe(data))
+        if command == "buffer_stats":
+            return self._ok(self.get_buffer_stats())
+        if command == "dump":
+            return self._ok(self.dump_observations(data.get("limit", 10)))
+        return self._unknown(command)
 
     # ── Observation Methods ───────────────────────────────────────────
 
@@ -149,7 +171,7 @@ class BehaviorObserver:
                     time_key = f"hour_{hour}"
                     time_patterns[time_key] = time_patterns.get(time_key, 0) + 1
                 except Exception:
-                    pass
+                    logger.debug("Failed to parse observation timestamp")
 
         self._persist_to_memory_db(type_counts, category_counts, time_patterns)
         self.observation_buffer.clear()

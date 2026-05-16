@@ -17,8 +17,11 @@ import os
 import sys
 import json
 import shutil
+import logging
 from pathlib import Path
 from datetime import datetime
+
+logger = logging.getLogger("intake.process")
 import yaml
 import re
 import json5
@@ -342,8 +345,8 @@ def process_all(dry_run: bool = False):
             for d in dirs:
                 try:
                     (Path(root) / d).rmdir()  # Only works if empty
-                except:
-                    pass
+                except OSError:
+                    logger.debug("Directory not empty, skipping: %s", Path(root) / d)
         
         # Final count of remaining files
         remaining = 0
@@ -379,8 +382,8 @@ def show_history(limit: int = 20):
             
             status_symbol = "✓" if status == "SUCCESS" else "✗" if status.startswith("ERROR") else "→"
             print(f"  {status_symbol} {ts}  {filename:40} → {dest:20} ({status})")
-        except:
-            pass
+        except Exception as e:
+            logger.debug("Failed to parse import history entry: %s", e)
 
 
 if __name__ == "__main__":

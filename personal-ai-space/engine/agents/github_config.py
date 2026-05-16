@@ -1,8 +1,10 @@
 import os
 import json
 import json5
+import logging
 from pathlib import Path
 
+logger = logging.getLogger("engine.github_config")
 
 DEFAULTS = {
     "sync_interval": 900,
@@ -37,8 +39,8 @@ class GitHubConfig:
                 with open(self._config_path) as f:
                     file_data = json5.load(f)
                 self._data.update(file_data)
-            except (json.JSONDecodeError, OSError):
-                pass
+            except (json.JSONDecodeError, OSError) as e:
+                logger.debug("No saved GitHub config found: %s", e)
 
     def _load_env(self):
         """Override config from environment variables."""
@@ -55,8 +57,8 @@ class GitHubConfig:
             if val is not None:
                 try:
                     self._data[config_key] = converter(val)
-                except (ValueError, TypeError):
-                    pass
+                except (ValueError, TypeError) as e:
+                    logger.debug("Invalid GitHub config value: %s", e)
 
     def get(self, key: str, default=None):
         """Get a config value."""

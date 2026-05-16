@@ -247,8 +247,8 @@ def on_task_deleted(task_id: str) -> None:
         rows = db.query("tasks", "SELECT project_id FROM tasks WHERE id=?", (task_id,))
         if rows:
             proj = rows[0]["project_id"]
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("Knowledge propagation failed: %s", e)
     _log_history(task_id, "deleted", "exists", "deleted")
     _log_to_memories("task_deleted", {"task_id": task_id})
     if proj:

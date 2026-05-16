@@ -6,6 +6,7 @@ import os
 import sys
 import json
 import re
+import logging
 from pathlib import Path
 from datetime import datetime, timedelta
 import yaml
@@ -14,6 +15,8 @@ from collections import defaultdict
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from db_manager import execute, query
 from synthesis import propagator
+
+logger = logging.getLogger("engine.extractors.comprehensive")
 
 PROJECT_ROOT = Path(__file__).parent.parent
 
@@ -27,10 +30,9 @@ def extract_frontmatter(content: str) -> dict:
         parts = content.split("---", 2)
         if len(parts) >= 2:
             return yaml.safe_load(parts[1]) or {}
-    except Exception:
-        pass
-    
-    return {}
+    except Exception as e:
+        logger.warning("Failed to parse frontmatter YAML: %s", e)
+        return {}
 
 
 def extract_text_content(content: str) -> str:
@@ -103,9 +105,9 @@ class ComprehensiveExtractor:
                     """, (name, email, phone, cpf, birth_date, datetime.now().isoformat()))
                     self.stats['relationships'] += 1
                 except Exception as e:
-                    pass
-            except Exception:
-                pass
+                    logger.warning("Failed to insert relationship: %s", e)
+            except Exception as e:
+                logger.warning("Failed to process relationship file: %s", e)
     
     def _extract_goals(self):
         """Extract goals from Life Plans files."""
@@ -149,10 +151,10 @@ class ComprehensiveExtractor:
                         VALUES (?, ?, ?, ?, ?)
                     """, (title, description, category, status, datetime.now().isoformat()))
                     self.stats['goals'] += 1
-                except Exception:
-                    pass
-            except Exception:
-                pass
+                except Exception as e:
+                    logger.warning("Failed to insert goal: %s", e)
+            except Exception as e:
+                logger.warning("Failed to process goal file: %s", e)
     
     def _extract_daily_patterns(self):
         """Extract behaviors and patterns from daily notes."""
@@ -187,8 +189,8 @@ class ComprehensiveExtractor:
                 for activity in activity_keywords:
                     if activity in content:
                         activities_found.add(activity)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Failed to process daily note: %s", e)
         
         # Insert unique behaviors
         for emotion in emotions_found:
@@ -199,8 +201,8 @@ class ComprehensiveExtractor:
                     VALUES (?, ?, ?, ?)
                 """, ('emotion', emotion, datetime.now().isoformat(), 1))
                 self.stats['behaviors_emotions'] += 1
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Failed to insert emotion behavior '%s': %s", emotion, e)
         
         for activity in activities_found:
             try:
@@ -210,8 +212,8 @@ class ComprehensiveExtractor:
                     VALUES (?, ?, ?, ?)
                 """, ('activity', activity, datetime.now().isoformat(), 1))
                 self.stats['behaviors_activities'] += 1
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Failed to insert activity behavior '%s': %s", activity, e)
     
     def _extract_professional_data(self):
         """Extract professional skills and roles."""
@@ -251,8 +253,8 @@ class ComprehensiveExtractor:
                                 """, (role_type, 'professional_role', file_path.name))
                                 self.stats['traits_roles'] += 1
                                 break
-                            except Exception:
-                                pass
+                            except Exception as e:
+                                logger.warning("Failed to insert professional role: %s", e)
                 
                 # Extract skills
                 for skill in skill_keywords:
@@ -264,10 +266,10 @@ class ComprehensiveExtractor:
                                 VALUES (?, ?, ?)
                             """, (skill, 'skill', file_path.name))
                             self.stats['traits_skills'] += 1
-                        except Exception:
-                            pass
-            except Exception:
-                pass
+                        except Exception as e:
+                            logger.warning("Failed to insert skill trait: %s", e)
+            except Exception as e:
+                logger.warning("Failed to process professional data file: %s", e)
     
     def _extract_learning_patterns(self):
         """Extract learning and research interests."""
@@ -294,8 +296,8 @@ class ComprehensiveExtractor:
                 for topic, keywords in learning_keywords.items():
                     if any(kw in content for kw in keywords):
                         topics_found.add(topic)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Failed to read learning file: %s", e)
         
         # Insert learning interests as needs
         import uuid
@@ -308,8 +310,8 @@ class ComprehensiveExtractor:
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                 """, (uuid.uuid4().hex, 'learning', topic, 'medium', 'active', topic, datetime.now().isoformat()))
                 self.stats['learning_needs'] += 1
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Failed to insert learning need '%s': %s", topic, e)
     
     def _extract_implicit_tasks(self):
         """Extract actionable tasks from all content."""
@@ -349,10 +351,10 @@ class ComprehensiveExtractor:
                                 """, (tid, task_text[:100], "", "normal", "pending", datetime.now().isoformat(), "general"))
                                 self.stats['implicit_tasks'] += 1
                                 propagator.on_task_created(tid)
-                            except Exception:
-                                pass
-            except Exception:
-                pass
+                            except Exception as e:
+                                logger.warning("Failed to insert implicit task: %s", e)
+            except Exception as e:
+                logger.warning("Failed to process inbox file for tasks: %s", e)
     
     def _print_summary(self):
         """Print extraction summary."""
@@ -377,37 +379,43 @@ class ComprehensiveExtractor:
         try:
             rel_count = query("self", "SELECT COUNT(*) as count FROM relationships")[0]['count']
             print(f"  Relationships:    {rel_count} records")
-        except:
+        except Exception as e:
+            logger.debug("Relationships table not available: %s", e)
             print(f"  Relationships:    0 records")
         
         try:
             goals_count = query("self", "SELECT COUNT(*) as count FROM goals")[0]['count']
             print(f"  Goals:            {goals_count} records")
-        except:
+        except Exception as e:
+            logger.debug("Goals table not available: %s", e)
             print(f"  Goals:            0 records")
         
         try:
             behaviors_count = query("self", "SELECT COUNT(*) as count FROM behaviors")[0]['count']
             print(f"  Behaviors:        {behaviors_count} records")
-        except:
+        except Exception as e:
+            logger.debug("Behaviors table not available: %s", e)
             print(f"  Behaviors:        0 records")
         
         try:
             traits_count = query("self", "SELECT COUNT(*) as count FROM traits")[0]['count']
             print(f"  Traits:           {traits_count} records")
-        except:
+        except Exception as e:
+            logger.debug("Traits table not available: %s", e)
             print(f"  Traits:           0 records")
         
         try:
             needs_count = query("self", "SELECT COUNT(*) as count FROM needs")[0]['count']
             print(f"  Needs:            {needs_count} records")
-        except:
+        except Exception as e:
+            logger.debug("Needs table not available: %s", e)
             print(f"  Needs:            0 records")
         
         try:
             tasks_count = query("tasks", "SELECT COUNT(*) as count FROM tasks")[0]['count']
             print(f"  Tasks:            {tasks_count} records")
-        except:
+        except Exception as e:
+            logger.debug("Tasks table not available: %s", e)
             print(f"  Tasks:            0 records")
         
         print("=" * 70 + "\n")

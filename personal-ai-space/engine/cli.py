@@ -73,7 +73,7 @@ def _try_daemon() -> DaemonProxy | None:
         if resp.status == 200:
             return DaemonProxy()
     except Exception:
-        pass
+        return None  # daemon not available, fall through to local engine
     return None
 
 

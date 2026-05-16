@@ -124,8 +124,8 @@ class TaskCoordinator(BaseAgent):
                 due_dt = datetime.fromisoformat(str(due))
                 days_left = (due_dt - datetime.now()).days
                 score += max(0, 40 - days_left * 4)
-            except ValueError:
-                pass
+            except ValueError as e:
+                logger.debug("Invalid due date format: %s", e)
         est = task.get("estimated_hours") or 2
         if est < 1:
             score += 15

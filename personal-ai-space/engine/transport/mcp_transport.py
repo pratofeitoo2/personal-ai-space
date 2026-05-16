@@ -185,7 +185,7 @@ class SafeMCPTransport:
             try:
                 self._client.close()
             except Exception:
-                pass
+                logger.debug("MCP server health check failed, continuing")
 
         try:
             if self._config.transport == "http":

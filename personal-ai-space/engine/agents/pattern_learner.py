@@ -13,17 +13,39 @@ from typing import Optional
 
 from log_manager import get_logger, audit
 from transport.data_hub import DataHub
+from agents.base_agent import BaseAgent
 
 logger = get_logger("engine.pattern_learner")
 
 
-class PatternLearner:
+class PatternLearner(BaseAgent):
     """Infers patterns from historical data and agent observations."""
 
     def __init__(self):
+        super().__init__("pattern-learner")
         self._hub = DataHub()
         self.learned_patterns = {}
+        self.state = "ready"
         logger.info("PatternLearner initialized")
+
+    # ── BaseAgent interface ───────────────────────────────────────────
+
+    def get_capabilities(self) -> list:
+        return ["infer_all_patterns", "get_top_patterns", "get_workflow_recommendation"]
+
+    def get_metadata(self) -> dict:
+        return {"name": "Pattern Learner", "version": "1.0", "type": "learner"}
+
+    def process(self, message: dict) -> dict:
+        command = message.get("payload", {}).get("command", "")
+        data = message.get("payload", {}).get("data", {})
+        if command == "infer":
+            return self._ok(self.infer_all_patterns())
+        if command == "top_patterns":
+            return self._ok(self.get_top_patterns(data.get("limit", 5)))
+        if command == "workflow":
+            return self._ok({"recommendation": self.get_workflow_recommendation()})
+        return self._unknown(command)
 
     # ── Time-Based Patterns ───────────────────────────────────────────
 
@@ -45,7 +67,7 @@ class PatternLearner:
                         dt = datetime.fromisoformat(t['ct'])
                         hours[dt.hour] += 1
                     except Exception:
-                        pass
+                        logger.debug("Failed to parse task timestamp for hour")
 
                 if hours:
                     most_common_hour = hours.most_common(1)[0][0]
@@ -173,5 +195,6 @@ class PatternLearner:
             primary = self.learned_patterns.get('top_categories', ['general'])[0]
             time_hint = self.learned_patterns.get('task_creation_hour', 9)
             return f"Your typical workflow: start {time_hint}:00 -> focus on {primary} work"
-        except Exception:
+        except Exception as e:
+            logger.debug("Workflow recommendation unavailable: %s", e)
             return "No workflow recommendation available yet"

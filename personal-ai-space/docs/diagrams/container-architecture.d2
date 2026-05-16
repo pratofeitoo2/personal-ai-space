@@ -1,0 +1,748 @@
+# ──────────────────────────────────────────────────────────────
+# Personal AI Powerhouse — Container Architecture (C4 Level 2)
+# Dark-tech design system — semantic color coding
+# ──────────────────────────────────────────────────────────────
+d2-config: {
+  layout-engine: tala
+  theme: 1
+  pad: 30
+  sketch: false
+}
+
+title: |md
+  # 🧠 Personal AI Powerhouse
+  ### Container Architecture · C4 Level 2
+| {
+  shape: text
+  style: {
+    fill: transparent
+    stroke: transparent
+    font-color: "#f1f5f9"
+    font-size: 28
+    bold: true
+  }
+}
+
+# ── ENTRY POINTS ─────────────────────────────────────────────
+entry: {
+  label: "1. ENTRY POINTS"
+  style: {
+    fill: "#0c1929"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  cli: "CLI (Click + Rich)" {
+    style: {
+      fill: "#0e7490"
+      fill-pattern: dots
+      stroke: "#22d3ee"
+      border-radius: 6
+      font-color: "#cffafe"
+      font-size: 12
+      shadow: true
+    }
+  }
+
+  http_daemon: "HTTP Daemon :19876" {
+    style: {
+      fill: "#0e7490"
+      fill-pattern: dots
+      stroke: "#22d3ee"
+      border-radius: 6
+      font-color: "#cffafe"
+      font-size: 12
+      shadow: true
+    }
+  }
+
+  opencode: "OpenCode Plugin" {
+    style: {
+      fill: "#0e7490"
+      fill-pattern: dots
+      stroke: "#22d3ee"
+      border-radius: 6
+      font-color: "#cffafe"
+      font-size: 12
+      shadow: true
+    }
+  }
+}
+
+# ── ORCHESTRATION ────────────────────────────────────────────
+orchestration: {
+  label: "2. ORCHESTRATION"
+  style: {
+    fill: "#0a1f14"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  engine_py: "Engine.py v0.1.0\nOrchestrator" {
+    style: {
+      fill: "#065f46"
+      stroke: "#34d399"
+      border-radius: 6
+      font-color: "#d1fae5"
+      font-size: 14
+      shadow: true
+    }
+  }
+
+  eventbus: "EventBus\nPydantic Messages" {
+    style: {
+      fill: "#9a3412"
+      stroke: "#fb923c"
+      border-radius: 6
+      font-color: "#fed7aa"
+      font-size: 11
+      shadow: true
+    }
+  }
+
+  db_manager: "DB Manager\nConnection Pool (8/DB)" {
+    style: {
+      fill: "#065f46"
+      stroke: "#34d399"
+      border-radius: 6
+      font-color: "#a7f3d0"
+      font-size: 11
+    }
+  }
+
+  datahub: "DataHub\nTyped DB Facade" {
+    style: {
+      fill: "#065f46"
+      stroke: "#34d399"
+      border-radius: 6
+      font-color: "#a7f3d0"
+      font-size: 11
+    }
+  }
+
+  log_manager: "Log Manager" {
+    style: {
+      fill: "#065f46"
+      stroke: "#6ee7b7"
+      border-radius: 6
+      font-color: "#a7f3d0"
+      font-size: 11
+    }
+  }
+
+  mcp_transport: "SafeMCPTransport\nCircuit Breaker" {
+    style: {
+      fill: "#881337"
+      stroke: "#fb7185"
+      stroke-dash: 4
+      border-radius: 6
+      font-color: "#fecdd3"
+      font-size: 11
+      shadow: true
+    }
+  }
+
+  appconfig: "AppConfig\nPydantic Singleton" {
+    style: {
+      fill: "#065f46"
+      stroke: "#6ee7b7"
+      border-radius: 6
+      font-color: "#a7f3d0"
+      font-size: 11
+    }
+  }
+
+  synthesis_module: "Synthesis\nPropagator + Loops" {
+    style: {
+      fill: "#065f46"
+      stroke: "#6ee7b7"
+      border-radius: 6
+      font-color: "#a7f3d0"
+      font-size: 11
+    }
+  }
+
+  llm_bridge: "LLM Bridge\nOllama Client" {
+    style: {
+      fill: "#1e293b"
+      stroke: "#64748b"
+      border-radius: 6
+      font-color: "#cbd5e1"
+      font-size: 11
+    }
+  }
+}
+
+# ── AGENT SYSTEM ─────────────────────────────────────────────
+agents: {
+  label: "3. AGENT SYSTEM"
+  style: {
+    fill: "#140a26"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  circuit_breaker: "CIRCUIT BREAKER BOUNDARY" {
+    label: "CIRCUIT BREAKER BOUNDARY\n3 fails→OPEN, 30s→HALF_OPEN, 1 success→CLOSED"
+    style: {
+      fill: "#881337"
+      stroke: "#fb7185"
+      stroke-dash: 4
+      border-radius: 8
+      font-color: "#fb7185"
+      font-size: 9
+    }
+  }
+
+  ctx_mgr: {
+    label: "Context\nManager"
+    shape: rectangle
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  task_cord: {
+    label: "Task\nCoordinator"
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  insight_gen: {
+    label: "Insight\nGenerator"
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  reminder: {
+    label: "Reminder\nSystem"
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  report_gen: {
+    label: "Report\nGenerator"
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  knowledge_idx: {
+    label: "Knowledge\nIndexer"
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  mcp_agent: {
+    label: "MCP\nAgent"
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  github_agent: {
+    label: "GitHub\nAgent"
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  # Autonomous learners (purple)
+  auto_learners_label: "AUTONOMOUS LEARNERS" {
+    style: {
+      fill: "#3b0764"
+      stroke: "#a855f7"
+      stroke-dash: 4
+      border-radius: 6
+      font-color: "#c084fc"
+      font-size: 9
+    }
+  }
+
+  behavior_obs: {
+    label: "Behavior\nObserver"
+    style: {
+      fill: "#3b0764"
+      stroke: "#c084fc"
+      border-radius: 6
+      font-color: "#e9d5ff"
+      font-size: 10
+    }
+  }
+
+  pattern_lrn: {
+    label: "Pattern\nLearner"
+    style: {
+      fill: "#3b0764"
+      stroke: "#c084fc"
+      border-radius: 6
+      font-color: "#e9d5ff"
+      font-size: 10
+    }
+  }
+}
+
+# ── STORAGE ──────────────────────────────────────────────────
+storage: {
+  label: "4. STORAGE & MEMORY"
+  style: {
+    fill: "#140a26"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  tasks_db: "tasks.db\nTasks + Projects" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+
+  self_db: "self.db\nProfile + Habits" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+
+  memories_db: "memories.db\nInteractions + Context" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+
+  knowledge_db: "knowledge.db\nArticles + Notes" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+
+  git_db: "git.db\nRepos + Branches" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+
+  mcp_bridge_py: "mcp_bridge.py\nPython→Node subprocess" {
+    style: {
+      fill: "#1e1b4b"
+      stroke: "#a78bfa"
+      border-radius: 6
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+
+  headless_js: "headless.js\nNode.js memory server" {
+    style: {
+      fill: "#1e1b4b"
+      stroke: "#a78bfa"
+      border-radius: 6
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+
+  fallback_mem: "FallbackMemoryBridge\nSQLite auto-failover" {
+    style: {
+      fill: "#1e1b4b"
+      stroke: "#c4b5fd"
+      border-radius: 6
+      font-color: "#c4b5fd"
+      font-size: 9
+    }
+  }
+
+  mempalace: "MemPalace\nKnowledge Graph" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+}
+
+# ── SELF — DIGITAL TWIN ─────────────────────────────────────
+self: {
+  label: "5. SELF — DIGITAL TWIN"
+  style: {
+    fill: "#0c1929"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  profile_self: "profile.json\nUser Profile" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  habits_dir: "habits/\nTracking CSV" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  traits_dir: "traits/\nPersonality" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  needs_dir: "needs/\nPriorities" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  goals_dir: "goals/\nLife Plans" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  relationships_dir: "relationships/\nPeople Network" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+}
+
+# ── INFRASTRUCTURE ──────────────────────────────────────────
+infrastructure: {
+  label: "6. INFRASTRUCTURE"
+  style: {
+    fill: "#1c1405"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  intake: {
+    label: "Intake Pipeline"
+    style: {
+      fill: "#0f172a"
+      stroke: "#334155"
+      stroke-dash: 4
+      border-radius: 8
+      font-color: "#94a3b8"
+      font-size: 9
+    }
+
+    launchd: "launchd Watcher\n10s poll, 60s debounce" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+
+    processor: "process_intake.py\nConvert→Route→Archive" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+
+    extractor: "Comprehensive Extractor\n6-phase to all DBs" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fcd34d"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 9
+      }
+    }
+  }
+
+  external: {
+    label: "External Services"
+    style: {
+      fill: "#0f172a"
+      stroke: "#334155"
+      stroke-dash: 4
+      border-radius: 8
+      font-color: "#94a3b8"
+      font-size: 9
+    }
+
+    ollama: "Ollama\n:11434\nnomic-embed-text" {
+      style: {
+        fill: "#334155"
+        stroke: "#94a3b8"
+        border-radius: 6
+        font-color: "#cbd5e1"
+        font-size: 10
+      }
+    }
+
+    mail_mcp: "Mail MCP" {
+      style: {
+        fill: "#334155"
+        stroke: "#94a3b8"
+        border-radius: 6
+        font-color: "#cbd5e1"
+        font-size: 10
+      }
+    }
+
+    gh_cli: "gh CLI\ngit CLI" {
+      style: {
+        fill: "#334155"
+        stroke: "#94a3b8"
+        border-radius: 6
+        font-color: "#cbd5e1"
+        font-size: 10
+      }
+    }
+
+    github_actions: "GitHub Actions\nruff + pytest + trufflehog" {
+      style: {
+        fill: "#334155"
+        stroke: "#94a3b8"
+        border-radius: 6
+        font-color: "#cbd5e1"
+        font-size: 10
+      }
+    }
+
+    obsidian: "BMO Plugin\nObsidian Chat" {
+      style: {
+        fill: "#334155"
+        stroke: "#94a3b8"
+        border-radius: 6
+        font-color: "#cbd5e1"
+        font-size: 10
+      }
+    }
+
+    apple_bridges: "Apple Bridges\nNotes+Reminders+Cal" {
+      style: {
+        fill: "#334155"
+        stroke: "#94a3b8"
+        border-radius: 6
+        font-color: "#cbd5e1"
+        font-size: 10
+      }
+    }
+  }
+}
+
+# ══════════════════════════════════════════════════════════════
+# CONNECTIONS
+# ══════════════════════════════════════════════════════════════
+
+# Entry → Orchestration
+entry.cli -> orchestration.engine_py: "invokes"
+entry.http_daemon -> orchestration.engine_py: "RPC calls"
+entry.opencode -> orchestration.engine_py: "lifecycle hooks"
+
+# Orchestration internals
+orchestration.engine_py -> orchestration.eventbus: "dispatches"
+orchestration.engine_py -> orchestration.log_manager: "audits"
+orchestration.engine_py -> orchestration.appconfig: "reads config"
+orchestration.engine_py -> orchestration.synthesis_module: "triggers"
+orchestration.engine_py -> orchestration.llm_bridge: "LLM calls"
+orchestration.datahub -> orchestration.db_manager: "typed facade"
+
+# Orchestration → Agents
+orchestration.engine_py -> agents: "Engine.send() dispatch"
+
+# Agent connections to storage
+agents.ctx_mgr -> storage.self_db: "reads profile"
+agents.ctx_mgr -> storage.mcp_bridge_py: "memory ops"
+agents.task_cord -> storage.tasks_db: "CRUD tasks"
+agents.task_cord -> storage.self_db: "reads habits"
+agents.insight_gen -> storage.self_db: "analyzes habits"
+agents.reminder -> storage.tasks_db: "checks due dates"
+agents.report_gen -> storage: "reads from all"
+agents.knowledge_idx -> storage.knowledge_db: "indexes/searches"
+agents.mcp_agent -> orchestration.mcp_transport: "MCP calls"
+agents.github_agent -> storage.git_db: "syncs repos"
+agents.github_agent -> infrastructure.gh_cli: "git/gh ops"
+agents.behavior_obs -> storage.mcp_bridge_py: "facts"
+agents.pattern_lrn -> storage: "reads historical"
+
+# Storage internal
+storage.mcp_bridge_py -> storage.headless_js: "stdin JSON-RPC"
+storage.fallback_mem -> storage.mcp_bridge_py: "SQLite failover"
+storage.mcp_bridge_py -> storage.mempalace: "semantic sync"
+
+# Storage ↔ Self
+storage.self_db <-> self: "sync_self.py syncs"
+
+# Infrastructure connections
+infrastructure.external.ollama -> orchestration.llm_bridge: "embeddings/gen"
+orchestration.mcp_transport -> infrastructure.external.mail_mcp: "MCP calls"
+infrastructure.external.github_actions -> agents: "CI validation"
+
+# Intake flow
+infrastructure.intake.launchd -> infrastructure.intake.processor: "new file dropped"
+infrastructure.intake.processor -> infrastructure.intake.extractor: "6-phase extraction"
+infrastructure.intake.extractor -> storage: "populates DBs"
+infrastructure.intake.extractor -> self: "populates twin"
+
+# ── LEGEND ───────────────────────────────────────────────────
+legend: "LEGEND" {
+  style: {
+    fill: "#0f172a"
+    stroke: "#334155"
+    border-radius: 8
+    font-color: "#94a3b8"
+    font-size: 9
+  }
+
+  l1: "ENTRY (cyan)" {
+    style: {
+      fill: "#0e7490"
+      stroke: "#22d3ee"
+      font-color: "#cffafe"
+      font-size: 9
+    }
+  }
+  l2: "ORCHESTRATION (emerald)" {
+    style: {
+      fill: "#065f46"
+      stroke: "#34d399"
+      font-color: "#d1fae5"
+      font-size: 9
+    }
+  }
+  l3: "AGENT (blue)" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      font-color: "#bfdbfe"
+      font-size: 9
+    }
+  }
+  l4: "LEARNER (purple)" {
+    style: {
+      fill: "#3b0764"
+      stroke: "#c084fc"
+      font-color: "#e9d5ff"
+      font-size: 9
+    }
+  }
+  l5: "DATABASE (violet)" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      font-color: "#ddd6fe"
+      font-size: 9
+    }
+  }
+  l6: "CIRCUIT BRKR (rose)" {
+    style: {
+      fill: "#881337"
+      stroke: "#fb7185"
+      font-color: "#fecdd3"
+      font-size: 9
+    }
+  }
+  l7: "INFRASTRUCTURE (amber)" {
+    style: {
+      fill: "#92400e"
+      stroke: "#fbbf24"
+      font-color: "#fde68a"
+      font-size: 9
+    }
+  }
+}

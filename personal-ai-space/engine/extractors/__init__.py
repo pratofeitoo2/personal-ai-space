@@ -3,6 +3,7 @@ import os
 import sys
 import json
 import re
+import logging
 from pathlib import Path
 from datetime import datetime
 import yaml
@@ -11,6 +12,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from db_manager import execute, query
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
+
+logger = logging.getLogger("engine.extractors")
 
 
 class RelationshipExtractor:
@@ -186,8 +189,8 @@ class DailyNoteExtractor:
                         VALUES (?, ?, ?, ?)
                     """, ('emotion', emotion, datetime.now().isoformat(), 1))
                     count += 1
-                except:
-                    pass
+                except Exception as e:
+                    logger.debug("Failed to insert emotion behavior: %s", e)
             
             # Extract activity patterns
             activities = self._extract_activities(content)
@@ -199,8 +202,8 @@ class DailyNoteExtractor:
                         VALUES (?, ?, ?, ?)
                     """, ('activity', activity, datetime.now().isoformat(), 1))
                     count += 1
-                except:
-                    pass
+                except Exception as e:
+                    logger.debug("Failed to insert activity behavior: %s", e)
         except Exception as e:
             print(f"Error inserting insights from {filename}: {e}")
         
@@ -290,8 +293,8 @@ class FinanceExtractor:
                         VALUES (?, ?, ?)
                     """, ('professional_role', role, filename))
                     count += 1
-                except:
-                    pass
+                except Exception as e:
+                    logger.debug("Failed to insert role trait: %s", e)
             
             # Extract skills
             skills = self._extract_skills(content)
@@ -303,8 +306,8 @@ class FinanceExtractor:
                         VALUES (?, ?, ?)
                     """, ('skill', skill, filename))
                     count += 1
-                except:
-                    pass
+                except Exception as e:
+                    logger.debug("Failed to insert skill trait: %s", e)
         except Exception as e:
             print(f"Error inserting finance data from {filename}: {e}")
         

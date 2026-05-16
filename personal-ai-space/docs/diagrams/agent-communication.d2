@@ -1,0 +1,424 @@
+# ──────────────────────────────────────────────────────────────
+# Personal AI Powerhouse — Agent Communication Flow
+# Shows Engine.send() dispatch, EventBus, circuit breaker, observer
+# ──────────────────────────────────────────────────────────────
+d2-config: {
+  layout-engine: elk
+  theme: 1
+  pad: 40
+  sketch: false
+}
+
+title: |md
+  # 🧠 Agent Communication & Dispatch
+  ### EventBus, Circuit Breaker & Observer Pattern
+| {
+  shape: text
+  style: {
+    fill: transparent
+    stroke: transparent
+    font-color: "#f1f5f9"
+    font-size: 28
+    bold: true
+  }
+}
+
+# ── ENTRY ─────────────────────────────────────────────────────
+entry: {
+  label: "ENTRY"
+  style: {
+    fill: "#0c1929"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  cli: "CLI / HTTP / OpenCode" {
+    style: {
+      fill: "#0e7490"
+      stroke: "#22d3ee"
+      border-radius: 6
+      font-color: "#cffafe"
+      font-size: 12
+      shadow: true
+    }
+  }
+}
+
+# ── ENGINE (the message bus) ──────────────────────────────────
+engine: {
+  label: "ENGINE — Message Dispatch Layer"
+  style: {
+    fill: "#0a1f14"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  engine_py: "Engine.py\nOrchestrator" {
+    style: {
+      fill: "#065f46"
+      stroke: "#34d399"
+      border-radius: 6
+      font-color: "#d1fae5"
+      font-size: 14
+      shadow: true
+    }
+  }
+
+  eventbus: "EventBus\nTopic-based pub/sub" {
+    style: {
+      fill: "#9a3412"
+      stroke: "#fb923c"
+      border-radius: 6
+      font-color: "#fed7aa"
+      font-size: 11
+      shadow: true
+    }
+  }
+
+  send_chain: {
+    style: {
+      fill: "#1e293b"
+      stroke: "#64748b"
+      stroke-dash: 4
+      border-radius: 6
+      font-color: "#cbd5e1"
+      font-size: 9
+    }
+
+    step1: "1. Engine.send(agent, cmd, data)" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 10
+      }
+    }
+    step2: "2. agent.handle(message)" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 10
+      }
+    }
+    step3: "3. DataHub.log_interaction()" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 10
+      }
+    }
+    step4: "4. BehaviorObserver.observe()" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 10
+      }
+    }
+    step5: "5. Every 5th call: context_snapshot" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 10
+      }
+    }
+    step6: "6. Notify github-agent (fire-and-forget)" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 10
+      }
+    }
+  }
+
+  send_chain.step1 -> send_chain.step2
+  send_chain.step2 -> send_chain.step3
+  send_chain.step3 -> send_chain.step4
+  send_chain.step4 -> send_chain.step5
+  send_chain.step5 -> send_chain.step6
+}
+
+# ── AGENTS ────────────────────────────────────────────────────
+agents: {
+  label: "AGENTS"
+  style: {
+    fill: "#140a26"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  circuit_breaker_zone: {
+    label: "Circuit Breaker Boundary"
+    style: {
+      fill: "#881337"
+      stroke: "#fb7185"
+      stroke-dash: 4
+      border-radius: 8
+      font-color: "#fb7185"
+      font-size: 9
+    }
+  }
+
+  ctx_mgr: "Context\nManager" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  task_cord: "Task\nCoordinator" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  insight_gen: "Insight\nGenerator" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  reminder: "Reminder\nSystem" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  report_gen: "Report\nGenerator" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  knowledge_idx: "Knowledge\nIndexer" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  mcp_agent: "MCP\nAgent" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+
+  github_agent: "GitHub\nAgent" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      border-radius: 6
+      font-color: "#bfdbfe"
+      font-size: 10
+    }
+  }
+}
+
+# ── OBSERVER (wired transparently) ──────────────────────────
+observer: {
+  label: "AUTONOMOUS OBSERVERS"
+  style: {
+    fill: "#0f172a"
+    stroke: "#334155"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#94a3b8"
+    font-size: 10
+  }
+
+  behavior_obs: "BehaviorObserver\nLogs agent decisions,\nuser actions, commands" {
+    style: {
+      fill: "#3b0764"
+      stroke: "#c084fc"
+      border-radius: 6
+      font-color: "#e9d5ff"
+      font-size: 10
+    }
+  }
+
+  pattern_lrn: "PatternLearner\nInfers time patterns,\nworkflows, preferences" {
+    style: {
+      fill: "#3b0764"
+      stroke: "#c084fc"
+      border-radius: 6
+      font-color: "#e9d5ff"
+      font-size: 10
+    }
+  }
+}
+
+# ── STORAGE ──────────────────────────────────────────────────
+storage: {
+  label: "PERSISTENCE"
+  style: {
+    fill: "#140a26"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  memories_db: "memories.db\nInteractions\nContext Windows" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      border-radius: 6
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+
+  mcp_bridge: "MCP Memory Bridge\nPython → Node.js\nSQLite + semantic" {
+    style: {
+      fill: "#1e1b4b"
+      stroke: "#a78bfa"
+      border-radius: 6
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+}
+
+# ══════════════════════════════════════════════════════════════
+# CONNECTIONS
+# ══════════════════════════════════════════════════════════════
+
+# Entry → Engine
+entry.cli -> engine.engine_py: "user commands"
+
+# Engine dispatch
+engine.engine_py -> engine.eventbus: "dispatches EventEnvelope"
+engine.engine_py -> engine.send_chain: "send() chain→"
+
+# Engine → Broadcast via EventBus
+engine.engine_py -> agents: "Engine.send() direct"
+
+# EventBus topics (these are the actual subscriptions)
+agents.ctx_mgr -> engine.eventbus: "subscribes: context.*"
+agents.task_cord -> engine.eventbus: "subscribes: tasks.*"
+agents.insight_gen -> engine.eventbus: "subscribes: insights.*"
+agents.reminder -> engine.eventbus: "subscribes: reminders.*"
+agents.report_gen -> engine.eventbus: "subscribes: reports.*"
+agents.knowledge_idx -> engine.eventbus: "subscribes: knowledge.*"
+agents.mcp_agent -> engine.eventbus: "subscribes: mcp.*"
+agents.github_agent -> engine.eventbus: "subscribes: github.*"
+
+# Engine → observers (wired at init)
+engine.engine_py -> observer: "set_observer() injects at startup"
+
+# Observer observes everything (transparent)
+observer.behavior_obs -> agents: "transparently observes all agent actions"
+observer.pattern_lrn -> observer.behavior_obs: "reads observation history"
+
+# Persistence
+engine.engine_py -> storage.memories_db: "log_interaction()"
+agents.ctx_mgr -> storage.mcp_bridge: "add_fact / add_lesson"
+observer -> storage.mcp_bridge: "observation facts"
+agents -> storage: "CRUD via DataHub / db_manager"
+
+# Cross-agent notification (every non-github success)
+agents -> agents.github_agent: "agent_work_completed event"
+
+# Circuit breaker isolation
+engine.eventbus -> agents.circuit_breaker_zone: "messages pass through"
+agents.mcp_agent -> agents.circuit_breaker_zone: "3 fails → OPEN"
+
+# ── LEGEND ───────────────────────────────────────────────────
+legend: "LEGEND" {
+  style: {
+    fill: "#0f172a"
+    stroke: "#334155"
+    border-radius: 8
+    font-color: "#94a3b8"
+    font-size: 9
+  }
+
+  l1: "ENGINE (emerald)" {
+    style: {
+      fill: "#065f46"
+      stroke: "#34d399"
+      font-color: "#d1fae5"
+      font-size: 9
+    }
+  }
+  l2: "AGENT (blue)" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      font-color: "#bfdbfe"
+      font-size: 9
+    }
+  }
+  l3: "OBSERVER (purple)" {
+    style: {
+      fill: "#3b0764"
+      stroke: "#c084fc"
+      font-color: "#e9d5ff"
+      font-size: 9
+    }
+  }
+  l4: "BROADCAST (orange)" {
+    style: {
+      fill: "#9a3412"
+      stroke: "#fb923c"
+      font-color: "#fed7aa"
+      font-size: 9
+    }
+  }
+  l5: "CIRCUIT BRKR (rose)" {
+    style: {
+      fill: "#881337"
+      stroke: "#fb7185"
+      font-color: "#fecdd3"
+      font-size: 9
+    }
+  }
+  l6: "STORAGE (violet)" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      font-color: "#ddd6fe"
+      font-size: 9
+    }
+  }
+}

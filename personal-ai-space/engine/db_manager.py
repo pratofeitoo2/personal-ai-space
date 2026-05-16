@@ -69,9 +69,9 @@ def acquire_conn(path: Path) -> sqlite3.Connection:
         conn.execute("SELECT 1")  # validate
         return conn
     except queue.Empty:
-        pass
-    except (sqlite3.Error, AttributeError):
-        pass  # stale conn, create new one below
+        logger.debug("Connection pool timed out waiting for connection")
+    except (sqlite3.Error, AttributeError) as e:
+        logger.warning("Connection error during pool_acquire: %s", e)  # stale conn, create new one below
 
     # Create new if pool not full
     with _pool_lock:
@@ -226,7 +226,9 @@ def init_git_db():
 def init_all():
     """Initialize all databases from schema files."""
     for db_name, db_path in DB_PATHS.items():
-        schema_file = db_path.parent / f"schema_{db_name}.sql"
+        if db_name == "git":
+            continue  # init_git_db() handles git.db separately with correct filename
+        schema_file = DB_DIR / db_name / f"schema_{db_name}.sql"
         if not schema_file.exists():
             logger.warning(f"Schema missing: {schema_file}")
             continue

@@ -115,5 +115,53 @@
     "triggers": ["scheduled_sync", "agent_work_completed", "on_startup", "on_command"],
     "outputs": ["git_status", "sync_report", "commit_log", "repo_discovery"],
     "error_handling": "retry_with_backoff"
+  },
+  {
+    "id": "mcp-agent",
+    "name": "MCP Agent",
+    "description": "Manages external MCP server connections and tool indexing",
+    "priority": "medium",
+    "dependencies": ["mcp_registry.json5"],
+    "capabilities": [
+      "Connect to MCP servers",
+      "Discover tools",
+      "Route tool calls",
+      "Handle server lifecycle"
+    ],
+    "triggers": ["on_startup", "server_change"],
+    "outputs": ["tool_registry", "server_status"],
+    "error_handling": "log_and_continue"
+  },
+  {
+    "id": "behavior-observer",
+    "name": "Behavior Observer",
+    "description": "Observes and logs user actions, task creation/completion, and habit tracking for behavioral analysis",
+    "priority": "low",
+    "dependencies": ["self.db"],
+    "capabilities": [
+      "Log user actions",
+      "Track task lifecycle",
+      "Monitor habit streaks",
+      "Record context changes"
+    ],
+    "triggers": ["on_action", "scheduled_sync"],
+    "outputs": ["behavior_log", "action_stream"],
+    "error_handling": "log_and_continue"
+  },
+  {
+    "id": "pattern-learner",
+    "name": "Pattern Learner",
+    "description": "Learns user patterns from observed behavior — time patterns, preferences, workflows",
+    "priority": "low",
+    "dependencies": ["self.db", "memories.db"],
+    "capabilities": [
+      "Infer time patterns",
+      "Detect preferences",
+      "Learn workflows",
+      "Predict next actions"
+    ],
+    "triggers": ["scheduled_learning", "on_new_data"],
+    "outputs": ["patterns", "predictions"],
+    "error_handling": "degrade_gracefully"
   }
 ]

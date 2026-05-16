@@ -159,7 +159,7 @@ class SyncEngine:
                     (now, now, repo_id)
                 )
         except Exception:
-            pass
+            logger.debug("Auto-commit failed (expected when no changes)")
 
     def report(self) -> dict:
         """Return sync status report."""

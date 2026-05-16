@@ -1,0 +1,514 @@
+# ──────────────────────────────────────────────────────────────
+# Personal AI Powerhouse — Data Flow: File Intake Pipeline
+# Shows how files flow from drop to persistent storage
+# ──────────────────────────────────────────────────────────────
+d2-config: {
+  layout-engine: dagre
+  theme: 1
+  pad: 40
+  sketch: false
+}
+
+title: |md
+  # 📥 Data Flow — Intake Pipeline
+  ### Zero-touch file import via macOS launchd
+| {
+  shape: text
+  style: {
+    fill: transparent
+    stroke: transparent
+    font-color: "#f1f5f9"
+    font-size: 28
+    bold: true
+  }
+}
+
+# ── INPUT ───────────────────────────────────────────────────
+input: {
+  label: "INPUT"
+  style: {
+    fill: "#0c1929"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  dropzone: "User drops files\nintake/staging/" {
+    style: {
+      fill: "#0e7490"
+      stroke: "#22d3ee"
+      border-radius: 6
+      font-color: "#cffafe"
+      font-size: 12
+      shadow: true
+    }
+  }
+
+  obsidian: "Obsidian Vault\n(project root)" {
+    style: {
+      fill: "#0e7490"
+      stroke: "#22d3ee"
+      border-radius: 6
+      font-color: "#cffafe"
+      font-size: 10
+      shadow: true
+    }
+  }
+
+  opencode: "OpenCode\n(agent sessions)" {
+    style: {
+      fill: "#0e7490"
+      stroke: "#22d3ee"
+      border-radius: 6
+      font-color: "#cffafe"
+      font-size: 10
+      shadow: true
+    }
+  }
+}
+
+# ── TRIGGER ──────────────────────────────────────────────────
+trigger: "launchd Watcher\nmacOS service\nPoll: 10s, Debounce: 60s" {
+  style: {
+    fill: "#92400e"
+    stroke: "#fbbf24"
+    border-radius: 6
+    font-color: "#fde68a"
+    font-size: 11
+    shadow: true
+  }
+}
+
+# ── PROCESS PIPELINE ────────────────────────────────────────
+pipeline: {
+  label: "PROCESSING PIPELINE"
+  style: {
+    fill: "#0a1f14"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  convert: "1. Convert\n.txt → .md\n.pdf → .md\n.docx → .md" {
+    style: {
+      fill: "#065f46"
+      stroke: "#34d399"
+      border-radius: 6
+      font-color: "#d1fae5"
+      font-size: 10
+    }
+  }
+
+  frontmatter: "2. Frontmatter\nStandardize YAML" {
+    style: {
+      fill: "#065f46"
+      stroke: "#34d399"
+      border-radius: 6
+      font-color: "#d1fae5"
+      font-size: 10
+    }
+  }
+
+  route: {
+    label: "3. Route"
+    style: {
+      fill: "#1e293b"
+      stroke: "#64748b"
+      stroke-dash: 4
+      border-radius: 6
+      font-color: "#cbd5e1"
+      font-size: 9
+    }
+
+    type_route: "type_routes (19 rules)" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 9
+      }
+    }
+    tag_route: "tag_routes (4)" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 9
+      }
+    }
+    folder_route: "folder_routes (5)" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 9
+      }
+    }
+    filename_route: "filename_routes (5)" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 9
+      }
+    }
+    date_route: "date_patterns (4)" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 9
+      }
+    }
+    default_route: "default → knowledge/notes" {
+      style: {
+        fill: "transparent"
+        stroke: "transparent"
+        font-color: "#e2e8f0"
+        font-size: 9
+      }
+    }
+
+    type_route -> tag_route
+    tag_route -> folder_route
+    folder_route -> filename_route
+    filename_route -> date_route
+    date_route -> default_route
+  }
+
+  archive: "4. Archive\nMove to intake/processed/" {
+    style: {
+      fill: "#065f46"
+      stroke: "#34d399"
+      border-radius: 6
+      font-color: "#d1fae5"
+      font-size: 10
+    }
+  }
+}
+
+# ── DESTINATIONS ────────────────────────────────────────────
+destinations: {
+  label: "DESTINATIONS"
+  style: {
+    fill: "#1c1405"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  cmd: {
+    label: "Command Center"
+    style: {
+      fill: "#0f172a"
+      stroke: "#334155"
+      stroke-dash: 4
+      border-radius: 8
+      font-color: "#94a3b8"
+      font-size: 9
+    }
+
+    inbox: "command/inbox/\nDaily notes" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+    finances: "command/finances/\nCVs, invoices" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+    tasks_dir: "command/tasks/" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+  }
+
+  knowledge: {
+    label: "Knowledge"
+    style: {
+      fill: "#0f172a"
+      stroke: "#334155"
+      stroke-dash: 4
+      border-radius: 8
+      font-color: "#94a3b8"
+      font-size: 9
+    }
+
+    articles: "knowledge/articles/" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+    notes: "knowledge/notes/" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+    references: "knowledge/references/" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+    projects: "knowledge/projects/" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+  }
+
+  self_dest: {
+    label: "Digital Twin"
+    style: {
+      fill: "#0f172a"
+      stroke: "#334155"
+      stroke-dash: 4
+      border-radius: 8
+      font-color: "#94a3b8"
+      font-size: 9
+    }
+
+    profile_dest: "self/profile.json" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+    goals_dest: "self/goals/" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+    relationships_dest: "self/relationships/" {
+      style: {
+        fill: "#92400e"
+        stroke: "#fbbf24"
+        border-radius: 6
+        font-color: "#fde68a"
+        font-size: 10
+      }
+    }
+  }
+}
+
+# ── POST-PROCESS ─────────────────────────────────────────────
+post_process: "👇 ComprehensiveExtractor\n6-phase extraction to all 5 SQLite DBs" {
+  style: {
+    fill: "#1e3a5f"
+    stroke: "#60a5fa"
+    border-radius: 6
+    font-color: "#bfdbfe"
+    font-size: 11
+    shadow: true
+  }
+}
+
+# ── DATABASES ───────────────────────────────────────────────
+databases: {
+  label: "DATABASES"
+  style: {
+    fill: "#140a26"
+    stroke: "#1e293b"
+    stroke-dash: 4
+    border-radius: 8
+    font-color: "#64748b"
+    font-size: 10
+  }
+
+  tasks_db: "tasks.db" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      border-radius: 6
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+  self_db: "self.db" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      border-radius: 6
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+  memories_db: "memories.db" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      border-radius: 6
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+  knowledge_db: "knowledge.db" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      border-radius: 6
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+  git_db: "git.db" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      border-radius: 6
+      font-color: "#ddd6fe"
+      font-size: 10
+    }
+  }
+}
+
+# ── AGENTS ───────────────────────────────────────────────────
+indexer_agent: "KnowledgeIndexer agent\nindexes, searches, deduplicates" {
+  style: {
+    fill: "#3b0764"
+    stroke: "#c084fc"
+    border-radius: 6
+    font-color: "#e9d5ff"
+    font-size: 10
+  }
+}
+
+# ══════════════════════════════════════════════════════════════
+# CONNECTIONS
+# ══════════════════════════════════════════════════════════════
+
+# Sources → Trigger
+input.dropzone -> trigger: "file created"
+input.obsidian -> input.dropzone: "copy/move files"
+input.opencode -> input.dropzone: "agent file output"
+
+# Trigger → Pipeline
+trigger -> pipeline.convert: "new file event"
+
+# Pipeline internal
+pipeline.convert -> pipeline.frontmatter: "converted .md"
+pipeline.frontmatter -> pipeline.route: "standardized"
+pipeline.route -> pipeline.archive: "routed"
+
+# Pipeline → Destinations
+pipeline -> destinations: "routed files"
+
+destinations.cmd.inbox -> post_process
+destinations.cmd.finances -> post_process
+destinations.knowledge.articles -> post_process
+destinations.knowledge.notes -> post_process
+destinations.self_dest.profile_dest -> post_process
+destinations.self_dest.goals_dest -> post_process
+
+# Post-process → DBs
+post_process -> databases.tasks_db: "extracts tasks"
+post_process -> databases.self_db: "extracts profile/habits"
+post_process -> databases.memories_db: "extracts context"
+post_process -> databases.knowledge_db: "extracts knowledge"
+post_process -> databases.git_db: "extracts git info"
+
+# Indexer
+post_process -> indexer_agent: "triggers indexing"
+indexer_agent -> databases.knowledge_db: "FTS5 search queries"
+
+# ── LEGEND ───────────────────────────────────────────────────
+legend: "LEGEND" {
+  style: {
+    fill: "#0f172a"
+    stroke: "#334155"
+    border-radius: 8
+    font-color: "#94a3b8"
+    font-size: 9
+  }
+
+  l1: "INPUT (cyan)" {
+    style: {
+      fill: "#0e7490"
+      stroke: "#22d3ee"
+      font-color: "#cffafe"
+      font-size: 9
+    }
+  }
+  l2: "PIPELINE (emerald)" {
+    style: {
+      fill: "#065f46"
+      stroke: "#34d399"
+      font-color: "#d1fae5"
+      font-size: 9
+    }
+  }
+  l3: "ROUTING (slate)" {
+    style: {
+      fill: "#1e293b"
+      stroke: "#64748b"
+      font-color: "#cbd5e1"
+      font-size: 9
+    }
+  }
+  l4: "DEST (amber)" {
+    style: {
+      fill: "#92400e"
+      stroke: "#fbbf24"
+      font-color: "#fde68a"
+      font-size: 9
+    }
+  }
+  l5: "EXTRACT (blue)" {
+    style: {
+      fill: "#1e3a5f"
+      stroke: "#60a5fa"
+      font-color: "#bfdbfe"
+      font-size: 9
+    }
+  }
+  l6: "DB (violet)" {
+    style: {
+      fill: "#4c1d95"
+      stroke: "#a78bfa"
+      font-color: "#ddd6fe"
+      font-size: 9
+    }
+  }
+}

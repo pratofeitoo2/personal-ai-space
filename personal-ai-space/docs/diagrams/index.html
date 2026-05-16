@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal AI Powerhouse — Diagrams</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0f172a; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 40px; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  .subtitle { color: #64748b; margin-bottom: 32px; }
+  .gallery { display: flex; flex-direction: column; gap: 48px; }
+  .card { background: #1e293b; border-radius: 12px; padding: 24px; }
+  .card h2 { font-size: 20px; margin-bottom: 4px; }
+  .card .desc { color: #94a3b8; font-size: 14px; margin-bottom: 16px; }
+  .card .meta { color: #64748b; font-size: 12px; margin-bottom: 12px; font-family: monospace; }
+  .card .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .card .tabs a { padding: 6px 14px; border-radius: 6px; background: #334155; color: #94a3b8; text-decoration: none; font-size: 13px; transition: all 0.2s; }
+  .card .tabs a:hover { background: #475569; color: #e2e8f0; }
+  .card .tabs a.active { background: #3b82f6; color: #fff; }
+  .card .preview { width: 100%; border-radius: 8px; border: 1px solid #334155; overflow: hidden; }
+  .card .preview svg { width: 100%; height: auto; }
+  .card .files { margin-top: 12px; font-size: 12px; color: #64748b; }
+  .card .files code { color: #a78bfa; }
+</style>
+</head>
+<body>
+  <h1>🧠 Personal AI Powerhouse — Architecture Diagrams</h1>
+  <p class="subtitle">Professional D2-generated diagrams with dark-tech design system</p>
+
+  <div class="gallery">
+
+    <div class="card">
+      <h2>1. Container Architecture (C4 Level 2)</h2>
+      <p class="desc">System overview — 6 layers, 10 agents, 5 databases, every connection. The hero diagram.</p>
+      <p class="meta">84 nodes · 32 edges · 6108 × 2009 · dagre layout</p>
+      <div class="tabs">
+        <a href="container-architecture.svg" target="_blank" class="active">Standard</a>
+        <a href="container-architecture-sketch.svg" target="_blank">Sketch (hand-drawn)</a>
+        <a href="container-architecture.d2" target="_blank">Source (.d2)</a>
+      </div>
+      <div class="preview">
+        <object data="container-architecture.svg" type="image/svg+xml" width="100%" height="500px">SVG not supported</object>
+      </div>
+      <p class="files">Source: <code>container-architecture.d2</code></p>
+    </div>
+
+    <div class="card">
+      <h2>2. Agent Communication &amp; Dispatch</h2>
+      <p class="desc">Engine.send() chain, EventBus pub/sub topics, circuit breaker boundary, observer wiring, cross-agent notification.</p>
+      <p class="meta">20+ nodes · 25 edges · ELK layout</p>
+      <div class="tabs">
+        <a href="agent-communication.svg" target="_blank" class="active">View</a>
+        <a href="agent-communication.d2" target="_blank">Source (.d2)</a>
+      </div>
+      <div class="preview">
+        <object data="agent-communication.svg" type="image/svg+xml" width="100%" height="400px">SVG not supported</object>
+      </div>
+      <p class="files">Source: <code>agent-communication.d2</code></p>
+    </div>
+
+    <div class="card">
+      <h2>3. Data Flow — Intake Pipeline</h2>
+      <p class="desc">Zero-touch file import: launchd watcher → conversion → frontmatter → routing (19 rules) → archive → 6-phase extraction → 5 databases.</p>
+      <p class="meta">25+ nodes · 20 edges · dagre layout</p>
+      <div class="tabs">
+        <a href="data-flow-intake.svg" target="_blank" class="active">View</a>
+        <a href="data-flow-intake.d2" target="_blank">Source (.d2)</a>
+      </div>
+      <div class="preview">
+        <object data="data-flow-intake.svg" type="image/svg+xml" width="100%" height="400px">SVG not supported</object>
+      </div>
+      <p class="files">Source: <code>data-flow-intake.d2</code></p>
+    </div>
+
+  </div>
+</body>
+</html>

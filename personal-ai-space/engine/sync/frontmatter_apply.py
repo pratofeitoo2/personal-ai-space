@@ -17,7 +17,10 @@ import re
 import sys
 import copy
 import shutil
+import logging
 import subprocess
+
+logger = logging.getLogger("engine.sync.frontmatter")
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -472,8 +475,8 @@ def collect_metadata(path, content):
                 val = func(path, content, existing_fm)
                 if val not in (None, "", [], {}):
                     meta[field] = val
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Frontmatter field extraction failed for '%s': %s", field, e)
     protected_keys = {"title", "type", "tags", "created", "updated"}
     fm_values = set()
     for v in existing_fm.values():

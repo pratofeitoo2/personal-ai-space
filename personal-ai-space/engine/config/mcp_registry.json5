@@ -10,7 +10,7 @@
       "env": {
         "MAIL_MCP_ADMIN_ENV_FILE": "/Users/paulorezende/Documents/Personal_AI_powerhouse/mcp-servers/mail-mcp/mail-admin.env"
       },
-      "enabled": true,
+      "enabled": false,
       "tools": []
     },
     {
