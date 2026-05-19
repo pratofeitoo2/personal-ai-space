@@ -6,22 +6,28 @@
       "command": [
         "/Users/paulorezende/Documents/Personal_AI_powerhouse/mcp-servers/opencode-mem-mcp/.venv/bin/opencode-mem-mcp"
       ],
-      "enabled": true
+      "enabled": false
     },
     "task-management-mcp": {
       "type": "local",
-      "command": ["task-management-mcp"],
-      "enabled": true
+      "command": [
+        "task-management-mcp"
+      ],
+      "enabled": false
     },
     "appointment-mcp": {
       "type": "local",
-      "command": ["appointment-mcp"],
-      "enabled": true
+      "command": [
+        "appointment-mcp"
+      ],
+      "enabled": false
     },
     "project-context-mcp": {
       "type": "local",
-      "command": ["project-context-mcp"],
-      "enabled": true
+      "command": [
+        "project-context-mcp"
+      ],
+      "enabled": false
     },
     "aivectormemory": {
       "type": "local",
