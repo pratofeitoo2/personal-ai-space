@@ -1,0 +1,112 @@
+{
+  "active_plan": "/Users/paulorezende/Documents/Personal_AI_powerhouse/.sisyphus/plans/modular-data-transport.md",
+  "started_at": "2026-05-14T09:30:00.000Z",
+  "session_ids": [
+    "ses_1da59aef1ffeEG7MpJJ92boYnl"
+  ],
+  "plan_name": "modular-data-transport",
+  "current_wave": 1,
+  "completed_tasks": [],
+  "pending_tasks": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "T8",
+    "T9",
+    "T10",
+    "T11",
+    "T12",
+    "T13",
+    "F1",
+    "F2",
+    "F3",
+    "F4"
+  ],
+  "session_origins": {
+    "ses_1da59aef1ffeEG7MpJJ92boYnl": "direct"
+  },
+  "task_sessions": {
+    "todo:1": {
+      "task_key": "todo:1",
+      "task_label": "1",
+      "task_title": "[Typed EventEnvelope + EventBus core]",
+      "session_id": "ses_1da26decaffezk8PObCzn4nrb7",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "started_at": "2026-05-14T09:37:36.334Z",
+      "status": "completed",
+      "updated_at": "2026-05-14T09:46:19.788Z",
+      "ended_at": "2026-05-14T09:46:19.788Z",
+      "elapsed_ms": 523454
+    },
+    "todo:5": {
+      "task_key": "todo:5",
+      "task_label": "5",
+      "task_title": "[Refactor context_manager.py]",
+      "session_id": "ses_1da1e00bdffeeY5Tpx1cI6tXV1",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-05-14T09:50:57.159Z",
+      "started_at": "2026-05-14T09:47:15.664Z",
+      "status": "completed",
+      "ended_at": "2026-05-14T09:50:57.159Z",
+      "elapsed_ms": 221495
+    }
+  },
+  "active_work_id": "modular-data-transport-legacy",
+  "updated_at": "2026-05-14T09:55:37.114Z",
+  "schema_version": 2,
+  "works": {
+    "modular-data-transport-legacy": {
+      "work_id": "modular-data-transport-legacy",
+      "active_plan": "/Users/paulorezende/Documents/Personal_AI_powerhouse/.sisyphus/plans/modular-data-transport.md",
+      "plan_name": "modular-data-transport",
+      "started_at": "2026-05-14T09:30:00.000Z",
+      "updated_at": "2026-05-14T09:55:37.114Z",
+      "session_ids": [
+        "ses_1da59aef1ffeEG7MpJJ92boYnl"
+      ],
+      "session_origins": {
+        "ses_1da59aef1ffeEG7MpJJ92boYnl": "direct"
+      },
+      "task_sessions": {
+        "todo:1": {
+          "task_key": "todo:1",
+          "task_label": "1",
+          "task_title": "[Typed EventEnvelope + EventBus core]",
+          "session_id": "ses_1da26decaffezk8PObCzn4nrb7",
+          "agent": "Sisyphus-Junior",
+          "category": "quick",
+          "started_at": "2026-05-14T09:37:36.334Z",
+          "status": "completed",
+          "updated_at": "2026-05-14T09:46:19.788Z",
+          "ended_at": "2026-05-14T09:46:19.788Z",
+          "elapsed_ms": 523454
+        },
+        "todo:5": {
+          "task_key": "todo:5",
+          "task_label": "5",
+          "task_title": "[Refactor context_manager.py]",
+          "session_id": "ses_1da1e00bdffeeY5Tpx1cI6tXV1",
+          "agent": "Sisyphus-Junior",
+          "category": "quick",
+          "updated_at": "2026-05-14T09:50:57.159Z",
+          "started_at": "2026-05-14T09:47:15.664Z",
+          "status": "completed",
+          "ended_at": "2026-05-14T09:50:57.159Z",
+          "elapsed_ms": 221495
+        }
+      },
+      "ended_at": "2026-05-14T09:55:37.114Z",
+      "elapsed_ms": 1537114,
+      "status": "completed"
+    }
+  },
+  "status": "completed",
+  "ended_at": "2026-05-14T09:55:37.114Z",
+  "elapsed_ms": 1537114
+}

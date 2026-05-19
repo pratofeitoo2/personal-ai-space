@@ -1,0 +1,12 @@
+Fix: MCP_DOCKER command typo in global config
+File: /Users/paulorezende/.config/opencode/opencode.json
+Date: 2026-05-13T19:35:00-03:00
+
+Before:
+  "command": ["docker", "mcp", "gateway", "run--profile", "main_docker_mcps"]
+
+After:
+  "command": ["docker", "mcp", "gateway", "run", "--profile", "main_docker_mcps"]
+
+Reason: run--profile was concatenated. Should be "run" with separate "--profile" flag.
+Verified: `docker mcp gateway --help` confirms `run` subcommand with `--profile` flag.
