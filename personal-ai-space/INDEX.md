@@ -15,8 +15,8 @@ updated: 2026-05-09T09:01
 ```
 personal-ai-space/
 ├── command/                          # Control center
-│   ├── activities/disciplined_routines.json
-│   ├── calendar/upcoming.csv
+│   ├── activities/                     # Now stored in engine/db/activities/activities.db
+│   ├── calendar/                     # Now stored in engine/db/calendar/calendar.db
 │   ├── finances/                     # 18 files (CVs, cover letters, profiles)
 │   ├── inbox/                        # 30+ timestamped daily notes
 │   └── tasks/active_tasks.json
@@ -149,8 +149,8 @@ personal-ai-space/
 | File | Purpose |
 |------|---------|
 | `tasks/active_tasks.json` | Current task list managed by task-coordinator agent |
-| `activities/disciplined_routines.json` | Habit definitions tracked by insight-generator |
-| `calendar/upcoming.csv` | Events and schedule data |
+| `engine/db/activities/activities.db`   | Disciplined routines (migrated from JSON) — `disciplined_routines` table |
+| `engine/db/calendar/calendar.db`    | Events and schedule data (migrated from CSV) — `upcoming` table |
 | `finances/overview.json` | Financial/profile overview |
 
 ---

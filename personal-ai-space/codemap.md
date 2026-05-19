@@ -7,7 +7,7 @@ Root of the Personal AI Space system — holds all AI augmentation subsystems: e
 
 | Directory | Responsibility | Map |
 |-----------|---------------|-----|
-| `command/` | Control center — tasks (`active_tasks.json`), habits (`disciplined_routines.json`), calendar (`upcoming.csv`), finances (CVs, cover letters), inbox (30+ daily notes) | — |
+| `command/` | Control center — tasks (`active_tasks.json`), activities (`engine/db/activities/activities.db`), calendar (`engine/db/calendar/calendar.db`), finances (CVs, cover letters), inbox (30+ daily notes) | — |
 | `engine/` | AI engine core — orchestrator, CLI, agents, databases, memory bridge | [View Map](engine/codemap.md) |
 | `intake/` | Auto-processing file import pipeline — watcher + processor + routing | [View Map](intake/codemap.md) |
 | `knowledge/` | Personal library — articles (research), notes, projects, references | — |

@@ -384,9 +384,9 @@ These are enhancements, not blockers.
 - `self/traits/inferred_personality.json` - Inferred you
 - `self/needs/current_needs.json` - Your goals
 - `command/tasks/active_tasks.json` - Active work
-- `command/calendar/upcoming.csv` - Scheduled events
+- `engine/db/calendar/calendar.db` - Scheduled events (SQLite, migrated from CSV)
 - `command/finances/overview.json` - Financial snapshot
-- `command/activities/disciplined_routines.json` - Daily practices
+- `engine/db/activities/activities.db` - Disciplined routines (SQLite, migrated from JSON)
 
 ### Documentation
 - `docs/COMPLETE_OVERVIEW.md` - This file

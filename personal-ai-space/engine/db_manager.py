@@ -23,11 +23,13 @@ logger = logging.getLogger("engine.db")
 DB_DIR = Path(__file__).parent / "db"
 
 DB_PATHS = {
-    "memories": DB_DIR / "memories" / "memories.db",
-    "self":     DB_DIR / "self" / "self.db",
-    "tasks":    DB_DIR / "tasks" / "tasks.db",
-    "knowledge": DB_DIR / "knowledge" / "knowledge.db",
-    "git":      DB_DIR / "git" / "git.db",
+    "memories":   DB_DIR / "memories" / "memories.db",
+    "self":       DB_DIR / "self" / "self.db",
+    "tasks":      DB_DIR / "tasks" / "tasks.db",
+    "knowledge":  DB_DIR / "knowledge" / "knowledge.db",
+    "git":        DB_DIR / "git" / "git.db",
+    "activities": DB_DIR / "activities" / "activities.db",
+    "calendar":   DB_DIR / "calendar" / "calendar.db",
 }
 
 # ── Connection Pool ──────────────────────────────────────────────────────────
