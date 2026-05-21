@@ -4,11 +4,13 @@
     "aivectormemory": {
       "type": "local",
       "command": [
+        "/Users/paulorezende/.local/share/uv/tools/aivectormemory/bin/python",
+        "-m",
         "aivectormemory",
         "--project-dir",
-        "/Users/paulorezende/Documents/Personal_AI_powerhouse"
+        "/Users/paulorezende/Documents/Personal_AI_powerhouse updated"
       ],
-      "enabled": false
+      "enabled": true
     }
   }
 }
