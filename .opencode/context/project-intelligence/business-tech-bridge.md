@@ -12,11 +12,11 @@
 
 ## Core Mapping
 
-| Business Need | Technical Solution | Why This Mapping | Business Value |
-|---------------|-------------------|------------------|----------------|
-| [Users need X] | [Technical implementation] | [Why this maps] | [Value delivered] |
-| [Business wants Y] | [Technical implementation] | [Why this maps] | [Value delivered] |
-| [Compliance requires Z] | [Technical implementation] | [Why this maps] | [Value delivered] |
+| Business Need           | Technical Solution         | Why This Mapping | Business Value    |
+|-------------------------|----------------------------|------------------|-------------------|
+| [Users need X]          | [Technical implementation] | [Why this maps]  | [Value delivered] |
+| [Business wants Y]      | [Technical implementation] | [Why this maps]  | [Value delivered] |
+| [Compliance requires Z] | [Technical implementation] | [Why this maps]  | [Value delivered] |
 
 ## Feature Mapping Examples
 
@@ -54,15 +54,15 @@
 
 When business and technical needs conflict, document the trade-off:
 
-| Situation | Business Priority | Technical Priority | Decision Made | Rationale |
-|-----------|-------------------|-------------------|---------------|-----------|
-| [Conflict] | [What business wants] | [What tech wants] | [What was chosen] | [Why this was right] |
+| Situation  | Business Priority     | Technical Priority | Decision Made     | Rationale            |
+|------------|-----------------------|--------------------|-------------------|----------------------|
+| [Conflict] | [What business wants] | [What tech wants]  | [What was chosen] | [Why this was right] |
 
 ## Common Misalignments
 
-| Misalignment | Warning Signs | Resolution Approach |
-|--------------|---------------|---------------------|
-| [Type of mismatch] | [Symptoms to watch for] | [How to address] |
+| Misalignment       | Warning Signs           | Resolution Approach |
+|--------------------|-------------------------|---------------------|
+| [Type of mismatch] | [Symptoms to watch for] | [How to address]    |
 
 ## Stakeholder Communication
 

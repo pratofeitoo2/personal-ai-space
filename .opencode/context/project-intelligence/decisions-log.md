@@ -29,10 +29,10 @@
 [Why this decision? What were the alternatives and why were they rejected?]
 
 ### Alternatives Considered
-| Alternative | Pros | Cons | Why Rejected? |
-|-------------|------|------|---------------|
-| [Alt 1] | [Pros] | [Cons] | [Why not chosen] |
-| [Alt 2] | [Pros] | [Cons] | [Why not chosen] |
+| Alternative | Pros   | Cons   | Why Rejected?    |
+|-------------|--------|--------|------------------|
+| [Alt 1]     | [Pros] | [Cons] | [Why not chosen] |
+| [Alt 2]     | [Pros] | [Cons] | [Why not chosen] |
 
 ### Impact
 **Positive**: [What this enables or improves]
@@ -61,10 +61,10 @@
 [Why this was the right choice]
 
 ### Alternatives Considered
-| Alternative | Pros | Cons | Why Rejected? |
-|-------------|------|------|---------------|
-| [Option A] | [Good things] | [Bad things] | [Reason] |
-| [Option B] | [Good things] | [Bad things] | [Reason] |
+| Alternative | Pros          | Cons         | Why Rejected? |
+|-------------|---------------|--------------|---------------|
+| [Option A]  | [Good things] | [Bad things] | [Reason]      |
+| [Option B]  | [Good things] | [Bad things] | [Reason]      |
 
 ### Impact
 - **Positive**: [What we gain]
@@ -94,9 +94,9 @@
 [Why this was right]
 
 ### Alternatives Considered
-| Alternative | Pros | Cons | Why Rejected? |
-|-------------|------|------|---------------|
-| [Option A] | [Good things] | [Bad things] | [Reason] |
+| Alternative | Pros          | Cons         | Why Rejected? |
+|-------------|---------------|--------------|---------------|
+| [Option A]  | [Good things] | [Bad things] | [Reason]      |
 
 ### Impact
 - **Positive**: [What we gain]
@@ -111,8 +111,8 @@
 
 Decisions that were later overturned (for historical context):
 
-| Decision | Date | Replaced By | Why |
-|----------|------|-------------|-----|
+| Decision       | Date   | Replaced By    | Why      |
+|----------------|--------|----------------|----------|
 | [Old decision] | [Date] | [New decision] | [Reason] |
 
 ## Onboarding Checklist

@@ -21,12 +21,12 @@ Analyze codebase for recurring patterns, similar implementations, and refactorin
 
 ## Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `--pattern` | string | No | Pattern name or regex to search for (e.g., "singleton", "factory", "error-handling") |
-| `--language` | string | No | Filter by language: js, ts, py, go, rust, java, etc. |
-| `--depth` | string | No | Search depth: shallow (current dir) \| medium (src/) \| deep (entire repo) |
-| `--output` | string | No | Output format: text (default) \| json \| markdown |
+| Parameter    | Type   | Required | Description                                                                          |
+|--------------|--------|----------|--------------------------------------------------------------------------------------|
+| `--pattern`  | string | No       | Pattern name or regex to search for (e.g., "singleton", "factory", "error-handling") |
+| `--language` | string | No       | Filter by language: js, ts, py, go, rust, java, etc.                                 |
+| `--depth`    | string | No       | Search depth: shallow (current dir) \| medium (src/) \| deep (entire repo)           |
+| `--output`   | string | No       | Output format: text (default) \| json \| markdown                                    |
 
 ## Behavior
 
