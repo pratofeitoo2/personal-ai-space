@@ -147,6 +147,25 @@ def _run_bridge(args: list[str], timeout: int = 10) -> Optional[subprocess.Compl
     return None
 
 
+def _get_existing_lists() -> list[str]:
+    result = _run_bridge(["lists"])
+    if result is None:
+        return []
+    return [l.strip() for l in result.stdout.strip().split("\n") if l.strip()]
+
+
+def _ensure_list_exists(list_name: str, existing: set[str]) -> bool:
+    if list_name in existing:
+        return False
+    result = _run_bridge(["create-list", list_name])
+    if result is not None:
+        existing.add(list_name)
+        logger.info("Created Reminders list: %s", list_name)
+        return True
+    logger.warning("Failed to create Reminders list: %s", list_name)
+    return False
+
+
 # ── Reminder Parsing ────────────────────────────────────────────────────────
 
 def _parse_reminder_output(output: str) -> dict[str, list[dict]]:
@@ -327,6 +346,8 @@ class RemindersSync:
             "t_to_r_updated": 0,
             "lists_found": 0,
             "projects_created": 0,
+            "initial_pushed": 0,
+            "initial_skipped": 0,
         }
 
     def sync_all(self) -> dict:
@@ -488,6 +509,92 @@ class RemindersSync:
             if result is None:
                 logger.warning("Failed to set due date for: %s :: %s", list_name, title)
 
+    def initial_push(self) -> dict:
+        """One-shot export: create reminders for all tasks not yet tracked in sync_state.
+
+        For each task without an apple-reminder sync_state entry:
+          1. Find/create the matching Reminders list (by project name)
+          2. Create the reminder via bridge
+          3. Set due date and completion status
+          4. Create sync_state entry so future syncs work bidirectionally
+        """
+        logger.info("=== Initial Push (Tasks → Reminders) ===")
+
+        tasks = db.query("tasks", """
+            SELECT t.* FROM tasks t
+            LEFT JOIN sync_state s
+                ON s.entity_type='apple-reminder' AND s.entity_id=t.id
+            WHERE s.id IS NULL
+            ORDER BY t.created_at ASC
+        """)
+        logger.info("Found %d tasks to push", len(tasks))
+
+        if not tasks:
+            logger.info("No unlinked tasks — nothing to push")
+            return self.stats
+
+        existing_lists = set(_get_existing_lists())
+        stats = {"initial_pushed": 0, "initial_skipped": 0, "lists_created": 0}
+
+        for task in tasks:
+            project_name = self._resolve_project_name(task)
+            if not project_name:
+                logger.warning("Task %s has no project, skipping", task.get("title", "?"))
+                stats["initial_skipped"] += 1
+                continue
+
+            if _ensure_list_exists(project_name, existing_lists):
+                stats["lists_created"] += 1
+
+            title = task["title"]
+            description = task.get("description") or ""
+            compound_key = f"{project_name}::{title}"
+
+            if self.dry_run:
+                print(f"  WOULD_CREATE: {project_name} :: {title} "
+                      f"(due={task.get('due_date') or 'none'}, "
+                      f"status={task['status']})")
+                stats["initial_pushed"] += 1
+                continue
+
+            result = _run_bridge(["add", project_name, title, description] if description
+                                  else ["add", project_name, title])
+            if result is None:
+                logger.warning("Failed to create reminder: %s :: %s", project_name, title)
+                stats["initial_skipped"] += 1
+                continue
+
+            due_date = task.get("due_date")
+            if due_date:
+                formatted = _format_due_date(str(due_date))
+                _run_bridge(["set-due", project_name, title, formatted])
+
+            if task["status"] in ("completed", "cancelled"):
+                _run_bridge(["complete", project_name, title])
+
+            reminder = {
+                "title": title,
+                "notes": description,
+                "due_date": due_date,
+                "priority": task.get("priority", "normal"),
+                "completed": task["status"] in ("completed", "cancelled"),
+                "list_name": project_name,
+            }
+            _upsert_sync_state(compound_key, task["id"], reminder)
+            stats["initial_pushed"] += 1
+            logger.info("Pushed: %s :: %s", project_name, title)
+
+        self.stats.update(stats)
+        return self.stats
+
+    @staticmethod
+    def _resolve_project_name(task: dict) -> Optional[str]:
+        project_id = task.get("project_id")
+        if not project_id:
+            return None
+        rows = db.query("tasks", "SELECT name FROM projects WHERE id=?", (project_id,))
+        return rows[0]["name"] if rows else None
+
 
 # ── CLI ────────────────────────────────────────────────────────────────────
 
@@ -499,16 +606,28 @@ def _format_stats(stats: dict):
     print(f"  Tasks skipped (R→T):     {stats.get('r_to_t_skipped', 0)}")
     print(f"  Reminders completed (T→R): {stats.get('t_to_r_completed', 0)}")
     print(f"  Reminders updated (T→R):   {stats.get('t_to_r_updated', 0)}")
+    push = stats.get("initial_pushed", 0)
+    skipped = stats.get("initial_skipped", 0)
+    if push or skipped:
+        print(f"  Initial push created:     {push}")
+        print(f"  Initial push skipped:     {skipped}")
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Bidirectional sync between Apple Reminders and tasks.db"
+        description="Bidirectional sync between Apple Reminders and tasks.db",
+        epilog="Examples:\n"
+               "  %(prog)s                        Full bidirectional sync\n"
+               "  %(prog)s --dry-run               Preview only, no changes\n"
+               "  %(prog)s --initial-push          Export all tasks as new reminders\n"
+               "  %(prog)s --one-way=r2t           Reminders → Tasks only",
     )
     parser.add_argument("--dry-run", action="store_true",
                         help="Preview only, no changes written")
     parser.add_argument("--one-way", choices=["r2t", "t2r"],
                         help="Run only one direction: r2t (Reminders→Tasks) or t2r (Tasks→Reminders)")
+    parser.add_argument("--initial-push", action="store_true",
+                        help="One-shot: export all unlinked tasks as new reminders")
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -526,7 +645,9 @@ def main():
 
     syncer = RemindersSync(dry_run=args.dry_run)
 
-    if args.one_way == "r2t":
+    if args.initial_push:
+        syncer.initial_push()
+    elif args.one_way == "r2t":
         syncer.sync_reminders_to_tasks()
     elif args.one_way == "t2r":
         syncer.sync_tasks_to_reminders()
