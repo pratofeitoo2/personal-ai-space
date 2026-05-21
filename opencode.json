@@ -20,6 +20,13 @@
         "mempalace.mcp_server"
       ],
       "enabled": true
+    },
+    "ong-vault-bridge": {
+      "type": "local",
+      "command": [
+        "/Users/paulorezende/Library/Mobile Documents/iCloud~md~obsidian/Documents/ONG/NEDS/agents_workspace/bridge/run.sh"
+      ],
+      "enabled": true
     }
   }
 }
