@@ -5,6 +5,9 @@
         },
         {
             "path": "../../.mempalace"
+        },
+        {
+            "path": "../../.aivectormemory"
         }
     ]
 }
