@@ -11,6 +11,15 @@
         "/Users/paulorezende/Documents/Personal_AI_powerhouse updated"
       ],
       "enabled": true
+    },
+    "mempalace": {
+      "type": "local",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "mempalace.mcp_server"
+      ],
+      "enabled": true
     }
   }
 }
