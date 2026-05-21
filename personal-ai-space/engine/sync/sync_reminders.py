@@ -46,7 +46,9 @@ _ITEM_LINE_RE = re.compile(
     r'(.+?)'                           # title (non-greedy)
     r'(?:\s*\(due:\s*(.+?)\))?'       # due date (optional)
     r'(?:\s*\[repeats:\s*(.+?)\])?'   # recurrence (optional)
-    r'\s*\[([^\]]+)\]\s*$'            # list name
+    r'\s*\[([^\]]+)\]'                # list name
+    r'(?:\s*\{[^}]*\})?'              # optional EventKit metadata {id:...}
+    r'\s*$'                            # end of line
 )
 
 # Matches a notes line following a reminder item line
@@ -240,8 +242,8 @@ def _find_or_create_project(list_name: str) -> str:
     try:
         db.execute("tasks",
             """INSERT INTO projects (id, name, status, priority, category, created_at, updated_at)
-               VALUES (?, 'active', 'normal', 'general', ?, ?)""",
-            (project_id, now, now))
+               VALUES (?, ?, 'active', 'normal', 'general', ?, ?)""",
+            (project_id, list_name, now, now))
         logger.info("Created project: %s (id=%s)", list_name, project_id)
     except Exception:
         # Race condition — another sync may have created it concurrently
@@ -364,17 +366,22 @@ class RemindersSync:
         """
         logger.info("=== Reminders → Tasks ===")
 
-        result = _run_bridge(["items", "--all"])
-        if result is None:
-            logger.warning("Cannot fetch reminders — bridge unavailable")
+        list_names = _get_existing_lists()
+        if not list_names:
+            logger.warning("Cannot fetch lists — bridge unavailable")
             return self.stats
 
-        raw_output = result.stdout
-        if not raw_output.strip():
-            logger.info("No reminders found")
+        all_items_output = []
+        for name in list_names:
+            result = _run_bridge(["items", name])
+            if result and result.stdout.strip():
+                all_items_output.append(result.stdout)
+
+        if not all_items_output:
+            logger.info("No reminders found across %d lists", len(list_names))
             return self.stats
 
-        lists = _parse_reminder_output(raw_output)
+        lists = _parse_reminder_output("\n".join(all_items_output))
         self.stats["lists_found"] = len(lists)
 
         for list_name, reminders in lists.items():
