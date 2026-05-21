@@ -199,7 +199,45 @@ Update self profile insights
 
 ---
 
-### 5. Fitness Apps (Fitbit, Strava)
+### 5. Telegram Bot Gateway
+**Purpose:** Remote OpenCode access via Telegram — send prompts, manage sessions, monitor progress
+**Status:** ✅ Active (live since 2026-05-21)
+**Tool:** [@grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot)
+**Connection:** Local Node.js process ↔ OpenCode API server (port 4096) ↔ Telegram Bot API
+**Scope:** Send prompts, session management, model switching, file attachments, live monitoring
+
+```json
+{
+  "id": "integration_telegram_bot",
+  "service": "telegram",
+  "type": "remote_access",
+  "enabled": true,
+  "status": "active",
+  "config": {
+    "port": 4096,
+    "openCodeServer": "http://localhost:4096",
+    "launchd_service": "com.opencode.telegram-bot"
+  },
+  "setup_doc": "docs/setup/telegram-bot-setup.md"
+}
+```
+
+**Data Flow:**
+```
+Telegram Message
+    ↓ (Telegram Bot API)
+@grinev/opencode-telegram-bot (local)
+    ↓ (localhost:4096)
+OpenCode CLI Server
+    ↓
+OpenCode processes prompt (code changes, file reads, etc.)
+    ↓ (response)
+Bot sends result to Telegram
+```
+
+---
+
+### 6. Fitness Apps (Fitbit, Strava)
 **Purpose**: Track health metrics, identify patterns  
 **Sync**: One-way pull daily (1440 min)  
 **Scope**: Read-only

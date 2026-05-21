@@ -96,3 +96,16 @@ CREATE TABLE IF NOT EXISTS goals (
 );
 
 CREATE INDEX IF NOT EXISTS idx_traits_confidence ON traits(confidence_score DESC);
+
+-- Observations: persistent behavioral data collected by the monitoring system
+-- Survives engine restarts for cross-session learning and pattern analysis
+CREATE TABLE IF NOT EXISTS observations (
+  id TEXT PRIMARY KEY,
+  obs_type TEXT NOT NULL,
+  observed_at DATETIME NOT NULL,
+  data TEXT NOT NULL,
+  source TEXT DEFAULT 'engine',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_observations_type ON observations(obs_type);
+CREATE INDEX IF NOT EXISTS idx_observations_observed_at ON observations(observed_at);

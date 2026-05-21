@@ -368,9 +368,12 @@ if HAS_RICH:
         import json
 
         engine = get_engine()
+        engine.start_scheduler()
         h = engine.health()
+        s = engine.scheduler_status()
         console.print(f"[green]✓ Engine v{h['version']} started[/green]")
         console.print(f"[dim]  {len(h['agents'])} agents, {len(h['databases'])} databases[/dim]")
+        console.print(f"[dim]  {s['jobs_loaded']} scheduler jobs loaded[/dim]")
         console.print(f"[dim]  Listening on http://{host}:{port}[/dim]")
 
         class EngineHandler(BaseHTTPRequestHandler):
@@ -384,10 +387,12 @@ if HAS_RICH:
                 if self.path == "/health":
                     self._json(200, engine.health())
                 elif self.path == "/stats":
+                    h = engine.health()
                     self._json(200, {
-                        "uptime_seconds": engine.health()["uptime_seconds"],
+                        "uptime_seconds": h["uptime_seconds"],
                         "agent_count": len(engine._agents),
                         "agent_states": {a: s.state for a, s in engine._agents.items()},
+                        "scheduler": engine.scheduler_status(),
                     })
                 else:
                     self._json(404, {"error": "not found"})
@@ -684,6 +689,74 @@ if HAS_RICH:
             return
         rec = e.pattern_workflow() if isinstance(e, DaemonProxy) else e._pattern_learner.get_workflow_recommendation()
         console.print(Panel(rec, title="💡 Workflow Recommendation"))
+
+    # ── scheduler ────────────────────────────────────────────────────────────
+
+    @cli.group()
+    def scheduler():
+        """Manage the background job scheduler."""
+
+    @scheduler.command("status")
+    def scheduler_status():
+        """Show scheduler status and loaded jobs."""
+        e = get_engine()
+        if isinstance(e, DaemonProxy):
+            s = e.scheduler_status()
+        else:
+            s = e.scheduler_status() if hasattr(e, '_scheduler') else {"running": False, "jobs": []}
+        if not s.get("running"):
+            console.print("[yellow]Scheduler not running[/yellow]")
+        else:
+            console.print(f"[green]✓ Scheduler running[/green]")
+            console.print(f"[dim]  {s['jobs_loaded']} jobs loaded[/dim]")
+            for j in s.get("jobs", []):
+                last = j.get("last_run", "")
+                last_str = f" (last: {last})" if last else ""
+                console.print(f"  • {j['name']} [{j['type']}]{last_str}")
+            console.print("\n[yellow]Note:[/yellow] Scheduler runs alongside 'cli.py serve' (HTTP daemon)")
+            console.print("  Use: [bold]python cli.py daemon start[/bold] to start the daemon")
+
+    @scheduler.command("observations")
+    @click.option("--limit", default=20, help="Number of recent observations")
+    def scheduler_observations(limit):
+        """Show recent behavioral observations stored in self.db."""
+        e = get_engine()
+        try:
+            hub = e._hub if hasattr(e, '_hub') else None
+            if not hub and isinstance(e, DaemonProxy):
+                console.print("[yellow]Observations not available via daemon proxy (run 'cli.py serve' directly)[/yellow]")
+                return
+            obs = hub.get_observations(limit=limit)
+            if not obs:
+                console.print("[yellow]No observations yet. Start the daemon and use the system.[/yellow]")
+                return
+            t = Table("Type", "Time", "Source", "Data Preview", title="📋 Recent Observations")
+            for o in obs:
+                data_str = str(o.get("data", ""))[:60]
+                t.add_row(o.get("obs_type", "?"), str(o.get("observed_at", "?"))[-19:],
+                          o.get("source", "?"), data_str)
+            console.print(t)
+        except Exception as ex:
+            console.print(f"[red]Error: {ex}[/red]")
+
+    @scheduler.command("stats")
+    def scheduler_obs_stats():
+        """Show observation statistics."""
+        e = get_engine()
+        try:
+            hub = e._hub if hasattr(e, '_hub') else None
+            if not hub:
+                console.print("[yellow]Not available[/yellow]")
+                return
+            stats = hub.get_observation_stats()
+            console.print(Panel(
+                f"Total observations: [bold]{stats['total']}[/bold]\n"
+                f"Last 24h: [bold]{stats['last_24h']}[/bold]\n"
+                f"By type: {stats['by_type']}",
+                title="📊 Observation Stats"
+            ))
+        except Exception as ex:
+            console.print(f"[red]Error: {ex}[/red]")
 
     # ── MCP servers ─────────────────────────────────────────────────────────
 

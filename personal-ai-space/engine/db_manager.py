@@ -49,7 +49,7 @@ def _pool_key(path: Path) -> str:
 
 def _create_conn(path: Path) -> sqlite3.Connection:
     """Create a new SQLite connection with standard settings."""
-    conn = sqlite3.connect(str(path))
+    conn = sqlite3.connect(str(path), check_same_thread=False)
     conn.row_factory = dict_factory
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA foreign_keys=ON")

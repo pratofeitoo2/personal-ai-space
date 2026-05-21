@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.personal-ai-space.engine</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/paulorezende/Documents/Personal_AI_powerhouse updated/personal-ai-space/engine/.venv/bin/python3</string>
+        <string>/Users/paulorezende/Documents/Personal_AI_powerhouse updated/personal-ai-space/engine/cli.py</string>
+        <string>serve</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/paulorezende/Documents/Personal_AI_powerhouse updated/personal-ai-space/engine</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/paulorezende/Documents/Personal_AI_powerhouse updated/personal-ai-space/engine/logs/daemon.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/paulorezende/Documents/Personal_AI_powerhouse updated/personal-ai-space/engine/logs/daemon.err</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+        <key>PYTHONUNBUFFERED</key>
+        <string>1</string>
+    </dict>
+
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+</dict>
+</plist>

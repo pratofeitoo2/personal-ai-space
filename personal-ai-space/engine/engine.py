@@ -26,6 +26,7 @@ from agents.behavior_observer import BehaviorObserver
 from agents.pattern_learner import PatternLearner
 from agents.mcp_agent import MCPAgent
 from agents.github_agent import GitHubAgent
+from orchestrator.scheduler import Scheduler
 
 
 class Engine:
@@ -40,6 +41,7 @@ class Engine:
         self._agents: dict = {}
         self._start_time = datetime.now()
         self._interaction_count = 0
+        self._scheduler: Optional[Scheduler] = None
 
     # ── lifecycle ─────────────────────────────────────────────────────────
 
@@ -108,8 +110,32 @@ class Engine:
         self.logger.info(f"Engine ready — {len(self._agents)}/{len(agent_classes)} agents active")
         return True
 
+    def start_scheduler(self) -> bool:
+        """Start the background scheduler for periodic jobs."""
+        try:
+            self._scheduler = Scheduler(self)
+            self._scheduler.start()
+            self.logger.info("Scheduler started")
+            return True
+        except Exception as e:
+            self.logger.warning("Scheduler failed to start: %s", e)
+            self._scheduler = None
+            return False
+
+    def stop_scheduler(self) -> None:
+        if self._scheduler:
+            self._scheduler.stop()
+            self._scheduler = None
+            self.logger.info("Scheduler stopped")
+
+    def scheduler_status(self) -> dict:
+        if self._scheduler:
+            return self._scheduler.get_status()
+        return {"running": False, "jobs_loaded": 0, "jobs": []}
+
     def stop(self) -> None:
         self.logger.info("Engine stopping...")
+        self.stop_scheduler()
         for agent in self._agents.values():
             agent.shutdown()
         audit("ENGINE_STOP")

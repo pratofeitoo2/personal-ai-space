@@ -350,6 +350,98 @@ class DataHub:
             logger.error("Failed to search knowledge: %s", e)
             return []
 
+    # ── Observations (persistent behavioral tracking) ────────────────────────
+
+    def store_observation(self, obs_type: str, data: dict,
+                           source: str = "engine") -> bool:
+        """
+        Store a behavioral observation in self.db.
+
+        Observations persist across engine restarts and feed the pattern learner.
+        Call this from BehaviorObserver or any data collection point.
+
+        Args:
+            obs_type: Category (task_created, habit_logged, calendar_event, etc.)
+            data: Observation payload (will be JSON-serialized).
+            source: Origin identifier (engine, apple_bridge, system, etc.).
+
+        Returns:
+            True if stored successfully.
+        """
+        try:
+            import uuid as _uid
+            import json as _json
+            from datetime import timezone
+            obs_id = _uid.uuid4().hex
+            now_iso = datetime.now(timezone.utc).isoformat()
+            db.execute("self", """
+                INSERT INTO observations (id, obs_type, observed_at, data, source)
+                VALUES (?, ?, ?, ?, ?)
+            """, (obs_id, obs_type, now_iso, _json.dumps(data), source))
+            return True
+        except Exception as e:
+            logger.error("Failed to store observation: %s", e)
+            return False
+
+    def get_observations(self, obs_type: str | None = None,
+                         limit: int = 100,
+                         since: str | None = None) -> RecordList:
+        """
+        Retrieve stored observations from self.db.
+
+        Args:
+            obs_type: Filter by type (optional).
+            limit: Max results (default 100).
+            since: ISO datetime — only observations after this time.
+
+        Returns:
+            List of observation records.
+        """
+        try:
+            if obs_type and since:
+                rows = db.query("self",
+                    "SELECT * FROM observations WHERE obs_type=? AND observed_at>=?"
+                    " ORDER BY observed_at DESC LIMIT ?",
+                    (obs_type, since, limit))
+            elif obs_type:
+                rows = db.query("self",
+                    "SELECT * FROM observations WHERE obs_type=?"
+                    " ORDER BY observed_at DESC LIMIT ?",
+                    (obs_type, limit))
+            elif since:
+                rows = db.query("self",
+                    "SELECT * FROM observations WHERE observed_at>=?"
+                    " ORDER BY observed_at DESC LIMIT ?",
+                    (since, limit))
+            else:
+                rows = db.query("self",
+                    "SELECT * FROM observations ORDER BY observed_at DESC LIMIT ?",
+                    (limit,))
+            return rows
+        except Exception as e:
+            logger.error("Failed to get observations: %s", e)
+            return []
+
+    def get_observation_stats(self) -> dict:
+        """Return aggregate stats about stored observations."""
+        try:
+            total = db.query("self",
+                "SELECT COUNT(*) as n FROM observations")[0]["n"]
+            by_type = db.query("self",
+                "SELECT obs_type, COUNT(*) as n FROM observations"
+                " GROUP BY obs_type ORDER BY n DESC")
+            last_24h = db.query("self",
+                "SELECT COUNT(*) as n FROM observations WHERE"
+                " observed_at >= datetime('now', '-1 day')")[0]["n"]
+            return {
+                "total": total,
+                "by_type": {r["obs_type"]: r["n"] for r in by_type},
+                "last_24h": last_24h,
+            }
+        except Exception as e:
+            logger.error("Failed to get observation stats: %s", e)
+            return {"total": 0, "by_type": {}, "last_24h": 0}
+
     # ── Raw Escape Hatch ──────────────────────────────────────────────────────
 
     def query(self, db_name: str, sql: str, params: tuple = ()) -> RecordList:

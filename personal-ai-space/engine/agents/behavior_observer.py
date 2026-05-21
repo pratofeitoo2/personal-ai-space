@@ -144,7 +144,12 @@ class BehaviorObserver(BaseAgent):
     # ── Buffer & Learning ─────────────────────────────────────────────
 
     def _buffer_and_learn(self, observation: dict) -> None:
-        """Buffer observation and attempt pattern learning."""
+        """Buffer observation, persist to DB, and attempt pattern learning."""
+        # Persist to self.db immediately — observations survive engine restarts
+        obs_type = observation.get("type", "unknown")
+        self._hub.store_observation(obs_type, observation, source="behavior_observer")
+
+        # In-memory buffer for real-time pattern learning
         self.observation_buffer.append(observation)
 
         if len(self.observation_buffer) >= 10:
