@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "vault-query": {
+      "description": "Vault Query Agent — interpreta perguntas em linguagem natural sobre o ONG vault e roteia para as tools MCP certas (search, semantic, patients, tasks, stats).",
+      "mode": "subagent",
+      "model": "opencode/deepseek-v4-flash-free",
+      "prompt": "{file:./subagent/vault-query-agent.md}",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": false
+      }
+    }
+  }
+}
