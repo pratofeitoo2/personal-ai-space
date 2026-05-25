@@ -4,6 +4,7 @@ Scheduler — Periodic job runner for engine daemon.
 Reads schedule definitions from engine.config.json5 and system.config.json5.
 Runs jobs at configured times on a background thread alongside the HTTP daemon.
 """
+import sys
 import time
 import threading
 import json5
@@ -76,10 +77,22 @@ class Scheduler:
             "interval_minutes": 30,
         })
         self._jobs.append({
-            "name": "apple_reminders_poll",
+            "name": "apple_reminders_sync",
             "handler": self._run_apple_reminders_poll,
             "type": "interval",
-            "interval_minutes": 30,
+            "interval_minutes": 1,
+        })
+        self._jobs.append({
+            "name": "self_sync",
+            "handler": self._run_self_sync,
+            "type": "interval",
+            "interval_minutes": 60,
+        })
+        self._jobs.append({
+            "name": "knowledge_sync",
+            "handler": self._run_knowledge_sync,
+            "type": "interval",
+            "interval_minutes": 60,
         })
 
         logger.info("Scheduler: %d jobs loaded", len(self._jobs))
@@ -211,6 +224,40 @@ class Scheduler:
     def _run_habit_sync(self):
         logger.debug("Habit sync check completed")
 
+    def _run_self_sync(self):
+        """Sync self/ directory files into self.db (profile, habits, goals, etc.)."""
+        try:
+            from sync.sync_self import sync_all
+            result = sync_all()
+            logger.info(
+                "self_sync done — profile:%s habits:%s goals:%s rel:%s traits:%s needs:%s",
+                result.get("profile", "?"),
+                result.get("habits", "?"),
+                result.get("goals", "?"),
+                result.get("relationships", "?"),
+                result.get("traits", "?"),
+                result.get("needs", "?"),
+            )
+        except ImportError:
+            logger.warning("sync_self module not available, skipping")
+        except Exception as e:
+            logger.warning("self_sync failed: %s", e)
+
+    def _run_knowledge_sync(self):
+        """Sync knowledge/ directory files into knowledge.db."""
+        try:
+            from sync.sync_knowledge import sync_all
+            result = sync_all()
+            logger.info(
+                "knowledge_sync done — articles:%s notes:%s",
+                result.get("articles", "?"),
+                result.get("notes", "?"),
+            )
+        except ImportError:
+            logger.warning("sync_knowledge module not available, skipping")
+        except Exception as e:
+            logger.warning("knowledge_sync failed: %s", e)
+
     def _run_monthly_analysis(self):
         logger.info("Monthly analysis triggered (placeholder)")
 
@@ -253,8 +300,27 @@ class Scheduler:
                                 "calendar_event")
 
     def _run_apple_reminders_poll(self):
-        self._poll_apple_bridge("reminders-bridge", ["list"],
-                                "reminder")
+        """Run full bidirectional sync between Apple Reminders and tasks.db."""
+        import subprocess as _sp
+        sync_script = Path(__file__).resolve().parent.parent / "sync" / "sync_reminders.py"
+        if not sync_script.exists():
+            logger.warning("sync_reminders.py not found at %s", sync_script)
+            return
+        try:
+            result = _sp.run(
+                [sys.executable, str(sync_script)],
+                capture_output=True, text=True, timeout=30,
+            )
+            if result.returncode == 0:
+                for line in result.stdout.strip().split("\n"):
+                    if line.strip():
+                        logger.info("[sync_reminders] %s", line.strip())
+                logger.info("Apple Reminders sync completed")
+            else:
+                logger.warning("Apple Reminders sync failed (rc=%d): %s",
+                               result.returncode, result.stderr.strip()[:300])
+        except Exception as e:
+            logger.warning("Apple Reminders sync error: %s", e)
 
     # ── Lifecycle ─────────────────────────────────────────────────────
 
