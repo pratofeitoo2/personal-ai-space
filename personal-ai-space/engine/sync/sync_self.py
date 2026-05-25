@@ -27,8 +27,9 @@ import db_manager as db
 logger = logging.getLogger("engine.sync_self")
 
 # Resolve project root (this file lives at engine/sync_self.py)
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 _SELF_DIR = _PROJECT_ROOT / "self"
+
 
 def _parse_frontmatter(file_path: Path) -> dict:
     """Extract YAML frontmatter from a markdown file. Returns {} on failure."""
@@ -36,6 +37,65 @@ def _parse_frontmatter(file_path: Path) -> dict:
         text = file_path.read_text(encoding="utf-8")
     except Exception:
         return {}
+    if not text.startswith("---"):
+        return {}
+    m = re.match(r"^---\s*\n(.*?)\n---", text, re.DOTALL)
+    if not m:
+        return {}
+    try:
+        fm = yaml.safe_load(m.group(1))
+        return fm if isinstance(fm, dict) else {}
+    except Exception:
+        return {}
+
+
+def _strip_frontmatter(text: str) -> str:
+    """Return remaining text after removing the YAML frontmatter block."""
+    if not text.startswith("---"):
+        return text
+    m = re.match(r"^---\s*\n.*?\n---\s*\n?", text, re.DOTALL)
+    if m:
+        return text[m.end():]
+    return text
+
+
+def _ensure_profile_columns():
+    """Add missing profile columns if they don't already exist (safe migration)."""
+    existing = {
+        row["name"]
+        for row in db.query("self", "PRAGMA table_info(profile)")
+    }
+    additions = {
+        "core_values": "TEXT DEFAULT ''",
+        "feedback_preference": "TEXT DEFAULT ''",
+        "goals_current_year": "TEXT DEFAULT ''",
+        "constraints": "TEXT DEFAULT ''",
+        "created_at": "TEXT",
+    }
+    for col, coltype in additions.items():
+        if col not in existing:
+            db.execute(
+                "self",
+                f"ALTER TABLE profile ADD COLUMN {col} {coltype}"
+            )
+            logger.info("Added profile column: %s", col)
+
+
+def _extract_canvas_text(file_path: Path) -> str:
+    """Extract node labels/text from an Obsidian .canvas JSON file."""
+    try:
+        data = json.loads(file_path.read_text(encoding="utf-8"))
+        nodes = data.get("nodes", [])
+        parts = []
+        for n in nodes:
+            label = n.get("label", "")
+            text = n.get("text", "")
+            parts.append(f"{label}: {text}" if label else text)
+        return "\n".join(parts) if parts else json.dumps(data, indent=2)
+    except Exception as e:
+        logger.debug("canvas extraction failed for %s: %s", file_path.name, e)
+        return ""
+
     if not text.startswith("---"):
         return {}
     m = re.match(r"^---\s*\n(.*?)\n---", text, re.DOTALL)
@@ -57,6 +117,8 @@ def sync_profile() -> int:
         logger.warning("profile.json not found at %s", path)
         return 0
 
+    _ensure_profile_columns()
+
     with open(path) as f:
         p = json.load(f)
 
@@ -65,8 +127,10 @@ def sync_profile() -> int:
         conn.execute(
             """INSERT OR REPLACE INTO profile
                (id, name, age, timezone, work_style, energy_peak_hours,
-                communication_preference, decision_style, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                communication_preference, decision_style, core_values,
+                feedback_preference, goals_current_year, constraints,
+                created_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 p.get("id", "self_profile_001"),
                 p.get("name", ""),
@@ -76,6 +140,11 @@ def sync_profile() -> int:
                 json.dumps(p.get("energy_peak_hours", [])),
                 prefs.get("communication", ""),
                 prefs.get("decision_making", ""),
+                json.dumps(p.get("core_values", [])),
+                prefs.get("feedback", ""),
+                json.dumps(p.get("goals_current_year", [])),
+                json.dumps(p.get("constraints", [])),
+                p.get("created", ""),
                 datetime.now(timezone.utc).isoformat(),
             ),
         )
@@ -123,31 +192,81 @@ def sync_habits() -> int:
 # ── Goals ────────────────────────────────────────────────────────────────────
 
 def sync_goals() -> int:
-    """Sync goals/*.md frontmatter → self.db goals table. Returns rows affected."""
+    """Sync goals/*.md and *.canvas frontmatter → self.db goals table.
+
+    Extract description text from the body (excluding frontmatter),
+    tags from frontmatter, and handle .canvas files as JSON node dumps.
+    """
     goals_dir = _SELF_DIR / "goals"
     if not goals_dir.exists():
         logger.warning("goals/ directory not found")
         return 0
 
+    # Ensure unique index on title (needed by ON CONFLICT)
+    db.execute("self", "CREATE UNIQUE INDEX IF NOT EXISTS idx_goals_title ON goals(title)")
+
+    # Ensure description and tags columns exist
+    existing = {
+        row["name"]
+        for row in db.query("self", "PRAGMA table_info(goals)")
+    }
+    for col, coltype in {"description": "TEXT DEFAULT ''", "tags": "TEXT DEFAULT ''"}.items():
+        if col not in existing:
+            db.execute("self", f"ALTER TABLE goals ADD COLUMN {col} {coltype}")
+            logger.info("Added goals column: %s", col)
+
     total = 0
     for fpath in sorted(goals_dir.iterdir()):
+        # ── Canvas files ───────────────────────────────────────────────
+        if fpath.suffix == ".canvas":
+            title = fpath.stem.replace("-", " ").replace("_", " ").title()
+            description = _extract_canvas_text(fpath)
+            with db.transaction("self") as conn:
+                conn.execute(
+                    """INSERT INTO goals
+                       (title, description, tags, status, created_at, updated_at, progress_source)
+                       VALUES (?, ?, '[]', 'active', ?, ?, 'canvas')
+                       ON CONFLICT(title) DO UPDATE SET
+                           description = COALESCE(excluded.description, goals.description),
+                           updated_at  = excluded.updated_at""",
+                    (
+                        title,
+                        description[:2000] if description else "",
+                        datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                        datetime.now(timezone.utc).isoformat(),
+                    ),
+                )
+                total += 1
+            continue
+
+        # ── Markdown files ─────────────────────────────────────────────
         if fpath.suffix not in (".md", ".markdown"):
             continue
         fm = _parse_frontmatter(fpath)
         if not fm or not fm.get("title"):
             continue
         title = str(fm["title"]).strip("\"'")
+
+        full_text = fpath.read_text(encoding="utf-8")
+        body = _strip_frontmatter(full_text).strip()
+        description = body[:2000] if body else ""
+        tags = json.dumps(fm.get("tags", [])) if isinstance(fm.get("tags"), list) else "[]"
+
         with db.transaction("self") as conn:
             conn.execute(
                 """INSERT INTO goals
-                   (title, category, status, created_at, updated_at, progress_source)
-                   VALUES (?, ?, ?, ?, ?, 'sync')
+                   (title, description, tags, category, status, created_at, updated_at, progress_source)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, 'sync')
                    ON CONFLICT(title) DO UPDATE SET
-                       category = excluded.category,
-                       status   = excluded.status,
-                       updated_at = excluded.updated_at""",
+                       description    = COALESCE(excluded.description, goals.description),
+                       tags           = excluded.tags,
+                       category       = excluded.category,
+                       status         = excluded.status,
+                       updated_at     = excluded.updated_at""",
                 (
                     title,
+                    description,
+                    tags,
                     str(fm.get("type", "")),
                     str(fm.get("status", "active")),
                     str(fm.get("created", "")),
@@ -162,19 +281,28 @@ def sync_goals() -> int:
 # ── Relationships ────────────────────────────────────────────────────────────
 
 def sync_relationships() -> int:
-    """Sync relationships/*.md frontmatter → self.db relationships table.
-
-    Only updates fields available in the markdown frontmatter; leaves
-    relationship_type and notes untouched (they are set by other processes).
-    """
+    """Sync relationships/*.md frontmatter + body → self.db relationships table."""
     rel_dir = _SELF_DIR / "relationships"
     if not rel_dir.exists():
         logger.warning("relationships/ directory not found")
         return 0
 
+    # Ensure relationship_type and notes columns exist
+    existing = {
+        row["name"]
+        for row in db.query("self", "PRAGMA table_info(relationships)")
+    }
+    for col, coltype in {"relationship_type": "TEXT DEFAULT ''", "notes": "TEXT DEFAULT ''"}.items():
+        if col not in existing:
+            db.execute("self", f"ALTER TABLE relationships ADD COLUMN {col} {coltype}")
+            logger.info("Added relationships column: %s", col)
+
     total = 0
     for fpath in sorted(rel_dir.iterdir()):
         if fpath.suffix not in (".md", ".markdown"):
+            continue
+        # Skip template/base files
+        if ".base" in fpath.suffixes or "base" in fpath.stem.lower():
             continue
         fm = _parse_frontmatter(fpath)
         if not fm:
@@ -182,19 +310,28 @@ def sync_relationships() -> int:
         name = fm.get("Name") or fm.get("title")
         if not name:
             continue
+        # Extract body text as notes
+        full_text = fpath.read_text(encoding="utf-8")
+        body = _strip_frontmatter(full_text).strip()
+        notes = body[:2000] if body else ""
+        rel_type = str(fm.get("type", "") or "")
         with db.transaction("self") as conn:
             conn.execute(
                 """INSERT INTO relationships
-                   (name, email, phone, cpf, birth_date, created_at, updated_at)
-                   VALUES (?, ?, ?, ?, ?, ?, ?)
+                   (name, relationship_type, notes, email, phone, cpf, birth_date, created_at, updated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                    ON CONFLICT(name) DO UPDATE SET
-                       email      = COALESCE(excluded.email, relationships.email),
-                       phone      = COALESCE(excluded.phone, relationships.phone),
-                       cpf        = COALESCE(excluded.cpf, relationships.cpf),
-                       birth_date = COALESCE(excluded.birth_date, relationships.birth_date),
-                       updated_at = excluded.updated_at""",
+                       relationship_type = COALESCE(excluded.relationship_type, relationships.relationship_type),
+                       notes             = COALESCE(excluded.notes, relationships.notes),
+                       email             = COALESCE(excluded.email, relationships.email),
+                       phone             = COALESCE(excluded.phone, relationships.phone),
+                       cpf               = COALESCE(excluded.cpf, relationships.cpf),
+                       birth_date        = COALESCE(excluded.birth_date, relationships.birth_date),
+                       updated_at        = excluded.updated_at""",
                 (
                     name,
+                    rel_type,
+                    notes,
                     str(fm.get("email", "") or ""),
                     str(fm.get("number", "") or ""),
                     str(fm.get("CPF", "") or ""),
