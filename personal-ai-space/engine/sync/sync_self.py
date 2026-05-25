@@ -112,9 +112,12 @@ def _extract_canvas_text(file_path: Path) -> str:
 
 def sync_profile() -> int:
     """Sync profile.json → self.db profile table. Returns rows affected."""
-    path = _SELF_DIR / "profile.json"
+    # Try new location first (self/profile/profile.json), fall back to old (self/profile.json)
+    path = _SELF_DIR / "profile" / "profile.json"
     if not path.exists():
-        logger.warning("profile.json not found at %s", path)
+        path = _SELF_DIR / "profile.json"
+    if not path.exists():
+        logger.warning("profile.json not found at %s or %s", _SELF_DIR / "profile" / "profile.json", _SELF_DIR / "profile.json")
         return 0
 
     _ensure_profile_columns()
