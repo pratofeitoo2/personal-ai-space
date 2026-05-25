@@ -317,6 +317,18 @@ if HAS_RICH:
         for n in results:
             console.print(f"[bold]{n['title']}[/bold] [{n.get('category','')}] — {n.get('tags','')}")
 
+    @note.command("reindex")
+    def note_reindex():
+        """Rebuild the knowledge term-frequency index from all notes."""
+        e = get_engine()
+        r = e.send("knowledge-indexer", "build_index")
+        data = r.get("payload", {})
+        console.print(
+            f"[green]✓ Index rebuilt:[/green] "
+            f"{data.get('indexed_terms', 0)} terms "
+            f"from {data.get('processed_notes', 0)} notes"
+        )
+
     @note.command("stats")
     def note_stats():
         """Show knowledge base statistics."""
