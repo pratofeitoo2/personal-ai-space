@@ -1,6 +1,2 @@
 id,habit,category,frequency,start_date,current_streak,total_completions
-001,Morning deep work block,productivity,daily,2026-01-15,12,87
-002,Read technical articles,learning,3x_week,2026-02-01,8,24
-003,Exercise,health,4x_week,2026-01-01,5,18
-004,Review and reflect,meta,weekly,2026-03-01,4,16
-005,Side project work,development,5x_week,2025-12-01,3,45
+,,,,,,
