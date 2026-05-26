@@ -230,13 +230,14 @@ class Scheduler:
             from sync.sync_self import sync_all
             result = sync_all()
             logger.info(
-                "self_sync done — profile:%s habits:%s goals:%s rel:%s traits:%s needs:%s",
+                "self_sync done — profile:%s habits:%s goals:%s rel:%s traits:%s needs:%s docs:%s",
                 result.get("profile", "?"),
                 result.get("habits", "?"),
                 result.get("goals", "?"),
                 result.get("relationships", "?"),
                 result.get("traits", "?"),
                 result.get("needs", "?"),
+                result.get("documents", "?"),
             )
         except ImportError:
             logger.warning("sync_self module not available, skipping")
@@ -296,8 +297,27 @@ class Scheduler:
             logger.warning("%s poll failed: %s", bridge_name, e)
 
     def _run_apple_calendar_poll(self):
-        self._poll_apple_bridge("calendar-bridge", ["list", "--days", "1"],
-                                "calendar_event")
+        """Sync Apple Calendar events into calendar.db via sync_calendar.py."""
+        import subprocess as _sp
+        sync_script = Path(__file__).resolve().parent.parent / "sync" / "sync_calendar.py"
+        if not sync_script.exists():
+            logger.warning("sync_calendar.py not found at %s", sync_script)
+            return
+        try:
+            result = _sp.run(
+                [sys.executable, str(sync_script), "--quick"],
+                capture_output=True, text=True, timeout=60,
+            )
+            if result.returncode == 0:
+                for line in result.stdout.strip().split("\n"):
+                    if line.strip():
+                        logger.info("[sync_calendar] %s", line.strip())
+                logger.info("Apple Calendar sync completed")
+            else:
+                logger.warning("Apple Calendar sync failed (rc=%d): %s",
+                               result.returncode, result.stderr.strip()[:300])
+        except Exception as e:
+            logger.warning("Apple Calendar sync error: %s", e)
 
     def _run_apple_reminders_poll(self):
         """Run full bidirectional sync between Apple Reminders and tasks.db."""

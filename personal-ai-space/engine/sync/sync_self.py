@@ -445,6 +445,145 @@ def sync_needs() -> int:
     return total
 
 
+# ── Documents ────────────────────────────────────────────────────────────────
+
+def sync_documents() -> int:
+    """Sync documents/ metadata (index.json + .md frontmatter) → self.db documents table.
+
+    Scans every subdirectory under self/documents/ for:
+      - index.json — metadata entries for binary files (pdf, docx, png, jpeg, etc.)
+      - *.md files — YAML frontmatter + body text (same pattern as relationships/)
+
+    Returns total rows upserted.
+    """
+    docs_root = _SELF_DIR / "documents"
+    if not docs_root.exists():
+        logger.warning("documents/ directory not found at %s", docs_root)
+        return 0
+
+    # Ensure the documents table exists (safe to call repeatedly)
+    db.execute("self", """
+        CREATE TABLE IF NOT EXISTS documents (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            doc_type TEXT NOT NULL,
+            subcategory TEXT DEFAULT '',
+            tags TEXT DEFAULT '[]',
+            file_path TEXT DEFAULT '',
+            file_format TEXT DEFAULT '',
+            content TEXT DEFAULT '',
+            metadata TEXT DEFAULT '{}',
+            created_at TEXT,
+            updated_at TEXT
+        )
+    """)
+
+    total = 0
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    for subdir in sorted(docs_root.iterdir()):
+        if not subdir.is_dir():
+            continue
+
+        subcategory = subdir.name  # e.g. "resumes", "portfolios"
+
+        # ── index.json entries (binary file metadata) ─────────────────
+        index_path = subdir / "index.json"
+        if index_path.exists():
+            try:
+                entries = json.loads(index_path.read_text(encoding="utf-8"))
+                if isinstance(entries, list):
+                    for entry in entries:
+                        title = entry.get("title", "")
+                        if not title:
+                            continue
+                        doc_id = entry.get("id", f"doc_{subcategory}_{title.lower().replace(' ', '_')}")
+                        with db.transaction("self") as conn:
+                            conn.execute(
+                                """INSERT INTO documents
+                                   (id, title, doc_type, subcategory, tags,
+                                    file_path, file_format, content, metadata,
+                                    created_at, updated_at)
+                                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                   ON CONFLICT(id) DO UPDATE SET
+                                       title        = excluded.title,
+                                       doc_type     = excluded.doc_type,
+                                       subcategory  = excluded.subcategory,
+                                       tags         = excluded.tags,
+                                       file_path    = excluded.file_path,
+                                       file_format  = excluded.file_format,
+                                       content      = COALESCE(excluded.content, documents.content),
+                                       metadata     = excluded.metadata,
+                                       updated_at   = excluded.updated_at""",
+                                (
+                                    doc_id,
+                                    title,
+                                    entry.get("doc_type", subcategory),
+                                    subcategory,
+                                    json.dumps(entry.get("tags", [])),
+                                    entry.get("file", ""),
+                                    entry.get("file_format", ""),
+                                    entry.get("description", ""),
+                                    json.dumps({k: v for k, v in entry.items()
+                                                if k not in ("title", "doc_type", "tags", "file", "file_format", "description", "id")}),
+                                    entry.get("created", now_iso),
+                                    entry.get("updated", now_iso),
+                                ),
+                            )
+                            total += 1
+            except Exception as e:
+                logger.warning("Failed to parse %s: %s", index_path, e)
+
+        # ── .md files with frontmatter ────────────────────────────────
+        for fpath in sorted(subdir.iterdir()):
+            if fpath.suffix not in (".md", ".markdown"):
+                continue
+            fm = _parse_frontmatter(fpath)
+            if not fm:
+                continue
+            title = fm.get("title") or fpath.stem
+            doc_id = fm.get("id") or str(fpath.relative_to(_SELF_DIR))
+            full_text = fpath.read_text(encoding="utf-8")
+            body = _strip_frontmatter(full_text).strip()
+            with db.transaction("self") as conn:
+                conn.execute(
+                    """INSERT INTO documents
+                       (id, title, doc_type, subcategory, tags,
+                        file_path, file_format, content, metadata,
+                        created_at, updated_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                       ON CONFLICT(id) DO UPDATE SET
+                           title        = excluded.title,
+                           doc_type     = excluded.doc_type,
+                           subcategory  = excluded.subcategory,
+                           tags         = excluded.tags,
+                           file_path    = excluded.file_path,
+                           file_format  = excluded.file_format,
+                           content      = excluded.content,
+                           metadata     = excluded.metadata,
+                           updated_at   = excluded.updated_at""",
+                    (
+                        doc_id,
+                        title,
+                        str(fm.get("doc_type", subcategory)),
+                        subcategory,
+                        json.dumps(fm.get("tags", [])),
+                        str(fpath.relative_to(_SELF_DIR)),
+                        "md",
+                        body,
+                        json.dumps({k: v for k, v in fm.items()
+                                    if k not in ("title", "doc_type", "tags", "id")},
+                                   default=str),
+                        str(fm.get("created", "") or now_iso),
+                        str(fm.get("updated", "") or now_iso),
+                    ),
+                )
+                total += 1
+
+    logger.info("sync_documents: %d document(s) synced", total)
+    return total
+
+
 # ── Orchestrator ─────────────────────────────────────────────────────────────
 
 def sync_all(dry_run: bool = False) -> dict[str, Any]:
@@ -454,7 +593,7 @@ def sync_all(dry_run: bool = False) -> dict[str, Any]:
         dry_run: When True, only preview what would be synced (no DB writes).
 
     Returns:
-        Dict with keys: profile, habits, goals, relationships, traits, needs
+        Dict with keys: profile, habits, goals, relationships, traits, needs, documents
         each mapping to a row count or error message.
     """
     if dry_run:
@@ -466,6 +605,7 @@ def sync_all(dry_run: bool = False) -> dict[str, Any]:
             "relationships": "DRY_RUN",
             "traits": "DRY_RUN",
             "needs": "DRY_RUN",
+            "documents": "DRY_RUN",
         }
 
     return {
@@ -475,6 +615,7 @@ def sync_all(dry_run: bool = False) -> dict[str, Any]:
         "relationships": sync_relationships(),
         "traits": sync_traits(),
         "needs": sync_needs(),
+        "documents": sync_documents(),
     }
 
 
@@ -493,14 +634,16 @@ def _log_dry_run():
     rel_ok = any(f.suffix == ".md" for f in (_SELF_DIR / "relationships").iterdir()) if (_SELF_DIR / "relationships").exists() else False
     traits_ok = (_SELF_DIR / "traits" / "inferred_personality.json").exists()
     needs_ok = (_SELF_DIR / "needs" / "current_needs.json").exists()
+    docs_ok = (_SELF_DIR / "documents").exists() and any((_SELF_DIR / "documents").iterdir()) if (_SELF_DIR / "documents").exists() else False
 
     print("DRY RUN — No changes written")
-    print(f"  profile.json      → profile table    {'✓ found' if profile_ok else '✗ missing'}")
-    print(f"  habits/tracking.csv  → habits table     {'✓ found' if habits_ok else '✗ missing'}")
-    print(f"  goals/*.md        → goals table       {'✓ found' if goals_ok else '✗ missing or empty'}")
-    print(f"  relationships/*.md  → relationships table {'✓ found' if rel_ok else '✗ missing or empty'}")
-    print(f"  traits/*.json     → traits table      {'✓ found' if traits_ok else '✗ missing'}")
-    print(f"  needs/*.json      → needs table       {'✓ found' if needs_ok else '✗ missing'}")
+    print(f"  profile.json           → profile table       {'✓ found' if profile_ok else '✗ missing'}")
+    print(f"  habits/tracking.csv    → habits table        {'✓ found' if habits_ok else '✗ missing'}")
+    print(f"  goals/*.md             → goals table          {'✓ found' if goals_ok else '✗ missing or empty'}")
+    print(f"  relationships/*.md     → relationships table  {'✓ found' if rel_ok else '✗ missing or empty'}")
+    print(f"  traits/*.json          → traits table         {'✓ found' if traits_ok else '✗ missing'}")
+    print(f"  needs/*.json           → needs table          {'✓ found' if needs_ok else '✗ missing'}")
+    print(f"  documents/*/index.json → documents table      {'✓ found' if docs_ok else '✗ missing or empty'}")
 
 
 def _format_summary(results: dict[str, Any]):
@@ -511,6 +654,7 @@ def _format_summary(results: dict[str, Any]):
     print(f"  Relationships  → {results.get('relationships', '?')} row(s)")
     print(f"  Traits         → {results.get('traits', '?')} row(s)")
     print(f"  Needs          → {results.get('needs', '?')} row(s)")
+    print(f"  Documents      → {results.get('documents', '?')} row(s)")
 
 
 def main():

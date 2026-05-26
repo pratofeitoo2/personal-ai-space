@@ -350,6 +350,89 @@ class DataHub:
             logger.error("Failed to search knowledge: %s", e)
             return []
 
+    # ── Documents (personal documents like resumes, bios, portfolios) ──────
+
+    def get_document(self, doc_type: str | None = None,
+                     subcategory: str | None = None,
+                     doc_id: str | None = None) -> RecordList:
+        """
+        Query personal documents from self.db.
+
+        Args:
+            doc_type: Filter by document type (e.g. 'resume', 'bio', 'portfolio').
+            subcategory: Filter by subdirectory (e.g. 'resumes', 'cover_letters').
+            doc_id: Exact document ID lookup.
+
+        Returns:
+            List of matching document records.
+        """
+        try:
+            if doc_id:
+                rows = db.query("self",
+                    "SELECT * FROM documents WHERE id=? LIMIT 1", (doc_id,))
+            elif doc_type and subcategory:
+                rows = db.query("self",
+                    "SELECT * FROM documents WHERE doc_type=? AND subcategory=? ORDER BY updated_at DESC",
+                    (doc_type, subcategory))
+            elif doc_type:
+                rows = db.query("self",
+                    "SELECT * FROM documents WHERE doc_type=? ORDER BY updated_at DESC",
+                    (doc_type,))
+            elif subcategory:
+                rows = db.query("self",
+                    "SELECT * FROM documents WHERE subcategory=? ORDER BY updated_at DESC",
+                    (subcategory,))
+            else:
+                rows = db.query("self",
+                    "SELECT * FROM documents ORDER BY doc_type, title")
+            audit(f"[datahub] get_document: type={doc_type}, sub={subcategory}, count={len(rows)}")
+            return rows
+        except Exception as e:
+            logger.error("Failed to get documents: %s", e)
+            return []
+
+    def search_documents(self, query: str, limit: int = 20) -> RecordList:
+        """
+        Full-text search across document titles, tags, and content.
+
+        Args:
+            query: Search term (matched against title and tags via LIKE).
+            limit: Max results.
+
+        Returns:
+            List of matching document records.
+        """
+        try:
+            pattern = f"%{query}%"
+            rows = db.query("self", """
+                SELECT * FROM documents
+                WHERE title LIKE ? OR tags LIKE ? OR content LIKE ?
+                ORDER BY updated_at DESC LIMIT ?
+            """, (pattern, pattern, pattern, limit))
+            audit(f"[datahub] search_documents: query='{query}' count={len(rows)}")
+            return rows
+        except Exception as e:
+            logger.error("Failed to search documents: %s", e)
+            return []
+
+    def list_document_types(self) -> RecordList:
+        """
+        Get distinct document types with counts.
+
+        Returns:
+            List of {doc_type, subcategory, count} records.
+        """
+        try:
+            rows = db.query("self", """
+                SELECT doc_type, subcategory, COUNT(*) as count
+                FROM documents GROUP BY doc_type, subcategory
+                ORDER BY doc_type, subcategory
+            """)
+            return rows
+        except Exception as e:
+            logger.error("Failed to list document types: %s", e)
+            return []
+
     # ── Observations (persistent behavioral tracking) ────────────────────────
 
     def store_observation(self, obs_type: str, data: dict,

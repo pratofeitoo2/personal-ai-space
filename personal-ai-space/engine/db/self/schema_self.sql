@@ -109,3 +109,21 @@ CREATE TABLE IF NOT EXISTS observations (
 );
 CREATE INDEX IF NOT EXISTS idx_observations_type ON observations(obs_type);
 CREATE INDEX IF NOT EXISTS idx_observations_observed_at ON observations(observed_at);
+
+-- Documents: structured metadata for personal documents (resumes, bios, portfolios, etc.)
+-- Supports both .md with frontmatter and binary formats referenced via index.json
+CREATE TABLE IF NOT EXISTS documents (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  doc_type TEXT NOT NULL,
+  subcategory TEXT DEFAULT '',
+  tags TEXT DEFAULT '[]',
+  file_path TEXT DEFAULT '',
+  file_format TEXT DEFAULT '',
+  content TEXT DEFAULT '',
+  metadata TEXT DEFAULT '{}',
+  created_at TEXT,
+  updated_at TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_documents_type ON documents(doc_type);
+CREATE INDEX IF NOT EXISTS idx_documents_subcategory ON documents(subcategory);
