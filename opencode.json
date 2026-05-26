@@ -27,6 +27,15 @@
         "/Users/paulorezende/Library/Mobile Documents/iCloud~md~obsidian/Documents/ONG/NEDS/agents_workspace/bridge/run.sh"
       ],
       "enabled": true
+    },
+    "wa-cli-mcp": {
+      "type": "local",
+      "command": [
+        "npx",
+        "tsx",
+        "/Users/paulorezende/wa-cli-mcp/src/mcp-server.ts"
+      ],
+      "enabled": true
     }
   }
 }

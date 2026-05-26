@@ -9,5 +9,13 @@
         {
             "path": "../../.aivectormemory"
         }
-    ]
+    ],
+    "settings": {
+        "folder-color.pathColors": [
+            {
+                "folderPath": "Personal_AI_powerhouse updated/tmp/",
+                "color": "foldercolorizer.color_ff5f00"
+            }
+        ]
+    }
 }
