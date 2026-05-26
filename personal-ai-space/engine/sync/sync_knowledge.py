@@ -163,19 +163,27 @@ def _upsert_article(fpath: Path):
 
     db.execute(
         "knowledge",
-        """INSERT OR REPLACE INTO articles
+        """INSERT INTO articles
            (id, title, url, source, author, published_date,
             tags, summary, full_content, status, imported_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+           ON CONFLICT(id) DO UPDATE SET
+             title       = excluded.title,
+             url         = excluded.url,
+             tags        = excluded.tags,
+             full_content = excluded.full_content,
+             status      = excluded.status,
+             imported_at = excluded.imported_at
+        """,
         (
             aid,
             title,
             f"file://{fpath.resolve()}",
-            "",  # source — not typically available in local files
+            "",  # source — set via curation (fix_articles.py)
             fm.get("author", "") or "",
             str(fm.get("published_date", "") or "") or None,
             tags,
-            title,
+            title,  # summary — set via curation (fix_articles.py)
             content,
             fm.get("status", "imported") or "imported",
             now,

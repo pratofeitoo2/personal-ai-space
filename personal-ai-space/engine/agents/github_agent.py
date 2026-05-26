@@ -51,10 +51,16 @@ class GitHubAgent(BaseAgent):
             from agents.github_gh_api import GitHubAPI
             from agents.github_discovery import GitHubDiscovery
             import db_manager as db
-            disc = GitHubDiscovery(db, [str(Path(__file__).parent.parent.parent)])
+            project_root = str(Path(__file__).parent.parent.parent)
+            disc = GitHubDiscovery(db, [project_root])
             self.wire_discovery(disc)
             self._gh_api = GitHubAPI()
-            self.logger.info("Auto-wired: discovery, gh_api")
+            registered = disc.discover_and_register()
+            if registered:
+                self.logger.info("Auto-registered %d repo(s)", len(registered))
+            self._registered_repos_cache = disc.get_registered_repos()
+            self.logger.info("Auto-wired: discovery, gh_api (%d repo(s) tracked)",
+                             len(self._registered_repos_cache))
         except Exception as e:
             self.logger.debug(f"Auto-wire skipped: {e}")
         self._auto_wired = True

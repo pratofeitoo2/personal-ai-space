@@ -169,7 +169,8 @@ def fetch_events_for_date(date_str: str) -> list[dict]:
         info_str = m.group(2).strip()
         calendar_name = m.group(3).strip()
 
-        if calendar_name.lower() == "birthdays":
+        _skip_calendars = {"birthdays", "feriados", "holidays", "feriados brasileiros"}
+        if calendar_name.lower() in _skip_calendars:
             continue
 
         event_time = _parse_event_time(time_bracket)
@@ -323,6 +324,86 @@ def sync_quick(dry_run: bool = False) -> dict:
     return stats
 
 
+def ensure_past_events_table():
+    """Create past_events table if it doesn't exist."""
+    with db.get_conn("calendar") as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS past_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                event_date TEXT NOT NULL,
+                event_name TEXT NOT NULL,
+                event_time TEXT NOT NULL DEFAULT '',
+                duration_hours REAL DEFAULT 1.0,
+                category TEXT NOT NULL DEFAULT 'general',
+                account TEXT DEFAULT '',
+                calendar_name TEXT DEFAULT '',
+                location TEXT DEFAULT '',
+                source TEXT DEFAULT 'manual',
+                notes TEXT DEFAULT '',
+                outcome TEXT DEFAULT '',
+                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        for idx, col in [("idx_past_events_date", "event_date"),
+                         ("idx_past_events_category", "category"),
+                         ("idx_past_events_source", "source")]:
+            conn.execute(
+                f"CREATE INDEX IF NOT EXISTS {idx} ON past_events({col})"
+            )
+
+
+def archive_past_events(dry_run: bool = False) -> int:
+    """Move past-dated entries from upcoming to past_events.
+
+    Only archives rows with event_date before today. Skips rows that
+    already exist in past_events (matched by event_date + event_name).
+    Returns count of archived entries.
+    """
+    from datetime import timezone
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    past = db.query(
+        "calendar",
+        "SELECT * FROM upcoming WHERE event_date < ?",
+        (today,),
+    )
+    if not past:
+        return 0
+
+    count = 0
+    for row in past:
+        if dry_run:
+            print(f"  WOULD_ARCHIVE: {row['event_date']} | {row['event_name']}")
+            count += 1
+            continue
+
+        exists = db.query(
+            "calendar",
+            "SELECT 1 FROM past_events WHERE event_date=? AND event_name=? LIMIT 1",
+            (row["event_date"], row["event_name"]),
+        )
+        if exists:
+            db.execute("calendar", "DELETE FROM upcoming WHERE id=?", (row["id"],))
+            count += 1
+            continue
+
+        db.execute("calendar", """
+            INSERT INTO past_events
+            (event_date, event_name, event_time, duration_hours, category,
+             account, calendar_name, location, source)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            row["event_date"], row["event_name"], row["event_time"],
+            row["duration_hours"], row["category"], row["account"],
+            row["calendar_name"], row["location"], row["source"],
+        ))
+        db.execute("calendar", "DELETE FROM upcoming WHERE id=?", (row["id"],))
+        count += 1
+
+    return count
+
+
 def _format_stats(stats: dict):
     print("\nSync Summary:")
     print(f"  Dates scanned:  {stats.get('dates_scanned', 0)}")
@@ -350,6 +431,10 @@ def main():
         sys.exit(1)
 
     ensure_schema()
+    ensure_past_events_table()
+    archived = archive_past_events(dry_run=args.dry_run)
+    if archived:
+        print(f"  Archived past events: {archived}")
 
     if args.quick:
         stats = sync_quick(dry_run=args.dry_run)
