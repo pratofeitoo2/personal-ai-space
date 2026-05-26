@@ -81,11 +81,14 @@ class TaskCoordinator(BaseAgent):
         audit(f"CREATED task={task_id} title={data.get('title')}")
         self.logger.info(f"Task created: {task_id}")
         propagator.on_task_created(task_id)
+        if self.observer:
+            self.observer.observe_task_created({"id": task_id, **data})
         return task_id
 
     def update_status(self, task_id: str, new_status: str) -> bool:
-        old = db.query("tasks", "SELECT status FROM tasks WHERE id=?", (task_id,))
-        old_status = old[0]["status"] if old else None
+        old = db.query("tasks", "SELECT id, title, category, priority, status FROM tasks WHERE id=?", (task_id,))
+        old_task = old[0] if old else None
+        old_status = old_task["status"] if old_task else None
         rows = db.execute(
             "tasks",
             "UPDATE tasks SET status=?, completed_at=CASE WHEN ?='completed' THEN ? ELSE completed_at END WHERE id=?",
@@ -95,6 +98,9 @@ class TaskCoordinator(BaseAgent):
             audit(f"STATUS_CHANGE task={task_id} new_status={new_status}")
             self.logger.info(f"Task {task_id} → {new_status}")
             propagator.on_task_updated(task_id, {"status": old_status} if old_status else None)
+            if self.observer:
+                if new_status == "completed":
+                    self.observer.observe_task_completed(old_task or {"id": task_id}, 0)
         return bool(rows)
 
     def summary(self) -> dict:

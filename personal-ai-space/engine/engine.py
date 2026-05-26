@@ -185,6 +185,8 @@ class Engine:
                     self._observer.observe_anomaly_detected(
                         f"agent_{agent_id}_error", "warning"
                     )
+                elif agent_id == "context-manager" and command == "get_context":
+                    self._observer.observe_context_accessed("user_context")
 
             # Fire-and-forget notification to GitHub agent (non-blocking)
             if agent_id != "github-agent" and status == "success":
@@ -249,7 +251,16 @@ class Engine:
 
     def log_habit(self, habit_name: str, duration_min: int = 0, notes: str = "") -> bool:
         """Find habit by name, log completion, update streak, propagate via DataHub."""
-        return self._hub.log_habit_completion(habit_name, duration_min, notes)
+        result = self._hub.log_habit_completion(habit_name, duration_min, notes)
+        if result and self._observer:
+            rows = db_manager.query(
+                "self",
+                "SELECT * FROM habits WHERE habit_name=? LIMIT 1",
+                (habit_name,),
+            )
+            if rows:
+                self._observer.observe_habit_logged(rows[0], True)
+        return result
 
     def add_note(self, title: str, content: str = "", tags: str = "", category: str = "general") -> str:
         r = self.send("knowledge-indexer", "add_note", {

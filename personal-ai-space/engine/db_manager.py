@@ -2,7 +2,7 @@
 Engine core: database connection manager.
 Handles all SQLite connections and queries.
 Features:
-  - Connection pooling (reuse connections across callers)
+  - Thread-local connection caching (each thread owns its connections)
   - Transaction context manager for atomic multi-table operations
   - WAL checkpoint management to prevent unbounded WAL growth
   - WAL mode + foreign keys on all connections
@@ -10,7 +10,6 @@ Features:
 import sqlite3
 import json
 import logging
-import queue
 import threading
 from pathlib import Path
 from contextlib import contextmanager
@@ -32,19 +31,23 @@ DB_PATHS = {
     "calendar":   DB_DIR / "calendar" / "calendar.db",
 }
 
-# ── Connection Pool ──────────────────────────────────────────────────────────
-# Thread-safe, path-keyed pool of reusable SQLite connections.
-# Each database gets its own pool of up to MAX_POOL_SIZE connections.
-# Connections are validated on checkout and replaced if stale.
+# ── Thread-Local Connections ─────────────────────────────────────────────────
+# Each thread gets its own SQLite connections, one per database file.
+# This avoids the "SQLite objects created in a thread can only be used
+# in that same thread" error entirely.
+# WAL mode allows concurrent reads across threads safely.
 
-MAX_POOL_SIZE = 8
-_pools: dict[str, queue.Queue] = {}
-_pool_sizes: dict[str, int] = {}
-_pool_lock = threading.Lock()
+_thread_local = threading.local()
 
 
 def _pool_key(path: Path) -> str:
     return str(path.resolve())
+
+
+def _get_local_conns() -> dict[str, sqlite3.Connection]:
+    if not hasattr(_thread_local, "conns"):
+        _thread_local.conns = {}
+    return _thread_local.conns
 
 
 def _create_conn(path: Path) -> sqlite3.Connection:
@@ -57,63 +60,32 @@ def _create_conn(path: Path) -> sqlite3.Connection:
 
 
 def acquire_conn(path: Path) -> sqlite3.Connection:
-    """Acquire a connection from the pool, creating one if needed."""
+    """Get a connection for the current thread. Thread-local cached."""
     key = _pool_key(path)
-    pool = _pools.get(key)
-    if pool is None:
-        pool = queue.Queue()
-        _pools[key] = pool
-        _pool_sizes[key] = 0
-
-    # Try cached connection first
-    try:
-        conn = pool.get_nowait()
-        conn.execute("SELECT 1")  # validate
-        return conn
-    except queue.Empty:
-        logger.debug("Connection pool timed out waiting for connection")
-    except (sqlite3.Error, AttributeError) as e:
-        logger.warning("Connection error during pool_acquire: %s", e)  # stale conn, create new one below
-
-    # Create new if pool not full
-    with _pool_lock:
-        if _pool_sizes.get(key, 0) < MAX_POOL_SIZE:
-            conn = _create_conn(path)
-            _pool_sizes[key] = _pool_sizes.get(key, 0) + 1
-            return conn
-
-    # Pool full — block until a connection is released
-    conn = pool.get(timeout=30)
-    return conn
+    local_conns = _get_local_conns()
+    if key not in local_conns:
+        local_conns[key] = _create_conn(path)
+        logger.debug("Created %s connection for thread %s",
+                     path.name, threading.current_thread().name)
+    return local_conns[key]
 
 
 def release_conn(path: Path, conn: sqlite3.Connection) -> None:
-    """Return a connection to the pool, or close if stale."""
-    key = _pool_key(path)
-    pool = _pools.get(key)
-    if pool is None:
-        conn.close()
-        return
-    try:
-        conn.execute("SELECT 1")
-        pool.put(conn)
-    except (sqlite3.Error, AttributeError):
-        with _pool_lock:
-            _pool_sizes[key] = max(0, _pool_sizes.get(key, 0) - 1)
-        conn.close()
+    """No-op — thread keeps its own connections until GC at thread exit."""
+
+
+def close_thread_connections() -> None:
+    local_conns = _get_local_conns()
+    for key, conn in list(local_conns.items()):
+        try:
+            conn.close()
+        except Exception:
+            pass
+    _get_local_conns().clear()
 
 
 def clear_pool() -> None:
-    """Close all pooled connections and reset. Used during testing."""
-    for key, pool in list(_pools.items()):
-        while True:
-            try:
-                conn = pool.get_nowait()
-                conn.close()
-            except queue.Empty:
-                break
-    _pools.clear()
-    _pool_sizes.clear()
+    close_thread_connections()
 
 
 def dict_factory(cursor, row):
