@@ -24,6 +24,14 @@ import yaml
 
 import db_manager as db
 
+# Text extraction from binary files (OCR for images, text for PDF/DOCX)
+# Falls back gracefully if the text_extractor module is not installed.
+try:
+    from sync.text_extractor import extract_text as _extract_binary_text
+    _HAS_TEXT_EXTRACTOR = True
+except ImportError:
+    _HAS_TEXT_EXTRACTOR = False
+
 logger = logging.getLogger("engine.sync_self")
 
 # Resolve project root (this file lives at engine/sync_self.py)
@@ -498,6 +506,16 @@ def sync_documents() -> int:
                         if not title:
                             continue
                         doc_id = entry.get("id", f"doc_{subcategory}_{title.lower().replace(' ', '_')}")
+                        # Extract text content from the actual file if it exists
+                        file_name = entry.get("file", "")
+                        file_format = entry.get("file_format", "")
+                        content = entry.get("description", "")
+                        if file_name and file_format not in ("md",):
+                            full_path = subdir / file_name
+                            if full_path.exists() and _HAS_TEXT_EXTRACTOR:
+                                extracted = _extract_binary_text(full_path)
+                                if extracted:
+                                    content = extracted
                         with db.transaction("self") as conn:
                             conn.execute(
                                 """INSERT INTO documents
@@ -523,7 +541,7 @@ def sync_documents() -> int:
                                     json.dumps(entry.get("tags", [])),
                                     entry.get("file", ""),
                                     entry.get("file_format", ""),
-                                    entry.get("description", ""),
+                                    content,
                                     json.dumps({k: v for k, v in entry.items()
                                                 if k not in ("title", "doc_type", "tags", "file", "file_format", "description", "id")}),
                                     entry.get("created", now_iso),

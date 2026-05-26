@@ -1,0 +1,65 @@
+[
+  {
+    "title": "CTPS - Carteira de Trabalho",
+    "doc_type": "gov_docs",
+    "file": "CTPS_16802953730_2024-12-09T16-2.pdf",
+    "file_format": "pdf",
+    "tags": ["ctps", "work_card", "brazil"]
+  },
+  {
+    "title": "RG - Registro Geral",
+    "doc_type": "gov_docs",
+    "file": "RG.jpg",
+    "file_format": "jpg",
+    "tags": ["rg", "id", "brazil"]
+  },
+  {
+    "title": "NIS - Número de Identificação Social",
+    "doc_type": "gov_docs",
+    "file": "NIS.jpg",
+    "file_format": "jpg",
+    "tags": ["nis", "social_id", "brazil"]
+  },
+  {
+    "title": "Documento CTPS - Página 1",
+    "doc_type": "gov_docs",
+    "file": "IMG_0307.pdf",
+    "file_format": "pdf",
+    "tags": ["ctps", "document_scan"]
+  },
+  {
+    "title": "Documento CTPS - Página 2",
+    "doc_type": "gov_docs",
+    "file": "IMG_0308.pdf",
+    "file_format": "pdf",
+    "tags": ["ctps", "document_scan"]
+  },
+  {
+    "title": "Documento CTPS - Página 3",
+    "doc_type": "gov_docs",
+    "file": "IMG_03080.pdf",
+    "file_format": "pdf",
+    "tags": ["ctps", "document_scan"]
+  },
+  {
+    "title": "Documento CTPS - Página 4",
+    "doc_type": "gov_docs",
+    "file": "IMG_0307 2.pdf",
+    "file_format": "pdf",
+    "tags": ["ctps", "document_scan"]
+  },
+  {
+    "title": "Foto CTPS - Imagem 1",
+    "doc_type": "gov_docs",
+    "file": "IMG_0307.heic",
+    "file_format": "heic",
+    "tags": ["ctps", "photo"]
+  },
+  {
+    "title": "Foto CTPS - Imagem 2",
+    "doc_type": "gov_docs",
+    "file": "IMG_0308.heic",
+    "file_format": "heic",
+    "tags": ["ctps", "photo"]
+  }
+]

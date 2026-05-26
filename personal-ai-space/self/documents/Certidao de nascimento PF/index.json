@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Certidão de Nascimento - PF",
+    "doc_type": "gov_docs",
+    "file": "Certidao PF .pdf",
+    "file_format": "pdf",
+    "tags": ["birth_certificate", "certidao_nascimento", "pf"]
+  },
+  {
+    "title": "Certidão de Nascimento - JPG",
+    "doc_type": "gov_docs",
+    "file": "Certidao PF .JPG",
+    "file_format": "jpg",
+    "tags": ["birth_certificate", "certidao_nascimento", "pf"]
+  },
+  {
+    "title": "Certidão de Nascimento - Foto",
+    "doc_type": "gov_docs",
+    "file": "IMG_0306.heic",
+    "file_format": "heic",
+    "tags": ["birth_certificate", "certidao_nascimento", "photo"]
+  }
+]
