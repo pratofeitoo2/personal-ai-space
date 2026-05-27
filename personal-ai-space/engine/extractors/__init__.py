@@ -7,8 +7,10 @@ import logging
 from pathlib import Path
 from datetime import datetime
 import yaml
+import uuid
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
+from extractors.behavior_vocab import extract_emotions, extract_activities
 from db_manager import execute, query
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
@@ -183,11 +185,16 @@ class DailyNoteExtractor:
             emotions = self._extract_emotions(content)
             for emotion in emotions:
                 try:
+                    effectiveness = 0.2 if emotion['negated'] else 0.5
+                    trigger = emotion['context']
                     execute("self", """
                         INSERT INTO behaviors 
-                        (behavior_type, response, observed_date, frequency)
-                        VALUES (?, ?, ?, ?)
-                    """, ('emotion', emotion, datetime.now().isoformat(), 1))
+                        (id, behavior_type, trigger, response, frequency, effectiveness, observed_date)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(behavior_type, response) DO UPDATE SET
+                          frequency = frequency + 1,
+                          observed_date = excluded.observed_date
+                    """, (uuid.uuid4().hex, 'emotion', trigger, emotion['word'], 1, effectiveness, datetime.now().isoformat()))
                     count += 1
                 except Exception as e:
                     logger.debug("Failed to insert emotion behavior: %s", e)
@@ -198,9 +205,12 @@ class DailyNoteExtractor:
                 try:
                     execute("self", """
                         INSERT INTO behaviors 
-                        (behavior_type, response, observed_date, frequency)
-                        VALUES (?, ?, ?, ?)
-                    """, ('activity', activity, datetime.now().isoformat(), 1))
+                        (id, behavior_type, trigger, response, frequency, effectiveness, observed_date)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(behavior_type, response) DO UPDATE SET
+                          frequency = frequency + 1,
+                          observed_date = excluded.observed_date
+                    """, (uuid.uuid4().hex, 'activity', activity['context'], activity['word'], 1, 0.5, datetime.now().isoformat()))
                     count += 1
                 except Exception as e:
                     logger.debug("Failed to insert activity behavior: %s", e)
@@ -210,33 +220,20 @@ class DailyNoteExtractor:
         return count
     
     def _extract_emotions(self, content: str) -> list:
-        """Extract emotion keywords."""
-        emotions = []
-        patterns = [
-            r'feel(?:ing)?[\s:]+([a-z]+)',
-            r'(?:felt|feeling|felt)\s+([a-z]+)',
-            r'(?:happy|sad|angry|anxious|stressed|excited|motivated|tired)',
-        ]
-        
-        for pattern in patterns:
-            matches = re.findall(pattern, content.lower())
-            emotions.extend(matches)
-        
-        return list(set(emotions))[:5]  # Limit to 5 unique
+        """Extract emotion keywords with whitelist filtering and context.
+
+        Delegates to behavior_vocab for shared extraction logic.
+        Returns list of dicts with word, category, negated, context.
+        """
+        return extract_emotions(content)
     
     def _extract_activities(self, content: str) -> list:
-        """Extract activity keywords."""
-        activities = []
-        patterns = [
-            r'(?:did|doing|studied|worked|exercised|read|wrote)\s+([a-z\s]+)',
-            r'(?:studied|work|exercise|read|write|coding|design)',
-        ]
-        
-        for pattern in patterns:
-            matches = re.findall(pattern, content.lower())
-            activities.extend(matches)
-        
-        return list(set(activities))[:5]  # Limit to 5 unique
+        """Extract activity keywords with whitelist filtering and context.
+
+        Delegates to behavior_vocab for shared extraction logic.
+        Returns list of dicts with word, context.
+        """
+        return extract_activities(content)
 
 
 class FinanceExtractor:

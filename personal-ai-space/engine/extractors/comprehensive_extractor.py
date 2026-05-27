@@ -10,11 +10,13 @@ import logging
 from pathlib import Path
 from datetime import datetime, timedelta
 import yaml
+import uuid
 from collections import defaultdict
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from db_manager import execute, query
 from synthesis import propagator
+from extractors.behavior_vocab import extract_emotions, extract_activities
 
 logger = logging.getLogger("engine.extractors.comprehensive")
 
@@ -160,60 +162,63 @@ class ComprehensiveExtractor:
         """Extract behaviors and patterns from daily notes."""
         inbox_dir = self.project_root / "command" / "inbox"
         
-        emotions_found = set()
-        activities_found = set()
-        
-        emotion_keywords = [
-            'stressed', 'anxious', 'calm', 'focused', 'distracted', 'motivated',
-            'tired', 'energized', 'happy', 'sad', 'frustrated', 'satisfied',
-            'productive', 'overwhelmed', 'confident', 'doubtful', 'excited'
-        ]
-        
-        activity_keywords = [
-            'studied', 'researched', 'worked', 'coded', 'designed', 'wrote',
-            'met', 'called', 'emailed', 'read', 'exercised', 'meditated',
-            'slept', 'meeting', 'conference', 'presentation', 'workshop'
-        ]
+        emotions_found = []
+        activities_found = []
         
         for file_path in inbox_dir.glob("*.md"):
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read().lower()
+                    content = f.read()
                 
-                # Find emotions
-                for emotion in emotion_keywords:
-                    if emotion in content:
-                        emotions_found.add(emotion)
-                
-                # Find activities
-                for activity in activity_keywords:
-                    if activity in content:
-                        activities_found.add(activity)
+                emotions_found.extend(extract_emotions(content))
+                activities_found.extend(extract_activities(content))
             except Exception as e:
                 logger.warning("Failed to process daily note: %s", e)
         
-        # Insert unique behaviors
-        for emotion in emotions_found:
+        # Deduplicate across all files (keep last-seen context)
+        emotion_dedup = {}
+        for e in emotions_found:
+            if e['word'] in emotion_dedup:
+                if e['negated']:
+                    emotion_dedup[e['word']]['negated'] = True
+            else:
+                emotion_dedup[e['word']] = dict(e)
+        
+        activity_dedup = {}
+        for a in activities_found:
+            if a['word'] not in activity_dedup:
+                activity_dedup[a['word']] = dict(a)
+        
+        for word, emotion in emotion_dedup.items():
             try:
+                effectiveness = 0.2 if emotion['negated'] else 0.5
+                trigger = emotion['context']
                 execute("self", """
                     INSERT INTO behaviors 
-                    (behavior_type, response, observed_date, frequency)
-                    VALUES (?, ?, ?, ?)
-                """, ('emotion', emotion, datetime.now().isoformat(), 1))
+                    (id, behavior_type, trigger, response, frequency, effectiveness, observed_date)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(behavior_type, response) DO UPDATE SET
+                      frequency = frequency + 1,
+                      observed_date = excluded.observed_date
+                """, (uuid.uuid4().hex, 'emotion', trigger, word, 1, effectiveness, datetime.now().isoformat()))
                 self.stats['behaviors_emotions'] += 1
             except Exception as e:
-                logger.warning("Failed to insert emotion behavior '%s': %s", emotion, e)
+                logger.warning("Failed to insert emotion behavior '%s': %s", word, e)
         
-        for activity in activities_found:
+        for word, activity in activity_dedup.items():
             try:
+                trigger = activity['context']
                 execute("self", """
                     INSERT INTO behaviors 
-                    (behavior_type, response, observed_date, frequency)
-                    VALUES (?, ?, ?, ?)
-                """, ('activity', activity, datetime.now().isoformat(), 1))
+                    (id, behavior_type, trigger, response, frequency, effectiveness, observed_date)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(behavior_type, response) DO UPDATE SET
+                      frequency = frequency + 1,
+                      observed_date = excluded.observed_date
+                """, (uuid.uuid4().hex, 'activity', trigger, word, 1, 0.5, datetime.now().isoformat()))
                 self.stats['behaviors_activities'] += 1
             except Exception as e:
-                logger.warning("Failed to insert activity behavior '%s': %s", activity, e)
+                logger.warning("Failed to insert activity behavior '%s': %s", word, e)
     
     def _extract_professional_data(self):
         """Extract professional skills and roles."""
