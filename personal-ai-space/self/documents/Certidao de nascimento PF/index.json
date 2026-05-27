@@ -4,20 +4,52 @@
     "doc_type": "gov_docs",
     "file": "Certidao PF .pdf",
     "file_format": "pdf",
-    "tags": ["birth_certificate", "certidao_nascimento", "pf"]
+    "tags": ["birth_certificate", "certidao_nascimento", "pf"],
+    "full_name": "PAULO FABIO DE REZENDE JUNIOR",
+    "birth_date": "22/08/1997",
+    "sexo": "Masculino",
+    "cor": "Branca",
+    "pai": "PAULO FABIO DE REZENDE",
+    "mae": "KAREN ARAUJO COUTINHO",
+    "avo_paterno": "MARCIO FERNANDO DE REZENDE",
+    "ava_paterna": "MARIA APARECIDA DE REZENDE",
+    "avo_materno": "EDUARDO DE SOUZA COUTINHO",
+    "ava_materna": "SELMA ARAUJO COUTINHO",
+    "naturalidade": "NITERÓI - RJ",
+    "hospital": "Hospital Santa Cruz",
+    "hora_nascimento": "21:40",
+    "cartorio": "Cartório do Registro Civil da Primeira Zona Judiciária do Município de Niterói",
+    "livro": "A-47",
+    "registro_numero": "29.504",
+    "data_registro": "27/08/1997",
+    "declarante": "Pai"
   },
   {
     "title": "Certidão de Nascimento - JPG",
     "doc_type": "gov_docs",
     "file": "Certidao PF .JPG",
     "file_format": "jpg",
-    "tags": ["birth_certificate", "certidao_nascimento", "pf"]
+    "tags": ["birth_certificate", "certidao_nascimento", "pf"],
+    "full_name": "PAULO FABIO DE REZENDE JUNIOR",
+    "birth_date": "22/08/1997",
+    "sexo": "Masculino",
+    "cor": "Branca",
+    "pai": "PAULO FABIO DE REZENDE",
+    "mae": "KAREN ARAUJO COUTINHO",
+    "naturalidade": "NITERÓI - RJ",
+    "hospital": "Hospital Santa Cruz",
+    "cartorio": "Cartório do Registro Civil da Primeira Zona Judiciária do Município de Niterói"
   },
   {
     "title": "Certidão de Nascimento - Foto",
     "doc_type": "gov_docs",
     "file": "IMG_0306.heic",
     "file_format": "heic",
-    "tags": ["birth_certificate", "certidao_nascimento", "photo"]
+    "tags": ["birth_certificate", "certidao_nascimento", "photo"],
+    "full_name": "PAULO FABIO DE REZENDE JUNIOR",
+    "birth_date": "22/08/1997",
+    "sexo": "Masculino",
+    "cor": "Branca",
+    "cartorio": "Cartório do Registro Civil da Primeira Zona Judiciária do Município de Niterói"
   }
 ]
