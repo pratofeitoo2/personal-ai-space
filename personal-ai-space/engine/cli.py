@@ -702,6 +702,23 @@ if HAS_RICH:
         rec = e.pattern_workflow() if isinstance(e, DaemonProxy) else e._pattern_learner.get_workflow_recommendation()
         console.print(Panel(rec, title="💡 Workflow Recommendation"))
 
+    # ── behaviors ─────────────────────────────────────────────────────────────
+
+    @cli.group()
+    def behaviors():
+        """Analyze behavior patterns — emotions, activities, trends."""
+
+    @behaviors.command("report")
+    @click.option("--raw", is_flag=True, help="Output raw JSON instead of formatted report")
+    def behaviors_report(raw):
+        """Show behavior analytics: trends, correlations, anomalies."""
+        from analytics.behavior_analytics import BehaviorAnalytics
+        ba = BehaviorAnalytics()
+        if raw:
+            out_json(ba.full_report())
+        else:
+            console.print(ba)
+
     # ── scheduler ────────────────────────────────────────────────────────────
 
     @cli.group()

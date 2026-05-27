@@ -64,10 +64,11 @@ CREATE TABLE IF NOT EXISTS behaviors (
   behavior_type TEXT,
   trigger TEXT,
   response TEXT,
-  frequency INTEGER,
-  effectiveness FLOAT,
+  frequency INTEGER DEFAULT 1,
+  effectiveness FLOAT DEFAULT 0.5,
   observed_date DATE
 );
+CREATE UNIQUE INDEX IF NOT EXISTS idx_behaviors_unique ON behaviors(behavior_type, response, observed_date);
 
 CREATE INDEX IF NOT EXISTS idx_habits_category ON habits(category);
 CREATE INDEX IF NOT EXISTS idx_habits_status ON habits(status);
