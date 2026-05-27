@@ -83,23 +83,37 @@ def _detect_negation(text: str, word_start: int, word: str) -> bool:
     return bool(pattern.search(window))
 
 
+_SENTENCE_END = re.compile(r'(?<=[.!?])\s+')
+
+
 def _capture_context(text: str, word_start: int, window: int = 5) -> str:
-    """Return up to N words immediately before the match position.
+    """Return the full sentence containing the word at word_start.
+
+    Splits text on sentence-ending punctuation (. ! ?) followed by
+    whitespace, then returns the sentence that contains the match index.
+    Falls back to 'daily_note' if no text is available.
 
     Args:
         text: Full text being searched.
         word_start: Character index where the target word begins.
-        window: Maximum number of context words to capture.
+        window: Deprecated, kept for API compatibility.
 
     Returns:
-        String of context words, or 'daily_note' if no context available.
+        The sentence containing the word, or 'daily_note'.
     """
-    before = text[:word_start].strip()
-    if not before:
+    if not text or not text.strip():
         return 'daily_note'
-    words = before.split()
-    context_words = words[-window:] if len(words) > window else words
-    return ' '.join(context_words)
+
+    sentences = _SENTENCE_END.split(text)
+
+    char_offset = 0
+    for sentence in sentences:
+        sentence_end = char_offset + len(sentence)
+        if char_offset <= word_start < sentence_end:
+            return sentence.strip()
+        char_offset = sentence_end + 1  # +1 for whitespace consumed by split
+
+    return 'daily_note'
 
 
 def _get_emotion_category(word: str) -> str:

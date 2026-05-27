@@ -19,7 +19,7 @@ class TestExtractEmotions:
         assert result[0]['word'] == 'anxious'
         assert result[0]['category'] == 'fear'
         assert result[0]['negated'] is False
-        assert result[0]['context'] == 'I feel'
+        assert result[0]['context'] == 'I feel anxious'
 
     def test_captures_multiple_emotions(self):
         result = extract_emotions("I feel anxious and sad")
@@ -130,17 +130,22 @@ class TestNegationDetection:
 
 
 class TestContextCapture:
-    def test_full_context_window(self):
-        result = _capture_context("Today I was feeling happy", 21, 5)
-        words = result.split()
-        assert len(words) <= 5
+    def test_returns_only_relevant_sentence(self):
+        """Two sentences: only the sentence containing the match is returned."""
+        result = _capture_context("I feel happy. I also feel sad.", 26)
+        assert result == 'I also feel sad.'
+
+    def test_single_sentence_returns_full_text(self):
+        """No sentence boundary means the entire text is the context."""
+        result = _capture_context("Today I was feeling happy", 21)
+        assert result == 'Today I was feeling happy'
 
     def test_no_context_returns_daily_note(self):
-        assert _capture_context("", 0, 5) == 'daily_note'
+        assert _capture_context("", 0) == 'daily_note'
 
     def test_single_word_context(self):
-        result = _capture_context("really happy", 7, 5)
-        assert result == 'really'
+        result = _capture_context("really happy", 7)
+        assert result == 'really happy'
 
 
 class TestVocabIntegrity:
