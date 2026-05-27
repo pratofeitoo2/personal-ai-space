@@ -176,5 +176,69 @@
     "workload": "10 horas/aula",
     "issue_date": "16/05/2022",
     "certificate_type": "Curso de Extensão"
+  },
+  {
+    "title": "Diploma - Tecnólogo em Coaching e Desenvolvimento Humano",
+    "doc_type": "academic",
+    "file": "Diploma Faculdade Coaching.pdf",
+    "file_format": "pdf",
+    "tags": ["unifcv", "coaching", "graduation", "diploma"],
+    "full_name": "Paulo Fabio De Rezende Junior",
+    "school": "Centro Universitário Cidade Verde – UniCV",
+    "course": "Curso Superior de Tecnologia em Coaching e Desenvolvimento Humano",
+    "degree": "Tecnólogo",
+    "conclusion_date": "22/09/2023",
+    "graduation_date": "16/12/2023",
+    "rg": "24.059.184-2",
+    "diploma_registry": "nº 10341, Livro 14, fls. 255",
+    "certificate_type": "Diploma de Graduação"
+  },
+  {
+    "title": "Histórico Escolar - Coaching e Desenvolvimento Humano",
+    "doc_type": "academic",
+    "file": "historico_digital_22250.pdf",
+    "file_format": "pdf",
+    "tags": ["unifcv", "coaching", "transcript", "historico"],
+    "full_name": "Paulo Fabio de Rezende Junior",
+    "school": "Centro Universitário Cidade Verde – UniCV",
+    "course": "Curso Superior de Tecnologia em Coaching e Desenvolvimento Humano",
+    "cpf": "168.029.537-30",
+    "rg": "24.059.184-2",
+    "total_hours": "1600",
+    "degree": "Tecnólogo",
+    "certificate_type": "Histórico Escolar"
+  },
+  {
+    "title": "Portal Acadêmico - Disciplinas Cursadas (captura 1)",
+    "doc_type": "academic",
+    "file": "Captura de Tela 2023-03-04 às 14.56.23.png",
+    "file_format": "png",
+    "tags": ["unifcv", "coaching", "grades", "screenshot"],
+    "full_name": "Paulo Fabio de Rezende Junior",
+    "school": "Centro Universitário Cidade Verde – UniCV",
+    "course": "Curso Superior de Tecnologia em Coaching e Desenvolvimento Humano",
+    "certificate_type": "Captura de Tela - Portal Acadêmico"
+  },
+  {
+    "title": "Portal Acadêmico - Disciplinas Cursadas (captura 2)",
+    "doc_type": "academic",
+    "file": "Captura de Tela 2023-03-04 às 14.56.43.png",
+    "file_format": "png",
+    "tags": ["unifcv", "coaching", "grades", "screenshot"],
+    "full_name": "Paulo Fabio de Rezende Junior",
+    "school": "Centro Universitário Cidade Verde – UniCV",
+    "course": "Curso Superior de Tecnologia em Coaching e Desenvolvimento Humano",
+    "certificate_type": "Captura de Tela - Portal Acadêmico"
+  },
+  {
+    "title": "Portal Acadêmico - Disciplinas Cursadas (captura 3)",
+    "doc_type": "academic",
+    "file": "Captura de Tela 2023-03-04 às 14.56.49.png",
+    "file_format": "png",
+    "tags": ["unifcv", "coaching", "grades", "screenshot"],
+    "full_name": "Paulo Fabio de Rezende Junior",
+    "school": "Centro Universitário Cidade Verde – UniCV",
+    "course": "Curso Superior de Tecnologia em Coaching e Desenvolvimento Humano",
+    "certificate_type": "Captura de Tela - Portal Acadêmico"
   }
 ]
