@@ -46,7 +46,7 @@ engine/tests/
 
 **Does NOT cover:** File I/O, database operations, or network calls — this module is pure string processing only.
 
-- [ ] **Step 1: Write failing tests in test_behavior_vocab.py**
+- [x] **Step 1: Write failing tests in test_behavior_vocab.py**
 
 ```python
 """Tests for behavior_vocab extraction module."""
@@ -203,7 +203,7 @@ class TestVocabIntegrity:
         assert len(ACTIVITY_WORDS) == len(set(ACTIVITY_WORDS)), "Duplicate activity words found"
 ```
 
-- [ ] **Step 2: Run tests to verify they fail (module doesn't exist yet)**
+^A- [x] **Step 2: Run tests to verify they fail (module doesn't exist yet)**
 
 Run:
 ```bash
@@ -211,7 +211,7 @@ cd personal-ai-space && python3 -m pytest engine/tests/test_behavior_vocab.py -v
 ```
 Expected: FAIL with `ModuleNotFoundError: No module named 'extractors.behavior_vocab'` (or similar import error — the test file itself may not even load since it imports from a non-existent module)
 
-- [ ] **Step 3: Implement behavior_vocab.py**
+^A- [x] **Step 3: Implement behavior_vocab.py**
 
 ```python
 """Shared vocabulary and extraction functions for behaviors table.
@@ -257,10 +257,10 @@ EMOTION_WORDS = {
 }
 
 # Fast lookup set
-ALL_EMOTIONS = [word for words in EMOTION_WORDS.values() for word in words]
+LL_EMOTIONS = [word for words in EMOTION_WORDS.values() for word in words]
 
 # Curated activity words — past-tense verbs describing meaningful actions
-ACTIVITY_WORDS = [
+CTIVITY_WORDS = [
     'studied', 'researched', 'worked', 'coded', 'designed', 'wrote',
     'met', 'called', 'emailed', 'read', 'exercised', 'meditated',
     'slept', 'planned', 'reviewed', 'analyzed', 'presented',
@@ -429,7 +429,7 @@ def extract_activities(text: str) -> list[dict]:
     return results
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+^A- [x] **Step 4: Run tests to verify they pass**
 
 Run:
 ```bash
@@ -437,7 +437,7 @@ cd personal-ai-space && python3 -m pytest engine/tests/test_behavior_vocab.py -v
 ```
 Expected: All tests PASS
 
-- [ ] **Step 5: Commit**
+^A- [x] **Step 5: Commit**
 
 ```bash
 git add docs/plans/2026-05-27-behavior-extraction.md
@@ -465,7 +465,7 @@ git commit -m "feat(behaviors): add behavior_vocab.py with curated dictionaries 
 
 **Does NOT cover:** Other extractors in `__init__.py` (RelationshipExtractor, GoalExtractor, FinanceExtractor, ProfileExtractor) — those are unchanged. Only the `DailyNoteExtractor` class is modified.
 
-- [ ] **Step 1: Add import and refactor DailyNoteExtractor**
+^A- [x] **Step 1: Add import and refactor DailyNoteExtractor**
 
 Insert at the top of `__init__.py` (after the existing imports):
 ```python
@@ -558,7 +558,7 @@ to:
                     count += 1
 ```
 
-- [ ] **Step 2: Verify no syntax/import errors**
+^A- [x] **Step 2: Verify no syntax/import errors**
 
 Run:
 ```bash
@@ -566,7 +566,7 @@ cd personal-ai-space && python3 -c "from extractors import DailyNoteExtractor; p
 ```
 Expected: prints `OK`
 
-- [ ] **Step 3: Run existing tests to verify no regressions**
+^A- [x] **Step 3: Run existing tests to verify no regressions**
 
 Run:
 ```bash
@@ -574,7 +574,7 @@ cd personal-ai-space && python3 -m pytest engine/tests/ -v --timeout=30 2>&1 | h
 ```
 Expected: All previously passing tests still pass (pre-existing failures, if any, are unchanged)
 
-- [ ] **Step 4: Commit**
+^A- [x] **Step 4: Commit**
 
 ```bash
 git add personal-ai-space/engine/extractors/__init__.py
@@ -596,9 +596,9 @@ git commit -m "refactor(behaviors): DailyNoteExtractor delegates to behavior_voc
 
 **Does NOT cover:** Other methods in ComprehensiveExtractor (`_extract_relationships`, `_extract_professional_data`, `_extract_learning_patterns`, `_extract_implicit_tasks`) — those are unchanged. Only `_extract_daily_patterns` is modified.
 
-- [ ] **Step 1: Add import and refactor _extract_daily_patterns**
+^A- [x] **Step 1: Add import and refactor _extract_daily_patterns**
 
-Add import at the top of `comprehensive_extractor.py` (after existing imports):
+dd import at the top of `comprehensive_extractor.py` (after existing imports):
 ```python
 from extractors.behavior_vocab import extract_emotions, extract_activities
 ```
@@ -671,7 +671,7 @@ Replace `_extract_daily_patterns` (lines 160-222) with:
                 logger.warning("Failed to insert activity behavior '%s': %s", word, e)
 ```
 
-- [ ] **Step 2: Verify no syntax/import errors**
+^A- [x] **Step 2: Verify no syntax/import errors**
 
 Run:
 ```bash
@@ -679,7 +679,7 @@ cd personal-ai-space && python3 -c "from extractors.comprehensive_extractor impo
 ```
 Expected: prints `OK`
 
-- [ ] **Step 3: Run existing tests to verify no regressions**
+^A- [x] **Step 3: Run existing tests to verify no regressions**
 
 Run:
 ```bash
@@ -687,7 +687,7 @@ cd personal-ai-space && python3 -m pytest engine/tests/ -v --timeout=30 2>&1 | h
 ```
 Expected: All previously passing tests still pass
 
-- [ ] **Step 4: Commit**
+^A- [x] **Step 4: Commit**
 
 ```bash
 git add personal-ai-space/engine/extractors/comprehensive_extractor.py
@@ -708,7 +708,7 @@ git commit -m "refactor(behaviors): ComprehensiveExtractor._extract_daily_patter
 
 **Security flag:** `none`
 
-- [ ] **Step 1: Delete existing behaviors**
+^A- [x] **Step 1: Delete existing behaviors**
 
 Run:
 ```bash
@@ -720,7 +720,7 @@ print('Behaviors deleted')
 ```
 Expected: prints `Behaviors deleted`
 
-- [ ] **Step 2: Run DailyNoteExtractor extraction**
+^A- [x] **Step 2: Run DailyNoteExtractor extraction**
 
 Run:
 ```bash
@@ -733,7 +733,7 @@ print(f'Extracted {count} behaviors from daily notes')
 ```
 Expected: prints extracted count (should be fewer than before since noise words are filtered)
 
-- [ ] **Step 3: Run ComprehensiveExtractor extraction**
+^A- [x] **Step 3: Run ComprehensiveExtractor extraction**
 
 Run:
 ```bash
@@ -746,7 +746,7 @@ print(f'Extracted emotions: {ce.stats.get(\"behaviors_emotions\", 0)}, activitie
 ```
 Expected: prints activity counts
 
-- [ ] **Step 4: Verify no noise words in behaviors**
+^A- [x] **Step 4: Verify no noise words in behaviors**
 
 Run:
 ```bash
@@ -771,14 +771,14 @@ for r in rows:
 ```
 Expected: Zero noise words. Most triggers have meaningful context. Some edge-case records may still have 'daily_note' (when the matched word is at the start of the text with no preceding context).
 
-- [ ] **Step 5: Update the design draft status to implemented**
+^A- [x] **Step 5: Update the design draft status to implemented**
 
 ```bash
 sed -i '' 's/^**Status**: Approved Design/**Status**: Implemented/' .omo/drafts/2026-05-27-behavior-extraction-design.md
 git add .omo/drafts/2026-05-27-behavior-extraction-design.md
 ```
 
-- [ ] **Step 6: Final commit**
+^A- [x] **Step 6: Final commit**
 
 ```bash
 git add -A
