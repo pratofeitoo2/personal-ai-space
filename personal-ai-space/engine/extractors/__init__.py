@@ -191,9 +191,8 @@ class DailyNoteExtractor:
                         INSERT INTO behaviors 
                         (id, behavior_type, trigger, response, frequency, effectiveness, observed_date)
                         VALUES (?, ?, ?, ?, ?, ?, ?)
-                        ON CONFLICT(behavior_type, response) DO UPDATE SET
-                          frequency = frequency + 1,
-                          observed_date = excluded.observed_date
+                        ON CONFLICT(behavior_type, response, observed_date) DO UPDATE SET
+                          frequency = frequency + 1
                     """, (uuid.uuid4().hex, 'emotion', trigger, emotion['word'], 1, effectiveness, datetime.now().isoformat()))
                     count += 1
                 except Exception as e:
@@ -207,9 +206,8 @@ class DailyNoteExtractor:
                         INSERT INTO behaviors 
                         (id, behavior_type, trigger, response, frequency, effectiveness, observed_date)
                         VALUES (?, ?, ?, ?, ?, ?, ?)
-                        ON CONFLICT(behavior_type, response) DO UPDATE SET
-                          frequency = frequency + 1,
-                          observed_date = excluded.observed_date
+                        ON CONFLICT(behavior_type, response, observed_date) DO UPDATE SET
+                          frequency = frequency + 1
                     """, (uuid.uuid4().hex, 'activity', activity['context'], activity['word'], 1, 0.5, datetime.now().isoformat()))
                     count += 1
                 except Exception as e:
