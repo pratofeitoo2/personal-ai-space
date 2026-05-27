@@ -8,7 +8,12 @@ CREATE TABLE IF NOT EXISTS profile (
   energy_peak_hours TEXT,
   communication_preference TEXT,
   decision_style TEXT,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  core_values TEXT DEFAULT '',
+  feedback_preference TEXT DEFAULT '',
+  goals_current_year TEXT DEFAULT '',
+  constraints TEXT DEFAULT '',
+  created_at TEXT
 );
 
 CREATE TABLE IF NOT EXISTS habits (
@@ -92,7 +97,8 @@ CREATE TABLE IF NOT EXISTS goals (
   progress_source TEXT DEFAULT 'independent',
   created_at TEXT,
   updated_at TEXT,
-  completed_at TEXT
+  completed_at TEXT,
+  tags TEXT DEFAULT ''
 );
 
 CREATE INDEX IF NOT EXISTS idx_traits_confidence ON traits(confidence_score DESC);
