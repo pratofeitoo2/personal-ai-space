@@ -20,7 +20,7 @@ from extractors.behavior_vocab import extract_emotions, extract_activities
 
 logger = logging.getLogger("engine.extractors.comprehensive")
 
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parent.parent.parent
 
 
 def extract_frontmatter(content: str) -> dict:
