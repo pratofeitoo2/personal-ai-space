@@ -166,12 +166,95 @@ def sync_profile() -> int:
 # ── Habits ───────────────────────────────────────────────────────────────────
 
 def sync_habits() -> int:
-    """Sync habits/tracking.csv → self.db habits table. Returns rows affected."""
-    csv_path = _SELF_DIR / "habits" / "tracking.csv"
-    if not csv_path.exists():
-        logger.warning("tracking.csv not found at %s", csv_path)
+    """Sync habits/*.md frontmatter → self.db habits table.
+
+    Each .md file becomes one habit row. Frontmatter fields map directly
+    to DB columns. Body text is for human reference (not stored in DB).
+
+    Falls back to habits/tracking.csv if no .md files exist (legacy).
+    """
+    habits_dir = _SELF_DIR / "habits"
+    if not habits_dir.exists():
+        logger.warning("habits/ directory not found")
         return 0
 
+    md_files = sorted(habits_dir.glob("*.md"))
+    real_md = [f for f in md_files if not f.stem.startswith("_")]
+
+    # Fall back to legacy CSV if no actual .md files (templates excluded)
+    if not real_md:
+        csv_path = habits_dir / "tracking.csv"
+        if csv_path.exists():
+            return _sync_habits_from_csv(csv_path)
+        logger.warning("no habits data found (no .md or tracking.csv)")
+        return 0
+
+    total = 0
+    for fpath in real_md:
+        if fpath.stem.startswith("_"):
+            continue
+
+        fm = _parse_frontmatter(fpath)
+        if not fm:
+            continue
+
+        habit_name = fm.get("habit_name")
+        if not habit_name:
+            continue
+
+        habit_id = str(fm.get("id", ""))
+        if not habit_id:
+            habit_id = f"habit_{habit_name.lower().replace(' ', '_').replace('-', '_')}"
+
+        category = str(fm.get("category", ""))
+        frequency = str(fm.get("frequency", ""))
+        start_date = str(fm.get("start_date", "")) or None
+        current_streak = (
+            int(fm.get("current_streak", 0))
+            if fm.get("current_streak") is not None
+            else 0
+        )
+        total_completions = (
+            int(fm.get("total_completions", 0))
+            if fm.get("total_completions") is not None
+            else 0
+        )
+        last_completed = str(fm.get("last_completed", "")) or None
+        target_streak = (
+            int(fm.get("target_streak", 0))
+            if fm.get("target_streak") is not None
+            else None
+        )
+        status = str(fm.get("status", "active"))
+
+        with db.transaction("self") as conn:
+            conn.execute(
+                """INSERT OR REPLACE INTO habits
+                   (id, habit_name, category, frequency, start_date,
+                    current_streak, total_completions, last_completed,
+                    target_streak, status)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (
+                    habit_id,
+                    habit_name,
+                    category,
+                    frequency,
+                    start_date,
+                    current_streak,
+                    total_completions,
+                    last_completed,
+                    target_streak,
+                    status,
+                ),
+            )
+            total += 1
+
+    logger.info("sync_habits: %d habit(s) synced from .md files", total)
+    return total
+
+
+def _sync_habits_from_csv(csv_path: Path) -> int:
+    """Legacy fallback — sync habits/tracking.csv → self.db habits table."""
     total = 0
     with open(csv_path, newline="") as f:
         reader = csv.DictReader(f)
@@ -196,7 +279,7 @@ def sync_habits() -> int:
                     ),
                 )
             total += 1
-    logger.info("sync_habits: %d habit(s) synced", total)
+    logger.info("sync_habits: %d habit(s) synced from CSV (legacy)", total)
     return total
 
 
@@ -263,16 +346,28 @@ def sync_goals() -> int:
         description = body[:2000] if body else ""
         tags = json.dumps(fm.get("tags", [])) if isinstance(fm.get("tags"), list) else "[]"
 
+        priority_val = fm.get("priority", 0)
+        priority_val = int(priority_val) if priority_val is not None else 0
+        progress_val = fm.get("progress", 0)
+        progress_val = float(progress_val) if progress_val is not None else 0.0
+        target_date_val = fm.get("target_date", None) or None
+        completed_val = fm.get("completed", None) or None
+
         with db.transaction("self") as conn:
             conn.execute(
                 """INSERT INTO goals
-                   (title, description, tags, category, status, created_at, updated_at, progress_source)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, 'sync')
+                   (title, description, tags, category, status, priority, progress,
+                    target_date, completed_at, created_at, updated_at, progress_source)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'sync')
                    ON CONFLICT(title) DO UPDATE SET
                        description    = COALESCE(excluded.description, goals.description),
                        tags           = excluded.tags,
                        category       = excluded.category,
                        status         = excluded.status,
+                       priority       = excluded.priority,
+                       progress       = excluded.progress,
+                       target_date    = excluded.target_date,
+                       completed_at   = excluded.completed_at,
                        updated_at     = excluded.updated_at""",
                 (
                     title,
@@ -280,6 +375,10 @@ def sync_goals() -> int:
                     tags,
                     str(fm.get("type", "")),
                     str(fm.get("status", "active")),
+                    priority_val,
+                    progress_val,
+                    target_date_val,
+                    completed_val,
                     str(fm.get("created", "")),
                     str(fm.get("updated", "")),
                 ),
@@ -726,7 +825,13 @@ def sync_quick() -> dict[str, Any]:
 
 def _log_dry_run():
     profile_ok = (_SELF_DIR / "profile.json").exists()
-    habits_ok = (_SELF_DIR / "habits" / "tracking.csv").exists()
+    habits_dir = _SELF_DIR / "habits"
+    habits_md = any(
+        f.suffix == ".md" and not f.stem.startswith("_")
+        for f in habits_dir.iterdir()
+    ) if habits_dir.exists() else False
+    habits_csv = (_SELF_DIR / "habits" / "tracking.csv").exists()
+    habits_ok = habits_md or habits_csv
     goals_ok = any(f.suffix == ".md" for f in (_SELF_DIR / "goals").iterdir()) if (_SELF_DIR / "goals").exists() else False
     rel_ok = any(f.suffix == ".md" for f in (_SELF_DIR / "relationships").iterdir()) if (_SELF_DIR / "relationships").exists() else False
     traits_ok = (_SELF_DIR / "traits" / "inferred_personality.json").exists()
@@ -741,7 +846,8 @@ def _log_dry_run():
 
     print("DRY RUN — No changes written")
     print(f"  profile.json           → profile table       {'✓ found' if profile_ok else '✗ missing'}")
-    print(f"  habits/tracking.csv    → habits table        {'✓ found' if habits_ok else '✗ missing'}")
+    print(f"  habits/*.md            → habits table        {'✓ found' if habits_md else '✗ missing or empty'}"
+          f"{'  (fallback: habits/tracking.csv ✓)' if habits_csv and not habits_md else ''}")
     print(f"  goals/*.md             → goals table          {'✓ found' if goals_ok else '✗ missing or empty'}")
     print(f"  relationships/*.md     → relationships table  {'✓ found' if rel_ok else '✗ missing or empty'}")
     print(f"  traits/*.json          → traits table         {'✓ found' if traits_ok else '✗ missing'}")

@@ -8,6 +8,10 @@
     "category": "multitext",
     "content_type": "multitext",
     "Pai": "multitext",
-    "language": "multitext"
+    "language": "multitext",
+    "completed": "date",
+    "linked_tasks": "text",
+    "priority": "number",
+    "id": "multitext"
   }
 }
