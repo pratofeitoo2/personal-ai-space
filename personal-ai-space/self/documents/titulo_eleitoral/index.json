@@ -1,0 +1,48 @@
+[
+  {
+    "title": "e-Título - Paulo Fabio (tela 1)",
+    "doc_type": "gov_docs",
+    "file": "IMG_0309.PNG",
+    "file_format": "png",
+    "tags": ["titulo_eleitor", "etitulo", "voter"],
+    "full_name": "Paulo Fabio de Rezende Junior",
+    "voter_number": "0256 0726 2003",
+    "birth_date": "22/08/1997",
+    "biometria": "coletada",
+    "document_type": "e-Título"
+  },
+  {
+    "title": "e-Título - Paulo Fabio (tela 2)",
+    "doc_type": "gov_docs",
+    "file": "IMG_0310.PNG",
+    "file_format": "png",
+    "tags": ["titulo_eleitor", "etitulo", "voter"],
+    "full_name": "Paulo Fabio de Rezende Junior",
+    "zona": "205",
+    "secao": "0404",
+    "municipio_uf": "Brasília/DF",
+    "mae": "Karen Araujo Coutinho",
+    "pai": "Paulo Fabio de Rezende",
+    "issue_date": "14/01/2023",
+    "document_type": "e-Título"
+  },
+  {
+    "title": "Título de Eleitor - via física",
+    "doc_type": "gov_docs",
+    "file": "Titulo de eleitor .JPG",
+    "file_format": "jpg",
+    "tags": ["titulo_eleitor", "voter_card", "physical"],
+    "full_name": "Paulo Fabio de Rezende Junior",
+    "document_type": "Título de Eleitor"
+  },
+  {
+    "title": "Certidão de Quitação Eleitoral",
+    "doc_type": "gov_docs",
+    "file": "quitação eleitoral.pdf",
+    "file_format": "pdf",
+    "tags": ["titulo_eleitor", "quitacao", "clearance"],
+    "full_name": "Paulo Fabio de Rezende Junior",
+    "document_type": "Certidão de Quitação Eleitoral",
+    "issue_date": "22/09/2023"
+  }
+]
