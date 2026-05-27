@@ -510,12 +510,18 @@ def sync_documents() -> int:
                         file_name = entry.get("file", "")
                         file_format = entry.get("file_format", "")
                         content = entry.get("description", "")
-                        if file_name and file_format not in ("md",):
+                        if file_name:
                             full_path = subdir / file_name
-                            if full_path.exists() and _HAS_TEXT_EXTRACTOR:
-                                extracted = _extract_binary_text(full_path)
-                                if extracted:
-                                    content = extracted
+                            if full_path.exists():
+                                if file_format == "md" or not _HAS_TEXT_EXTRACTOR:
+                                    raw = full_path.read_text(encoding="utf-8")
+                                    body = _strip_frontmatter(raw).strip()
+                                    if body:
+                                        content = body
+                                elif _HAS_TEXT_EXTRACTOR:
+                                    extracted = _extract_binary_text(full_path)
+                                    if extracted:
+                                        content = extracted
                         with db.transaction("self") as conn:
                             conn.execute(
                                 """INSERT INTO documents
