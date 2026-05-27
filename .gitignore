@@ -49,5 +49,6 @@ htmlcov/
 mempalace.yaml
 entities.json
 
-# Sisyphus runtime state (transient)
+# Runtime state (transient)
 .sisyphus/run-continuation/
+.omo/run-continuation/

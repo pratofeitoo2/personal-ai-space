@@ -4,173 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "e690f76ee98ac130",
-        "type": "split",
+        "id": "7142a1cabfea904d",
+        "type": "tabs",
         "children": [
           {
-            "id": "6eb1a0e3fe3f34a8",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "abc5595d089965e8",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "personal-ai-space/docs/CLI_COMMANDS.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "CLI_COMMANDS"
-                }
+            "id": "2e995294f063868d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "personal-ai-space/self/goals/Complete the \"Personal AI Powerhouse\" project.md",
+                "mode": "source",
+                "source": false
               },
-              {
-                "id": "4cf9570bf988004b",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "personal-ai-space/command/finances/LinkedIn Profile Data.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "LinkedIn Profile Data"
-                }
-              },
-              {
-                "id": "ea6c8b139b9c920a",
-                "type": "leaf",
-                "state": {
-                  "type": "json",
-                  "state": {
-                    "file": "personal-ai-space/command/activities/disciplined_routines.json"
-                  },
-                  "icon": "lucide-file",
-                  "title": "disciplined_routines"
-                }
-              },
-              {
-                "id": "a00118de8890698a",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "personal-ai-space/intake/README.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "README"
-                }
-              },
-              {
-                "id": "4af84bd59c2ca53e",
-                "type": "leaf",
-                "state": {
-                  "type": "empty",
-                  "state": {},
-                  "icon": "lucide-file",
-                  "title": "New tab"
-                }
-              }
-            ],
-            "currentTab": 3
-          },
-          {
-            "id": "dcc707d7ba5f748e",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "e2279bc3a5adbbf2",
-                "type": "leaf",
-                "pinned": true,
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/paulorezende/Documents/Personal_AI_powerhouse",
-                      "focus": false,
-                      "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/bin/zsh",
-                        "followTheme": true,
-                        "name": "",
-                        "platforms": {
-                          "darwin": true
-                        },
-                        "pythonExecutable": "python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "pinned": true,
-                  "icon": "terminal",
-                  "title": "Terminal: zsh"
-                }
-              },
-              {
-                "id": "a59c50fd0cfd976f",
-                "type": "leaf",
-                "pinned": true,
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/paulorezende/Documents/Personal_AI_powerhouse/personal-ai-space/intake",
-                      "focus": false,
-                      "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/bin/zsh",
-                        "followTheme": true,
-                        "name": "",
-                        "platforms": {
-                          "darwin": true
-                        },
-                        "pythonExecutable": "python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "pinned": true,
-                  "icon": "terminal",
-                  "title": "Terminal: zsh"
-                }
-              }
-            ],
-            "currentTab": 1
+              "icon": "lucide-file",
+              "title": "Complete the \"Personal AI Powerhouse\" project"
+            }
           }
-        ],
-        "direction": "horizontal"
+        ]
       }
     ],
     "direction": "vertical"
@@ -227,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 412.5
+    "width": 263.5
   },
   "right": {
     "id": "7f93b33c44aa02b9",
@@ -326,49 +177,52 @@
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
       "obsidian42-brat:BRAT": false,
-      "terminal:Open terminal": false
+      "terminal:Open terminal": false,
+      "publish:Publish changes...": false,
+      "templates:Insert template": false,
+      "workspaces:Manage workspace layouts": false,
+      "univer:Univer": false
     }
   },
-  "active": "a59c50fd0cfd976f",
+  "active": "2e995294f063868d",
   "lastOpenFiles": [
-    "personal-ai-space/intake/staging/20260511_141104_Web | OpenCode.pdf",
-    "personal-ai-space/intake/staging/20260511_141104_Tools | OpenCode.pdf",
-    "personal-ai-space/intake/staging/20260511_141104_Server | OpenCode.pdf",
-    "personal-ai-space/intake/staging/20260511_141104_MCP servers | OpenCode.pdf",
-    "personal-ai-space/intake/staging/20260511_141104_Features · Ogham MCP.pdf",
-    "personal-ai-space/intake/staging/20260511_141104_Custom Tools | OpenCode.pdf",
-    "personal-ai-space/intake/staging/20260511_141104_Commands | OpenCode.pdf",
-    "personal-ai-space/intake/staging/20260511_141104_CLI | OpenCode.pdf",
-    "personal-ai-space/intake/staging/20260511_141104_Agents | OpenCode.pdf",
-    "personal-ai-space/intake/staging/20260511_141104_Agent Skills | OpenCode.pdf",
-    "personal-ai-space/intake/staging/20260511_134831_Processo Seletivo - Talentos.pdf",
-    "personal-ai-space/intake/processed/20260511_141104_OpenChamber_README.md",
-    "personal-ai-space/knowledge/notes/OpenChamber_README.md",
-    "personal-ai-space/intake/processed/20260511_141104_Ogham MCP.md",
-    "personal-ai-space/knowledge/notes/Ogham MCP.md",
-    "personal-ai-space/intake/staging/Ogham MCP.md",
-    "personal-ai-space/intake/staging/OpenChamber_README.md",
-    "personal-ai-space/intake/README.md",
+    "personal-ai-space/self/goals/Complete the \"Personal AI Powerhouse\" project.md",
+    "personal-ai-space/self/relationships/People.base",
+    "obsidian/Plugins docs/Obsidian Base/Views.md",
+    "obsidian/Plugins docs/Obsidian Base/Table view.md",
+    "obsidian/Plugins docs/Obsidian Base/Obsidian cheat sheet Bases vs Dataview.md",
+    "obsidian/Plugins docs/Obsidian Base/List view.md",
+    "obsidian/Plugins docs/Obsidian Base/Formulas.md",
+    "obsidian/Plugins docs/Obsidian Base/Functions.md",
+    "obsidian/Plugins docs/Obsidian Base/Dataview vs Datacore vs Obsidian Bases.md",
+    "obsidian/Plugins docs/Obsidian Base/Create a base.md",
+    "obsidian/Plugins docs/Obsidian Base/Bases syntax.md",
+    "obsidian/Plugins docs/Obsidian Base/Bases Toolbox.md",
+    "obsidian/Plugins docs/Obsidian Base/Bases Toolbox 1.md",
+    "obsidian/Plugins docs/Obsidian Base",
+    "obsidian/Plugins docs/Tracker Plugin/obsidian-trackerexamplesTestTask.md at master · pyrochloreobsidian-tracker.md",
+    "obsidian/Plugins docs/Tracker Plugin/obsidian-trackerexamplesTestDvField.md at master · pyrochloreobsidian-tracker.md",
+    "obsidian/Plugins docs/Tracker Plugin/obsidian-trackerexamplesTestCalendar.md at master · pyrochloreobsidian-tracker.md",
+    "obsidian/Plugins docs/Tracker Plugin/obsidian-trackerdocsExamples.md at master · pyrochloreobsidian-tracker.md",
+    "obsidian/Plugins docs/Tracker Plugin/obsidian-trackerdocsExamples.md at master · pyrochloreobsidian-tracker 6.md",
+    "obsidian/Plugins docs/Tracker Plugin/obsidian-trackerdocsExamples.md at master · pyrochloreobsidian-tracker 5.md",
+    "obsidian/Plugins docs/Tracker Plugin/obsidian-trackerdocsExamples.md at master · pyrochloreobsidian-tracker 4.md",
+    "obsidian/Plugins docs/Tracker Plugin/obsidian-trackerdocsExamples.md at master · pyrochloreobsidian-tracker 3.md",
+    "obsidian/Plugins docs/Tracker Plugin/obsidian-trackerdocsExamples.md at master · pyrochloreobsidian-tracker 2.md",
+    "obsidian/Plugins docs/Tracker Plugin/obsidian-trackerdocsExamples.md at master · pyrochloreobsidian-tracker 1.md",
+    "obsidian/Plugins docs/Tracker Plugin",
+    "obsidian/Plugins docs/datacore/datacore-quickstart.html",
+    "obsidian/Plugins docs/datacore/Table Views (dc.Table)  Datacore.md",
+    "obsidian/Plugins docs/datacore/Quickstart  Datacore.md",
+    "obsidian/Plugins docs/datacore/Sections  Datacore.md",
+    "obsidian/Plugins docs/datacore",
+    "obsidian/Plugins docs/Charts Plugin Docs",
+    "obsidian/Plugins docs/Dataview Charts",
+    "obsidian/Plugins docs",
+    "personal-ai-space/__pycache__/__init__.cpython-313.pyc",
+    "personal-ai-space/engine/extractors/__pycache__/behavior_vocab.cpython-313.pyc",
     "personal-ai-space/self/goals/Life Map.canvas",
-    "personal-ai-space/command/finances/LinkedIn Profile Data.md",
-    "personal-ai-space/command/inbox/Daily Notes Dashboard.md",
-    "personal-ai-space/command/inbox/Nov-13-2025.md",
-    "personal-ai-space/command/inbox/dez 07, 2025 17h 30.md",
-    "personal-ai-space/command/inbox/Daily Notes Dashboard 1.md",
-    "AI Engine Command Center.md",
-    "personal-ai-space/self/goals/Clinical_Sex_Therapist_Career.md",
-    "Dashboard Logs/Daily/2026-05-10.md",
-    "personal-ai-space/self/goals/Clinical_Sex_Therapist_Career_Brazil.md",
-    "personal-ai-space/self/goals/Study Plan Ebook Outline.md",
-    "personal-ai-space/self/goals/Study Plan ebook.md",
-    "personal-ai-space/self/goals/Study plan.md",
-    "personal-ai-space/knowledge/articles/Classes sexólogos Portugal.md",
-    "personal-ai-space/knowledge/notes/Atendimentos Online.md",
-    "personal-ai-space/knowledge/notes/Getliner A prática da psicoterapia sexual no Brasil.md",
-    "personal-ai-space/knowledge/notes/Messy Brain Notes.md",
     "personal-ai-space/knowledge/notes/NEDS Vault Filetree.canvas",
-    "personal-ai-space/knowledge/notes/Qwen O Ecossistema da Psicoterapia Sexual no Brasil.md",
-    "personal-ai-space/knowledge/notes/Microsoft Copilot Psicoterapia Sexual no Brasil.md",
     "personal-ai-space/vault/personal documents  PF/Certificado de conclusao ensino medio .JPG",
     "personal-ai-space/vault/personal documents  PF/CPF Ravi .jpg",
     "personal-ai-space/vault/personal documents  PF/Sex CompulsionOCSB Assessment - Insight Psychological.jpeg.png",

@@ -1,7 +1,6 @@
 filters:
   and:
-    - file.folder == "PERSONAL/People"
-    - file.ext != "base"
+    - file.folder == "personal-ai-space/self/relationships"
 formulas:
   Progress Bar: |-
     if( note["maxProperty"], html("<progress class='metadata-progress' max='" + 
@@ -17,6 +16,9 @@ formulas:
 views:
   - type: table
     name: Table
+    filters:
+      and:
+        - file.folder == "personal-ai-space/self/relationships"
     order:
       - file.name
       - Name
