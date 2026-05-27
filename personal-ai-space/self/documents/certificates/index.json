@@ -240,5 +240,20 @@
     "school": "Centro Universitário Cidade Verde – UniCV",
     "course": "Curso Superior de Tecnologia em Coaching e Desenvolvimento Humano",
     "certificate_type": "Captura de Tela - Portal Acadêmico"
+  },
+  {
+    "title": "Histórico Escolar - Pós-Graduação em Sexologia",
+    "doc_type": "academic",
+    "file": "paulo-fabio-de-rezende-junior-pos-graduacao-em-sexologia_.pdf",
+    "file_format": "pdf",
+    "tags": ["sexologia", "pos_graduacao", "fadyc", "saude"],
+    "full_name": "Paulo Fábio de Rezende Junior",
+    "school": "Faculdade Dynamus de Campinas – FADYC",
+    "course": "Pós-Graduação em Sexologia",
+    "area": "Saúde e bem-estar",
+    "total_hours": "800",
+    "period": "05/09/2023 a 20/05/2024",
+    "disciplines": "19 disciplinas",
+    "certificate_type": "Histórico Escolar - Pós-Graduação"
   }
 ]
