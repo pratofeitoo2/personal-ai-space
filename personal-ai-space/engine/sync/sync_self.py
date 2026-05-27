@@ -418,13 +418,86 @@ def sync_traits() -> int:
 # ── Needs ────────────────────────────────────────────────────────────────────
 
 def sync_needs() -> int:
-    """Sync needs/current_needs.json → self.db needs table."""
-    path = _SELF_DIR / "needs" / "current_needs.json"
-    if not path.exists():
-        logger.warning("current_needs.json not found")
+    """Sync needs/ *.md frontmatter → self.db needs table.
+
+    Each .md file becomes one need row. Frontmatter fields map directly
+    to DB columns. Body text (minus frontmatter) becomes the description.
+
+    Falls back to needs/current_needs.json if no .md files exist (legacy).
+    """
+    needs_dir = _SELF_DIR / "needs"
+    if not needs_dir.exists():
+        logger.warning("needs/ directory not found")
         return 0
 
-    with open(path) as f:
+    md_files = sorted(needs_dir.glob("*.md"))
+
+    # Fall back to legacy JSON if no .md files
+    if not md_files:
+        json_path = needs_dir / "current_needs.json"
+        if json_path.exists():
+            return _sync_needs_from_json(json_path)
+        logger.warning("no needs data found (no .md or current_needs.json)")
+        return 0
+
+    now = datetime.now(timezone.utc).isoformat()
+    total = 0
+
+    for fpath in md_files:
+        # Skip template/prefixed files
+        if fpath.stem.startswith("_"):
+            continue
+
+        fm = _parse_frontmatter(fpath)
+        if not fm:
+            continue
+
+        name = fm.get("name") or fm.get("title")
+        if not name:
+            continue  # skip files without a name
+
+        need_id = (
+            str(fm.get("id", ""))
+            or f"need_{name.lower().replace(' ', '_').replace('-', '_')}"
+        )
+
+        # Body text as description
+        full_text = fpath.read_text(encoding="utf-8")
+        body = _strip_frontmatter(full_text).strip()
+        description = body[:2000] if body else str(fm.get("description", ""))
+
+        # Normalise linked_tasks (YAML list → comma-separated string)
+        linked = fm.get("linked_tasks", [])
+        if isinstance(linked, list):
+            linked_str = ", ".join(str(t) for t in linked if t)
+        else:
+            linked_str = str(linked) if linked else ""
+
+        with db.transaction("self") as conn:
+            conn.execute(
+                """INSERT OR REPLACE INTO needs
+                   (id, category, name, priority, status, description, linked_tasks, created_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                (
+                    need_id,
+                    str(fm.get("category", "")),
+                    name,
+                    str(fm.get("priority", "")),
+                    str(fm.get("status", "active")),
+                    description,
+                    linked_str,
+                    str(fm.get("created", now)),
+                ),
+            )
+            total += 1
+
+    logger.info("sync_needs: %d need(s) synced from .md files", total)
+    return total
+
+
+def _sync_needs_from_json(json_path: Path) -> int:
+    """Legacy: sync needs/current_needs.json → self.db needs table."""
+    with open(json_path) as f:
         needs = json.load(f)
 
     total = 0
@@ -449,7 +522,7 @@ def sync_needs() -> int:
                 ),
             )
             total += 1
-    logger.info("sync_needs: %d need(s) synced", total)
+    logger.info("sync_needs (legacy JSON): %d need(s) synced", total)
     return total
 
 
@@ -657,7 +730,13 @@ def _log_dry_run():
     goals_ok = any(f.suffix == ".md" for f in (_SELF_DIR / "goals").iterdir()) if (_SELF_DIR / "goals").exists() else False
     rel_ok = any(f.suffix == ".md" for f in (_SELF_DIR / "relationships").iterdir()) if (_SELF_DIR / "relationships").exists() else False
     traits_ok = (_SELF_DIR / "traits" / "inferred_personality.json").exists()
-    needs_ok = (_SELF_DIR / "needs" / "current_needs.json").exists()
+    needs_dir = _SELF_DIR / "needs"
+    needs_md = any(
+        f.suffix == ".md" and not f.stem.startswith("_")
+        for f in needs_dir.iterdir()
+    ) if needs_dir.exists() else False
+    needs_json = (_SELF_DIR / "needs" / "current_needs.json").exists()
+    needs_ok = needs_md or needs_json
     docs_ok = (_SELF_DIR / "documents").exists() and any((_SELF_DIR / "documents").iterdir()) if (_SELF_DIR / "documents").exists() else False
 
     print("DRY RUN — No changes written")
@@ -666,7 +745,8 @@ def _log_dry_run():
     print(f"  goals/*.md             → goals table          {'✓ found' if goals_ok else '✗ missing or empty'}")
     print(f"  relationships/*.md     → relationships table  {'✓ found' if rel_ok else '✗ missing or empty'}")
     print(f"  traits/*.json          → traits table         {'✓ found' if traits_ok else '✗ missing'}")
-    print(f"  needs/*.json           → needs table          {'✓ found' if needs_ok else '✗ missing'}")
+    print(f"  needs/*.md             → needs table          {'✓ found' if needs_md else '✗ missing or empty'}"
+          f"{'  (fallback: needs/current_needs.json ✓)' if needs_json and not needs_md else ''}")
     print(f"  documents/*/index.json → documents table      {'✓ found' if docs_ok else '✗ missing or empty'}")
 
 
