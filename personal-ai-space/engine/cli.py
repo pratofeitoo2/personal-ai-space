@@ -1352,6 +1352,58 @@ if HAS_RICH:
         else:
             console.print(f"[red]✗ {r.get('error')}[/red]")
 
+    # ── sessions ─────────────────────────────────────────────────────────────
+
+    @cli.group()
+    def sessions():
+        """Session data extraction and analysis."""
+
+    @sessions.command("extract")
+    @click.option("--opencode-db", type=click.Path(), help="Path to OpenCode database")
+    @click.option("--self-db", type=click.Path(), help="Path to self.db")
+    def sessions_extract(opencode_db, self_db):
+        """Extract signals from OpenCode sessions into self.db."""
+        from extractors.session_extractor import extract_all_sessions
+
+        console.print("[bold]Extracting session data...[/bold]")
+        stats = extract_all_sessions(opencode_db, self_db)
+
+        console.print(f"\n[green]✓ Extraction complete[/green]")
+        console.print(f"  Sessions processed: {stats['sessions_processed']}")
+        console.print(f"  Signals extracted: {stats['signals_extracted']}")
+        console.print(f"  Metadata records: {stats['metadata_extracted']}")
+        if stats['errors'] > 0:
+            console.print(f"  [red]Errors: {stats['errors']}[/red]")
+
+    @sessions.command("stats")
+    @click.option("--self-db", type=click.Path(), help="Path to self.db")
+    def sessions_stats(self_db):
+        """Show session extraction statistics."""
+        import sqlite3
+        from pathlib import Path
+
+        db_path = self_db or str(Path(__file__).parent / "db" / "self" / "self.db")
+        conn = sqlite3.connect(db_path)
+
+        try:
+            total_sessions = conn.execute("SELECT COUNT(*) FROM session_metadata").fetchone()[0]
+            total_signals = conn.execute("SELECT COUNT(*) FROM session_signals").fetchone()[0]
+
+            signal_types = conn.execute("""
+                SELECT signal_type, COUNT(*) as count
+                FROM session_signals
+                GROUP BY signal_type
+            """).fetchall()
+
+            console.print(f"\n[bold]Session Extraction Stats[/bold]")
+            console.print(f"  Total sessions: {total_sessions}")
+            console.print(f"  Total signals: {total_signals}")
+            console.print(f"\n  Signals by type:")
+            for st in signal_types:
+                console.print(f"    {st[0]}: {st[1]}")
+        finally:
+            conn.close()
+
 else:
     # Plain fallback if rich/click not installed
     def cli():

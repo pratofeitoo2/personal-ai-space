@@ -179,3 +179,57 @@ class SignalFilter:
             'date': session.get('date', ''),
             'extracted_at': datetime.now(timezone.utc).isoformat(),
         }
+
+
+def extract_all_sessions(
+    opencode_db_path: Optional[str] = None,
+    self_db_path: Optional[str] = None
+) -> dict:
+    from extractors.session_storage import SessionStorage
+
+    reader = OpenCodeReader(opencode_db_path)
+    storage = SessionStorage(self_db_path)
+
+    stats = {
+        'sessions_processed': 0,
+        'signals_extracted': 0,
+        'metadata_extracted': 0,
+        'errors': 0,
+    }
+
+    sessions = reader.read_sessions()
+    processed_ids = set(storage.get_unprocessed_sessions())
+
+    for session in sessions:
+        session_id = session['id']
+        if session_id in processed_ids:
+            continue
+
+        try:
+            metadata = SignalFilter.extract_session_metadata(session)
+            storage.upsert_session_metadata(metadata)
+            stats['metadata_extracted'] += 1
+
+            messages = reader.read_session_messages(session_id)
+
+            user_signals = SignalFilter.filter_user_messages(messages)
+            reasoning_signals = SignalFilter.filter_assistant_reasoning(messages)
+            error_signals = SignalFilter.filter_error_solutions(messages)
+
+            all_signals = user_signals + reasoning_signals + error_signals
+
+            for signal in all_signals:
+                signal['session_id'] = session_id
+                signal['agent'] = session.get('agent')
+                signal['model'] = session.get('model')
+                signal['source'] = 'opencode'
+                storage.upsert_signal(signal)
+
+            stats['signals_extracted'] += len(all_signals)
+            stats['sessions_processed'] += 1
+
+        except Exception as e:
+            logger.error("Failed to process session %s: %s", session_id, e)
+            stats['errors'] += 1
+
+    return stats

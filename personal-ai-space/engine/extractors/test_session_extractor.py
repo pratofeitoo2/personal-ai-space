@@ -211,3 +211,117 @@ class TestSignalFilters:
         assert metadata['session_id'] == 'ses_test'
         assert metadata['duration_hours'] == 1.0
         assert metadata['tokens_total'] == 1500
+
+
+class TestExtractionPipeline:
+    def test_extract_all_sessions(self, tmp_path):
+        from extractors.session_extractor import OpenCodeReader, SignalFilter
+        from extractors.session_storage import SessionStorage
+
+        opencode_db = tmp_path / "opencode.db"
+        conn = sqlite3.connect(str(opencode_db))
+        conn.execute("""
+            CREATE TABLE session (
+                id TEXT PRIMARY KEY,
+                project_id TEXT NOT NULL,
+                title TEXT NOT NULL,
+                agent TEXT,
+                model TEXT,
+                cost REAL DEFAULT 0,
+                tokens_input INTEGER DEFAULT 0,
+                tokens_output INTEGER DEFAULT 0,
+                time_created INTEGER NOT NULL,
+                time_updated INTEGER NOT NULL
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE message (
+                id TEXT PRIMARY KEY,
+                session_id TEXT NOT NULL,
+                time_created INTEGER NOT NULL,
+                time_updated INTEGER NOT NULL,
+                data TEXT NOT NULL
+            )
+        """)
+        conn.execute("""
+            INSERT INTO session VALUES
+            ('ses_test1', 'proj1', 'Test Session', 'general', 'gpt-4', 0.5, 1000, 500, 1716864000, 1716867600)
+        """)
+        conn.execute("""
+            INSERT INTO message VALUES
+            ('msg1', 'ses_test1', 1716864000, 1716864000, '{"role":"user","content":"I want to refactor the auth module"}'),
+            ('msg2', 'ses_test1', 1716864060, 1716864060, '{"role":"assistant","content":"Based on the codebase analysis, I recommend using PostgreSQL for the new schema. The current SQLite setup will not handle the expected load."}')
+        """)
+        conn.commit()
+        conn.close()
+
+        self_db = tmp_path / "self.db"
+        conn = sqlite3.connect(str(self_db))
+        conn.executescript("""
+            CREATE TABLE session_signals (
+                id TEXT PRIMARY KEY,
+                signal_type TEXT NOT NULL,
+                content TEXT NOT NULL,
+                session_id TEXT NOT NULL,
+                agent TEXT,
+                model TEXT,
+                source TEXT,
+                observed_at TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE session_metadata (
+                id TEXT PRIMARY KEY,
+                session_id TEXT NOT NULL UNIQUE,
+                title TEXT,
+                agent TEXT,
+                model TEXT,
+                cost REAL DEFAULT 0,
+                tokens_input INTEGER DEFAULT 0,
+                tokens_output INTEGER DEFAULT 0,
+                message_count INTEGER DEFAULT 0,
+                duration_seconds INTEGER DEFAULT 0,
+                date TEXT NOT NULL,
+                extracted_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
+        conn.close()
+
+        from extractors.session_extractor import extract_all_sessions
+        stats = extract_all_sessions(str(opencode_db), str(self_db))
+
+        assert stats['sessions_processed'] == 1
+        assert stats['signals_extracted'] >= 1
+        assert stats['metadata_extracted'] == 1
+
+    def test_extract_all_is_idempotent(self, tmp_path):
+        from extractors.session_extractor import extract_all_sessions
+
+        opencode_db = tmp_path / "opencode.db"
+        conn = sqlite3.connect(str(opencode_db))
+        conn.execute("CREATE TABLE session (id TEXT PRIMARY KEY, project_id TEXT, title TEXT, agent TEXT, model TEXT, cost REAL, tokens_input INT, tokens_output INT, time_created INT, time_updated INT)")
+        conn.execute("CREATE TABLE message (id TEXT PRIMARY KEY, session_id TEXT, time_created INT, time_updated INT, data TEXT)")
+        conn.execute("INSERT INTO session VALUES ('ses_test1', 'proj1', 'Test', 'general', 'gpt-4', 0, 0, 0, 1716864000, 1716867600)")
+        conn.execute("INSERT INTO message VALUES ('msg1', 'ses_test1', 1716864000, 1716864000, '{\"role\":\"user\",\"content\":\"test message\"}')")
+        conn.commit()
+        conn.close()
+
+        self_db = tmp_path / "self.db"
+        conn = sqlite3.connect(str(self_db))
+        conn.executescript("CREATE TABLE session_signals (id TEXT PRIMARY KEY, signal_type TEXT, content TEXT, session_id TEXT, agent TEXT, model TEXT, source TEXT, observed_at TEXT, created_at TEXT); CREATE TABLE session_metadata (id TEXT PRIMARY KEY, session_id TEXT UNIQUE, title TEXT, agent TEXT, model TEXT, cost REAL, tokens_input INT, tokens_output INT, message_count INT, duration_seconds INT, date TEXT, extracted_at TEXT);")
+        conn.close()
+
+        extract_all_sessions(str(opencode_db), str(self_db))
+        stats2 = extract_all_sessions(str(opencode_db), str(self_db))
+
+        assert stats2['sessions_processed'] == 0
+
+
+class TestCLIIntegration:
+    def test_cli_sessions_extract(self, tmp_path, monkeypatch):
+        from click.testing import CliRunner
+        from cli import cli
+
+        runner = CliRunner()
+        result = runner.invoke(cli, ['sessions', 'extract'])
+
+        assert result.exit_code == 0
