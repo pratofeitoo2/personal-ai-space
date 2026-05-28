@@ -36,7 +36,7 @@ class OpenCodeReader:
             conn.close()
 
     def read_session_messages(self, session_id: str) -> list[dict]:
-        """Read all messages for a session, parsed from JSON."""
+        """Read all messages for a session, with parts aggregated into content."""
         conn = self._get_conn()
         try:
             rows = conn.execute(
@@ -44,12 +44,46 @@ class OpenCodeReader:
                 (session_id,)
             ).fetchall()
 
+            if not rows:
+                return []
+
+            message_ids = [row['id'] for row in rows]
+            placeholders = ','.join('?' * len(message_ids))
+
+            part_rows = conn.execute(
+                f"SELECT message_id, data FROM part WHERE message_id IN ({placeholders}) ORDER BY time_created",
+                message_ids
+            ).fetchall()
+
+            parts_by_message: dict[str, list[dict]] = {}
+            for pr in part_rows:
+                try:
+                    parts_by_message.setdefault(pr['message_id'], []).append(json.loads(pr['data']))
+                except json.JSONDecodeError:
+                    pass
+
             messages = []
             for row in rows:
                 try:
                     data = json.loads(row['data'])
                     data['_message_id'] = row['id']
                     data['_time_created'] = row['time_created']
+
+                    msg_parts = parts_by_message.get(row['id'], [])
+                    text_segments = []
+                    reasoning_segments = []
+                    for pt in msg_parts:
+                        pt_type = pt.get('type')
+                        if pt_type == 'text' and pt.get('text'):
+                            text_segments.append(pt['text'])
+                        elif pt_type == 'reasoning' and pt.get('text'):
+                            reasoning_segments.append(pt['text'])
+
+                    if text_segments:
+                        data['content'] = '\n\n'.join(text_segments)
+                    if reasoning_segments:
+                        data['_reasoning'] = '\n\n'.join(reasoning_segments)
+
                     messages.append(data)
                 except json.JSONDecodeError:
                     logger.warning("Failed to parse message %s", row['id'])

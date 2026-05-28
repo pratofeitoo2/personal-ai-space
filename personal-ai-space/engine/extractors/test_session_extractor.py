@@ -54,7 +54,7 @@ class TestOpenCodeReader:
         assert sessions[0]['id'] == 'ses_test1'
         assert sessions[0]['title'] == 'Test Session'
 
-    def test_read_session_messages(self, tmp_path):
+    def test_read_session_messages_aggregates_parts(self, tmp_path):
         from extractors.session_extractor import OpenCodeReader
 
         opencode_db = tmp_path / "opencode.db"
@@ -83,13 +83,28 @@ class TestOpenCodeReader:
             )
         """)
         conn.execute("""
+            CREATE TABLE part (
+                id TEXT PRIMARY KEY,
+                message_id TEXT NOT NULL,
+                session_id TEXT NOT NULL,
+                time_created INTEGER NOT NULL,
+                time_updated INTEGER NOT NULL,
+                data TEXT NOT NULL
+            )
+        """)
+        conn.execute("""
             INSERT INTO session VALUES
             ('ses_test1', 'proj1', 'Test Session', 'general', 'gpt-4', 0.5, 1000, 500, 1716864000, 1716867600)
         """)
         conn.execute("""
             INSERT INTO message VALUES
-            ('msg1', 'ses_test1', 1716864000, 1716864000, '{"role":"user","content":"hello"}'),
-            ('msg2', 'ses_test1', 1716864060, 1716864060, '{"role":"assistant","content":"hi there"}')
+            ('msg1', 'ses_test1', 1716864000, 1716864000, '{"role":"user"}'),
+            ('msg2', 'ses_test1', 1716864060, 1716864060, '{"role":"assistant"}')
+        """)
+        conn.execute("""
+            INSERT INTO part VALUES
+            ('prt1', 'msg1', 'ses_test1', 1716864000, 1716864000, '{"type":"text","text":"hello"}'),
+            ('prt2', 'msg2', 'ses_test1', 1716864060, 1716864060, '{"type":"text","text":"hi there"}')
         """)
         conn.commit()
         conn.close()
@@ -99,7 +114,65 @@ class TestOpenCodeReader:
 
         assert len(messages) == 2
         assert messages[0]['role'] == 'user'
+        assert messages[0]['content'] == 'hello'
         assert messages[1]['role'] == 'assistant'
+        assert messages[1]['content'] == 'hi there'
+
+    def test_read_session_messages_empty_parts(self, tmp_path):
+        """Messages with no parts should still show up (content will be absent)."""
+        from extractors.session_extractor import OpenCodeReader
+
+        opencode_db = tmp_path / "opencode.db"
+        conn = sqlite3.connect(str(opencode_db))
+        conn.execute("""
+            CREATE TABLE session (
+                id TEXT PRIMARY KEY,
+                project_id TEXT NOT NULL,
+                title TEXT NOT NULL,
+                agent TEXT,
+                model TEXT,
+                cost REAL DEFAULT 0,
+                tokens_input INTEGER DEFAULT 0,
+                tokens_output INTEGER DEFAULT 0,
+                time_created INTEGER NOT NULL,
+                time_updated INTEGER NOT NULL
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE message (
+                id TEXT PRIMARY KEY,
+                session_id TEXT NOT NULL,
+                time_created INTEGER NOT NULL,
+                time_updated INTEGER NOT NULL,
+                data TEXT NOT NULL
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE part (
+                id TEXT PRIMARY KEY,
+                message_id TEXT NOT NULL,
+                session_id TEXT NOT NULL,
+                time_created INTEGER NOT NULL,
+                time_updated INTEGER NOT NULL,
+                data TEXT NOT NULL
+            )
+        """)
+        conn.execute("""
+            INSERT INTO session VALUES
+            ('ses_test1', 'proj1', 'Test Session', 'general', 'gpt-4', 0.5, 1000, 500, 1716864000, 1716867600)
+        """)
+        conn.execute("""
+            INSERT INTO message VALUES
+            ('msg1', 'ses_test1', 1716864000, 1716864000, '{"role":"user"}')
+        """)
+        conn.commit()
+        conn.close()
+
+        reader = OpenCodeReader(str(opencode_db))
+        messages = reader.read_session_messages('ses_test1')
+
+        assert len(messages) == 1
+        assert 'content' not in messages[0]
 
 
 class TestSessionTablesExist:
@@ -244,13 +317,28 @@ class TestExtractionPipeline:
             )
         """)
         conn.execute("""
+            CREATE TABLE part (
+                id TEXT PRIMARY KEY,
+                message_id TEXT NOT NULL,
+                session_id TEXT NOT NULL,
+                time_created INTEGER NOT NULL,
+                time_updated INTEGER NOT NULL,
+                data TEXT NOT NULL
+            )
+        """)
+        conn.execute("""
             INSERT INTO session VALUES
             ('ses_test1', 'proj1', 'Test Session', 'general', 'gpt-4', 0.5, 1000, 500, 1716864000, 1716867600)
         """)
         conn.execute("""
             INSERT INTO message VALUES
-            ('msg1', 'ses_test1', 1716864000, 1716864000, '{"role":"user","content":"I want to refactor the auth module"}'),
-            ('msg2', 'ses_test1', 1716864060, 1716864060, '{"role":"assistant","content":"Based on the codebase analysis, I recommend using PostgreSQL for the new schema. The current SQLite setup will not handle the expected load."}')
+            ('msg1', 'ses_test1', 1716864000, 1716864000, '{"role":"user"}'),
+            ('msg2', 'ses_test1', 1716864060, 1716864060, '{"role":"assistant"}')
+        """)
+        conn.execute("""
+            INSERT INTO part VALUES
+            ('prt1', 'msg1', 'ses_test1', 1716864000, 1716864000, '{"type":"text","text":"I want to refactor the auth module"}'),
+            ('prt2', 'msg2', 'ses_test1', 1716864060, 1716864060, '{"type":"text","text":"Based on the codebase analysis, I recommend using PostgreSQL for the new schema. The current SQLite setup will not handle the expected load."}')
         """)
         conn.commit()
         conn.close()
@@ -300,8 +388,10 @@ class TestExtractionPipeline:
         conn = sqlite3.connect(str(opencode_db))
         conn.execute("CREATE TABLE session (id TEXT PRIMARY KEY, project_id TEXT, title TEXT, agent TEXT, model TEXT, cost REAL, tokens_input INT, tokens_output INT, time_created INT, time_updated INT)")
         conn.execute("CREATE TABLE message (id TEXT PRIMARY KEY, session_id TEXT, time_created INT, time_updated INT, data TEXT)")
+        conn.execute("CREATE TABLE part (id TEXT PRIMARY KEY, message_id TEXT, session_id TEXT, time_created INT, time_updated INT, data TEXT)")
         conn.execute("INSERT INTO session VALUES ('ses_test1', 'proj1', 'Test', 'general', 'gpt-4', 0, 0, 0, 1716864000, 1716867600)")
-        conn.execute("INSERT INTO message VALUES ('msg1', 'ses_test1', 1716864000, 1716864000, '{\"role\":\"user\",\"content\":\"test message\"}')")
+        conn.execute("INSERT INTO message VALUES ('msg1', 'ses_test1', 1716864000, 1716864000, '{\"role\":\"user\"}')")
+        conn.execute("INSERT INTO part VALUES ('prt1', 'msg1', 'ses_test1', 1716864000, 1716864000, '{\"type\":\"text\",\"text\":\"test message\"}')")
         conn.commit()
         conn.close()
 
