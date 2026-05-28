@@ -194,7 +194,26 @@ class SignalFilter:
 
     @staticmethod
     def extract_session_metadata(session: dict) -> dict:
-        duration_hours = session.get('duration_seconds', 0) / 3600
+        # Backward compatibility: use pre-computed duration_seconds if available
+        if session.get('duration_seconds'):
+            duration_sec = session['duration_seconds']
+            date_str = session.get('date', '')
+        else:
+            # OpenCode stores time_created/time_updated as epoch milliseconds
+            ts_created = session.get('time_created', 0) or 0
+            ts_updated = session.get('time_updated', 0) or 0
+
+            duration_ms = ts_updated - ts_created if ts_updated and ts_created else 0
+            duration_sec = duration_ms // 1000
+
+            # Convert milliseconds to seconds for fromtimestamp
+            ts_sec = ts_created / 1000 if ts_created else 0
+            try:
+                date_str = datetime.fromtimestamp(ts_sec).strftime('%Y-%m-%d') if ts_sec else ''
+            except (OSError, ValueError):
+                date_str = ''
+
+        duration_hours = duration_sec / 3600
         tokens_total = session.get('tokens_input', 0) + session.get('tokens_output', 0)
 
         return {
@@ -207,10 +226,10 @@ class SignalFilter:
             'tokens_input': session.get('tokens_input', 0),
             'tokens_output': session.get('tokens_output', 0),
             'message_count': session.get('message_count', 0),
-            'duration_seconds': session.get('duration_seconds', 0),
+            'duration_seconds': duration_sec,
             'duration_hours': round(duration_hours, 2),
             'tokens_total': tokens_total,
-            'date': session.get('date', ''),
+            'date': date_str,
             'extracted_at': datetime.now(timezone.utc).isoformat(),
         }
 

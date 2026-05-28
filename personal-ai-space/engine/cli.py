@@ -1404,6 +1404,20 @@ if HAS_RICH:
         finally:
             conn.close()
 
+    @sessions.command("infer-traits")
+    def sessions_infer_traits():
+        """Infer traits from session data into the traits table."""
+        from analytics.trait_inference import TraitInferrer
+
+        inferrer = TraitInferrer()
+        stats = inferrer.infer_all()
+
+        console.print(f"\n[green]✓ Trait inference complete[/green]")
+        for group, count in stats.items():
+            if group != "total":
+                console.print(f"  {group}: {count} trait(s)")
+        console.print(f"  [bold]Total traits written: {stats['total']}[/bold]")
+
 else:
     # Plain fallback if rich/click not installed
     def cli():
