@@ -28,12 +28,14 @@
       ],
       "enabled": true
     },
-    "wa-cli-mcp": {
+    "whatsapp-mcp": {
       "type": "local",
       "command": [
-        "npx",
-        "tsx",
-        "/Users/paulorezende/wa-cli-mcp/src/mcp-server.ts"
+        "/Users/paulorezende/.local/bin/uv",
+        "--directory",
+        "/Users/paulorezende/Documents/Cline/MCP/whatsapp-mcp/whatsapp-mcp-server",
+        "run",
+        "main.py"
       ],
       "enabled": true
     }
