@@ -134,3 +134,39 @@ CREATE TABLE IF NOT EXISTS documents (
 );
 CREATE INDEX IF NOT EXISTS idx_documents_type ON documents(doc_type);
 CREATE INDEX IF NOT EXISTS idx_documents_subcategory ON documents(subcategory);
+
+-- Session signals: extracted behavioral signals from OpenCode transcripts
+CREATE TABLE IF NOT EXISTS session_signals (
+    id TEXT PRIMARY KEY,
+    signal_type TEXT NOT NULL,
+    content TEXT NOT NULL,
+    session_id TEXT NOT NULL,
+    agent TEXT,
+    model TEXT,
+    source TEXT,
+    observed_at TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_session_signals_type ON session_signals(signal_type);
+CREATE INDEX IF NOT EXISTS idx_session_signals_session ON session_signals(session_id);
+CREATE INDEX IF NOT EXISTS idx_session_signals_observed ON session_signals(observed_at);
+
+-- Session metadata: aggregate stats per OpenCode session
+CREATE TABLE IF NOT EXISTS session_metadata (
+    id TEXT PRIMARY KEY,
+    session_id TEXT NOT NULL UNIQUE,
+    title TEXT,
+    agent TEXT,
+    model TEXT,
+    cost REAL DEFAULT 0,
+    tokens_input INTEGER DEFAULT 0,
+    tokens_output INTEGER DEFAULT 0,
+    message_count INTEGER DEFAULT 0,
+    duration_seconds INTEGER DEFAULT 0,
+    date TEXT NOT NULL,
+    extracted_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_session_metadata_date ON session_metadata(date);
+CREATE INDEX IF NOT EXISTS idx_session_metadata_agent ON session_metadata(agent);
