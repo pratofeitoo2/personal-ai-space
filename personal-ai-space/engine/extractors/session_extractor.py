@@ -90,3 +90,92 @@ class OpenCodeReader:
             }
         finally:
             conn.close()
+
+
+import re
+import uuid
+
+PATTERNS_TOOL_CALL = re.compile(r'^\[tool:\s*\w+\]$')
+REASONING_MIN_LENGTH = 50
+
+
+class SignalFilter:
+    """Filter and extract behavioral signals from session messages."""
+
+    @staticmethod
+    def filter_user_messages(messages: list[dict]) -> list[dict]:
+        signals = []
+        for msg in messages:
+            if msg.get('role') == 'user' and msg.get('content'):
+                content = msg['content']
+                if not PATTERNS_TOOL_CALL.match(content):
+                    signals.append({
+                        'id': uuid.uuid4().hex,
+                        'signal_type': 'user_message',
+                        'content': content[:2000],
+                        'observed_at': datetime.now(timezone.utc).isoformat(),
+                    })
+        return signals
+
+    @staticmethod
+    def filter_assistant_reasoning(messages: list[dict]) -> list[dict]:
+        signals = []
+        for msg in messages:
+            if msg.get('role') == 'assistant' and msg.get('content'):
+                content = msg['content']
+                if (not PATTERNS_TOOL_CALL.match(content) and
+                        len(content) >= REASONING_MIN_LENGTH):
+                    signals.append({
+                        'id': uuid.uuid4().hex,
+                        'signal_type': 'assistant_reasoning',
+                        'content': content[:2000],
+                        'observed_at': datetime.now(timezone.utc).isoformat(),
+                    })
+        return signals
+
+    @staticmethod
+    def filter_error_solutions(messages: list[dict]) -> list[dict]:
+        signals = []
+        error_keywords = ['error', 'fail', 'bug', 'issue', 'broken', 'exception', 'traceback']
+        solution_keywords = ['fixed', 'solution', 'resolved', 'corrected', 'patched', 'updated']
+
+        for i, msg in enumerate(messages):
+            content = msg.get('content', '').lower()
+
+            if msg.get('role') == 'user':
+                if any(kw in content for kw in error_keywords):
+                    for j in range(i+1, min(i+5, len(messages))):
+                        next_msg = messages[j]
+                        next_content = next_msg.get('content', '').lower()
+                        if next_msg.get('role') == 'assistant':
+                            if any(kw in next_content for kw in solution_keywords):
+                                signals.append({
+                                    'id': uuid.uuid4().hex,
+                                    'signal_type': 'error_solution',
+                                    'content': f"Error: {msg['content'][:500]}\nSolution: {next_msg['content'][:500]}",
+                                    'observed_at': datetime.now(timezone.utc).isoformat(),
+                                })
+                                break
+        return signals
+
+    @staticmethod
+    def extract_session_metadata(session: dict) -> dict:
+        duration_hours = session.get('duration_seconds', 0) / 3600
+        tokens_total = session.get('tokens_input', 0) + session.get('tokens_output', 0)
+
+        return {
+            'id': uuid.uuid4().hex,
+            'session_id': session['id'],
+            'title': session.get('title', ''),
+            'agent': session.get('agent', ''),
+            'model': session.get('model', ''),
+            'cost': session.get('cost', 0),
+            'tokens_input': session.get('tokens_input', 0),
+            'tokens_output': session.get('tokens_output', 0),
+            'message_count': session.get('message_count', 0),
+            'duration_seconds': session.get('duration_seconds', 0),
+            'duration_hours': round(duration_hours, 2),
+            'tokens_total': tokens_total,
+            'date': session.get('date', ''),
+            'extracted_at': datetime.now(timezone.utc).isoformat(),
+        }

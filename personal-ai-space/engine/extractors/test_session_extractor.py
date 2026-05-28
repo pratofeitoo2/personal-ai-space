@@ -147,3 +147,67 @@ class TestSessionTablesExist:
         result = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='session_metadata'").fetchone()
         assert result is not None
         conn.close()
+
+
+class TestSignalFilters:
+    def test_filter_user_messages(self):
+        from extractors.session_extractor import SignalFilter
+
+        messages = [
+            {'role': 'user', 'content': 'I want to refactor the auth module'},
+            {'role': 'assistant', 'content': 'Let me analyze the codebase'},
+            {'role': 'user', 'content': 'Also add tests for the new endpoints'},
+        ]
+
+        signals = SignalFilter.filter_user_messages(messages)
+        assert len(signals) == 2
+        assert signals[0]['content'] == 'I want to refactor the auth module'
+        assert signals[0]['signal_type'] == 'user_message'
+
+    def test_filter_assistant_reasoning(self):
+        from extractors.session_extractor import SignalFilter
+
+        messages = [
+            {'role': 'assistant', 'content': 'Based on the codebase analysis, I recommend using PostgreSQL for the new schema. The current SQLite setup will not handle the expected load.'},
+            {'role': 'assistant', 'content': '[tool: read]'},
+            {'role': 'assistant', 'content': 'The migration strategy should be: 1) Create new tables, 2) Migrate data, 3) Update references'},
+        ]
+
+        signals = SignalFilter.filter_assistant_reasoning(messages)
+        assert len(signals) == 2
+        assert 'PostgreSQL' in signals[0]['content']
+        assert 'migration' in signals[1]['content']
+
+    def test_filter_error_solutions(self):
+        from extractors.session_extractor import SignalFilter
+
+        messages = [
+            {'role': 'user', 'content': 'The tests are failing with ImportError'},
+            {'role': 'assistant', 'content': 'The issue is that the module path is incorrect. Let me fix the import.'},
+            {'role': 'assistant', 'content': 'I fixed it by updating the sys.path in __init__.py'},
+        ]
+
+        signals = SignalFilter.filter_error_solutions(messages)
+        assert len(signals) >= 1
+        assert 'ImportError' in signals[0]['content'] or 'fixed' in signals[0]['content']
+
+    def test_extract_session_metadata(self):
+        from extractors.session_extractor import SignalFilter
+
+        session = {
+            'id': 'ses_test',
+            'title': 'Test Session',
+            'agent': 'general',
+            'model': 'gpt-4',
+            'cost': 0.5,
+            'tokens_input': 1000,
+            'tokens_output': 500,
+            'message_count': 10,
+            'duration_seconds': 3600,
+            'date': '2026-05-28',
+        }
+
+        metadata = SignalFilter.extract_session_metadata(session)
+        assert metadata['session_id'] == 'ses_test'
+        assert metadata['duration_hours'] == 1.0
+        assert metadata['tokens_total'] == 1500
