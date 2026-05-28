@@ -311,7 +311,7 @@ def _get_sync_state_rows() -> list[dict]:
 
 
 def _get_task(task_id: str) -> Optional[dict]:
-    rows = db.query("tasks", "SELECT * FROM tasks WHERE id=?", (task_id,))
+    rows = db.query("tasks", "SELECT * FROM tasks_v WHERE id=?", (task_id,))
     return rows[0] if rows else None
 
 
@@ -528,7 +528,7 @@ class RemindersSync:
         logger.info("=== Initial Push (Tasks → Reminders) ===")
 
         tasks = db.query("tasks", """
-            SELECT t.* FROM tasks t
+            SELECT t.* FROM tasks_v t
             LEFT JOIN sync_state s
                 ON s.entity_type='apple-reminder' AND s.entity_id=t.id
             WHERE s.id IS NULL

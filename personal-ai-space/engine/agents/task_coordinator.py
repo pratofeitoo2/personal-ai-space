@@ -106,7 +106,7 @@ class TaskCoordinator(BaseAgent):
     def summary(self) -> dict:
         rows = db.query(
             "tasks",
-            "SELECT status, count(*) as cnt FROM tasks GROUP BY status"
+            "SELECT status, count(*) as cnt FROM tasks_v GROUP BY status"
         )
         totals = {r["status"]: r["cnt"] for r in rows}
         completed = totals.get("completed", 0)

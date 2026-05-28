@@ -1,5 +1,16 @@
 -- tasks.db: Task management hub — projects, tasks, subtasks, dependencies, progress, doc sync
--- This is the canonical schema. The actual DB may lag behind; run migrate_schema_v2.py to catch up.
+-- v3: tasks = active only, task_archive = completed/cancelled, tasks_v = UNION ALL
+--
+-- Schema design:
+--   tasks          → active work items  (pending, in_progress, blocked)
+--   task_archive   → historical records (completed, cancelled)
+--   tasks_v        → UNION ALL view for backward-compatible reads
+--
+-- This separation keeps daily queries (overdue, due-today, open-tasks)
+-- fast — they only scan the active `tasks` table instead of filtering
+-- past every completed row.
+
+-- ── Active Tasks (pending, in_progress, blocked) ──────────────────────────
 
 CREATE TABLE IF NOT EXISTS tasks (
     id TEXT PRIMARY KEY,
@@ -12,8 +23,8 @@ CREATE TABLE IF NOT EXISTS tasks (
     status TEXT NOT NULL DEFAULT 'pending'
         CHECK(status IN ('pending','in_progress','blocked','completed','cancelled')),
     progress_pct INTEGER DEFAULT 0 CHECK(progress_pct BETWEEN 0 AND 100),
-    estimated_hours FLOAT,
-    actual_hours FLOAT,
+    estimated_hours REAL,
+    actual_hours REAL,
     sort_order INTEGER DEFAULT 0,
     assigned_to TEXT,
     tags TEXT,
@@ -25,6 +36,38 @@ CREATE TABLE IF NOT EXISTS tasks (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- ── Task Archive (completed, cancelled — historical only) ────────────────
+-- No FK constraints — archived tasks are historical snapshots.
+-- Completed/cancelled tasks are moved here by the scheduler or migration.
+-- Columns are identical to `tasks` plus `archived_at`.
+
+CREATE TABLE IF NOT EXISTS task_archive (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    project_id TEXT,
+    parent_task_id TEXT,
+    priority TEXT NOT NULL DEFAULT 'normal'
+        CHECK(priority IN ('critical','high','normal','low')),
+    status TEXT NOT NULL DEFAULT 'completed'
+        CHECK(status IN ('completed','cancelled')),
+    progress_pct INTEGER DEFAULT 0 CHECK(progress_pct BETWEEN 0 AND 100),
+    estimated_hours REAL,
+    actual_hours REAL,
+    sort_order INTEGER DEFAULT 0,
+    assigned_to TEXT,
+    tags TEXT,
+    recurrence TEXT,
+    category TEXT DEFAULT 'general',
+    due_date DATETIME,
+    completed_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    archived_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ── Task Dependencies ─────────────────────────────────────────────────────
+
 CREATE TABLE IF NOT EXISTS task_dependencies (
     id TEXT PRIMARY KEY,
     task_id TEXT NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
@@ -35,15 +78,23 @@ CREATE TABLE IF NOT EXISTS task_dependencies (
     UNIQUE(task_id, depends_on)
 );
 
+-- ── Task History (audit log — persists even after task is archived) ──────
+-- Note: task_id is a loose reference. When a task moves to task_archive,
+-- its history rows keep the same task_id but the FK is no longer enforced
+-- (the task's row is deleted from `tasks`). The UNIQUE constraint on
+-- (entity_type, entity_id, file_path) ensures no duplicate links.
+
 CREATE TABLE IF NOT EXISTS task_history (
     id TEXT PRIMARY KEY,
-    task_id TEXT NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+    task_id TEXT NOT NULL,
     field TEXT NOT NULL,
     old_value TEXT,
     new_value TEXT,
     changed_by TEXT DEFAULT 'system',
     changed_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ── Projects ──────────────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS projects (
     id TEXT PRIMARY KEY,
@@ -63,6 +114,8 @@ CREATE TABLE IF NOT EXISTS projects (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- ── Calendar Events ───────────────────────────────────────────────────────
+
 CREATE TABLE IF NOT EXISTS calendar_events (
     id TEXT PRIMARY KEY,
     task_id TEXT REFERENCES tasks(id),
@@ -75,6 +128,8 @@ CREATE TABLE IF NOT EXISTS calendar_events (
     notes TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ── Doc Links (file ↔ entity mapping) ────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS doc_links (
     id TEXT PRIMARY KEY,
@@ -89,6 +144,8 @@ CREATE TABLE IF NOT EXISTS doc_links (
     UNIQUE(entity_type, entity_id, file_path)
 );
 
+-- ── Sync State ────────────────────────────────────────────────────────────
+
 CREATE TABLE IF NOT EXISTS sync_state (
     id TEXT PRIMARY KEY,
     entity_type TEXT NOT NULL,
@@ -102,22 +159,56 @@ CREATE TABLE IF NOT EXISTS sync_state (
     UNIQUE(entity_type, entity_id, file_path)
 );
 
--- Indexes
-CREATE INDEX IF NOT EXISTS idx_tasks_status    ON tasks(status);
-CREATE INDEX IF NOT EXISTS idx_tasks_due_date  ON tasks(due_date);
-CREATE INDEX IF NOT EXISTS idx_tasks_project   ON tasks(project_id);
-CREATE INDEX IF NOT EXISTS idx_tasks_priority  ON tasks(priority);
-CREATE INDEX IF NOT EXISTS idx_tasks_parent    ON tasks(parent_task_id);
-CREATE INDEX IF NOT EXISTS idx_tasks_progress  ON tasks(progress_pct);
-CREATE INDEX IF NOT EXISTS idx_tasks_updated   ON tasks(updated_at DESC);
-CREATE INDEX IF NOT EXISTS idx_history_task    ON task_history(task_id);
-CREATE INDEX IF NOT EXISTS idx_depends_task    ON task_dependencies(task_id);
-CREATE INDEX IF NOT EXISTS idx_events_time     ON calendar_events(start_time);
-CREATE INDEX IF NOT EXISTS idx_events_category ON calendar_events(category);
-CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status);
-CREATE INDEX IF NOT EXISTS idx_projects_priority ON projects(priority);
-CREATE INDEX IF NOT EXISTS idx_projects_updated  ON projects(updated_at DESC);
-CREATE INDEX IF NOT EXISTS idx_doclinks_entity   ON doc_links(entity_type, entity_id);
-CREATE INDEX IF NOT EXISTS idx_doclinks_file     ON doc_links(file_path);
-CREATE INDEX IF NOT EXISTS idx_sync_file         ON sync_state(file_path);
-CREATE INDEX IF NOT EXISTS idx_sync_entity       ON sync_state(entity_type, entity_id);
+-- ── UNION ALL View ─────────────────────────────────────────────────────────
+-- Use `tasks_v` for read-only queries that need the full picture
+-- (analytics, ID lookups, counts). Inserts/updates/deletes go to the
+-- underlying tables (`tasks` or `task_archive`) directly.
+
+CREATE VIEW IF NOT EXISTS tasks_v AS
+SELECT
+    id, title, description, project_id, parent_task_id,
+    priority, status,
+    progress_pct, estimated_hours, actual_hours,
+    sort_order, assigned_to, tags, recurrence, category,
+    due_date, completed_at, created_at, updated_at
+FROM tasks
+UNION ALL
+SELECT
+    id, title, description, project_id, parent_task_id,
+    priority, status,
+    progress_pct, estimated_hours, actual_hours,
+    sort_order, assigned_to, tags, recurrence, category,
+    due_date, completed_at, created_at, updated_at
+FROM task_archive;
+
+-- ── Indexes: Tasks (active) ───────────────────────────────────────────────
+-- Full index on status for GROUP BY / status queries
+CREATE INDEX IF NOT EXISTS idx_tasks_status         ON tasks(status);
+-- Partial indexes — only rows with active statuses, smaller and faster
+CREATE INDEX IF NOT EXISTS idx_tasks_active_due     ON tasks(due_date)      WHERE status IN ('pending','in_progress','blocked');
+CREATE INDEX IF NOT EXISTS idx_tasks_active_priority ON tasks(priority)     WHERE status IN ('pending','in_progress','blocked');
+
+CREATE INDEX IF NOT EXISTS idx_tasks_project        ON tasks(project_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_priority       ON tasks(priority);
+CREATE INDEX IF NOT EXISTS idx_tasks_parent         ON tasks(parent_task_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_progress       ON tasks(progress_pct);
+CREATE INDEX IF NOT EXISTS idx_tasks_updated        ON tasks(updated_at DESC);
+
+-- ── Indexes: Task Archive ──────────────────────────────────────────────────
+CREATE INDEX IF NOT EXISTS idx_archive_completed_date ON task_archive(completed_at)  WHERE status = 'completed';
+CREATE INDEX IF NOT EXISTS idx_archive_project        ON task_archive(project_id);
+CREATE INDEX IF NOT EXISTS idx_archive_archived_at    ON task_archive(archived_at DESC);
+CREATE INDEX IF NOT EXISTS idx_archive_status         ON task_archive(status);
+
+-- ── Indexes: Other tables (unchanged) ──────────────────────────────────────
+CREATE INDEX IF NOT EXISTS idx_history_task        ON task_history(task_id);
+CREATE INDEX IF NOT EXISTS idx_depends_task        ON task_dependencies(task_id);
+CREATE INDEX IF NOT EXISTS idx_events_time         ON calendar_events(start_time);
+CREATE INDEX IF NOT EXISTS idx_events_category     ON calendar_events(category);
+CREATE INDEX IF NOT EXISTS idx_projects_status     ON projects(status);
+CREATE INDEX IF NOT EXISTS idx_projects_priority   ON projects(priority);
+CREATE INDEX IF NOT EXISTS idx_projects_updated    ON projects(updated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_doclinks_entity     ON doc_links(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_doclinks_file       ON doc_links(file_path);
+CREATE INDEX IF NOT EXISTS idx_sync_file           ON sync_state(file_path);
+CREATE INDEX IF NOT EXISTS idx_sync_entity         ON sync_state(entity_type, entity_id);

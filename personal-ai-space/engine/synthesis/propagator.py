@@ -45,7 +45,7 @@ def _get_mcp():
 
 def _get_task(task_id: str) -> Optional[dict]:
     db = _get_db()
-    rows = db.query("tasks", "SELECT * FROM tasks WHERE id=?", (task_id,))
+    rows = db.query("tasks", "SELECT * FROM tasks_v WHERE id=?", (task_id,))
     return rows[0] if rows else None
 
 
@@ -244,7 +244,7 @@ def on_task_deleted(task_id: str) -> None:
     db = _get_db()
     proj = None
     try:
-        rows = db.query("tasks", "SELECT project_id FROM tasks WHERE id=?", (task_id,))
+        rows = db.query("tasks", "SELECT project_id FROM tasks_v WHERE id=?", (task_id,))
         if rows:
             proj = rows[0]["project_id"]
     except Exception as e:

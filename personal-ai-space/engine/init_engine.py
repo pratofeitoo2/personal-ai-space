@@ -118,7 +118,7 @@ def seed_needs():
 
 def seed_tasks():
     print("Seeding starter tasks…")
-    rows = db.query("tasks", "SELECT count(*) as n FROM tasks")
+    rows = db.query("tasks", "SELECT count(*) as n FROM tasks_v")
     if rows and rows[0]["n"] > 0:
         print("  Tasks already exist — skipping")
         return

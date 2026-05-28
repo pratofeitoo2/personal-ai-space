@@ -90,7 +90,7 @@ class InsightGenerator(BaseAgent):
             "  count(*) as total, "
             "  count(*) FILTER (WHERE status='completed' AND completed_at IS NOT NULL "
             "      AND completed_at >= date('now','-7 days')) as completed_week "
-            "FROM tasks"
+            "FROM tasks_v"
         )
         r = rows[0] if rows else {}
         total = r.get("total") or 1

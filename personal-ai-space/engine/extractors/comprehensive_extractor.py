@@ -415,7 +415,7 @@ class ComprehensiveExtractor:
             print(f"  Needs:            0 records")
         
         try:
-            tasks_count = query("tasks", "SELECT COUNT(*) as count FROM tasks")[0]['count']
+            tasks_count = query("tasks", "SELECT COUNT(*) as count FROM tasks_v")[0]['count']
             print(f"  Tasks:            {tasks_count} records")
         except Exception as e:
             logger.debug("Tasks table not available: %s", e)

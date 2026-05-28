@@ -55,7 +55,7 @@ class PatternLearner(BaseAgent):
 
         try:
             tasks = self._hub.query("tasks", """
-                SELECT datetime(created_at) as ct FROM tasks
+                SELECT datetime(created_at) as ct FROM tasks_v
                 WHERE created_at > datetime('now', '-30 days')
                 ORDER BY created_at DESC
             """)
@@ -85,7 +85,7 @@ class PatternLearner(BaseAgent):
 
         try:
             tasks = self._hub.query("tasks", """
-                SELECT COALESCE(category, 'uncategorized') as category, COUNT(*) as count FROM tasks
+                SELECT COALESCE(category, 'uncategorized') as category, COUNT(*) as count FROM tasks_v
                 GROUP BY category
                 ORDER BY count DESC
                 LIMIT 5
@@ -112,7 +112,7 @@ class PatternLearner(BaseAgent):
                     COALESCE(priority, 'normal') as priority,
                     COUNT(*) as total,
                     SUM(CASE WHEN status='completed' THEN 1 ELSE 0 END) as completed
-                FROM tasks
+                FROM tasks_v
                 WHERE created_at > datetime('now', '-60 days')
                 GROUP BY category, priority
             """)

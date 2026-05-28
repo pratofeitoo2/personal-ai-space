@@ -49,8 +49,8 @@ def _read_frontmatter(path: Path) -> dict:
 
 
 def _load_tasks_cache(db) -> dict[str, dict]:
-    """Return {title_lower: task} for all tasks."""
-    rows = db.query("tasks", "SELECT id, title, status, progress_pct, project_id FROM tasks")
+    """Return {title_lower: task} for all tasks (active + archived)."""
+    rows = db.query("tasks", "SELECT id, title, status, progress_pct, project_id FROM tasks_v")
     cache = {}
     for r in rows:
         key = (r["title"] or "").strip().lower()
@@ -146,7 +146,7 @@ def _match_and_sync(db, path: Path, fm: dict, tasks_cache: dict,
     # Priority 1: frontmatter has task_id
     task_id = fm.get("task_id")
     if task_id:
-        task = _get_db().query("tasks", "SELECT id FROM tasks WHERE id=?", (task_id,))
+        task = _get_db().query("tasks", "SELECT id FROM tasks_v WHERE id=?", (task_id,))
         if task:
             result.update(matched=True, entity_type="task", entity_id=task_id, action="linked")
             _upsert_doc_link(db, "task", task_id, str(path), fm_status)

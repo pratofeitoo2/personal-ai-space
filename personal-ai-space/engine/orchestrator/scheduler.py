@@ -94,6 +94,12 @@ class Scheduler:
             "type": "interval",
             "interval_minutes": 60,
         })
+        self._jobs.append({
+            "name": "archive_tasks",
+            "handler": self._run_task_archiver,
+            "type": "interval",
+            "interval_minutes": 5,
+        })
 
         logger.info("Scheduler: %d jobs loaded", len(self._jobs))
 
@@ -243,6 +249,16 @@ class Scheduler:
             logger.warning("sync_self module not available, skipping")
         except Exception as e:
             logger.warning("self_sync failed: %s", e)
+
+    def _run_task_archiver(self):
+        """Move completed/cancelled tasks from tasks → task_archive every 5 minutes."""
+        try:
+            from db.tasks.migrate_schema_v3 import archive_completed_tasks
+            moved = archive_completed_tasks()
+            if moved:
+                logger.info("task_archiver: archived %d completed task(s)", moved)
+        except Exception as e:
+            logger.warning("task_archiver failed: %s", e)
 
     def _run_knowledge_sync(self):
         """Sync knowledge/ directory files into knowledge.db."""
