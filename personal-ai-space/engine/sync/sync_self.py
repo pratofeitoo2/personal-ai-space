@@ -681,11 +681,11 @@ def sync_documents() -> int:
                         # Extract text content from the actual file if it exists
                         file_name = entry.get("file", "")
                         file_format = entry.get("file_format", "")
-                        content = entry.get("description", "")
+                        content = ""
                         if file_name:
                             full_path = subdir / file_name
                             if full_path.exists():
-                                if file_format == "md" or not _HAS_TEXT_EXTRACTOR:
+                                if file_format == "md":
                                     raw = full_path.read_text(encoding="utf-8")
                                     body = _strip_frontmatter(raw).strip()
                                     if body:
@@ -694,6 +694,18 @@ def sync_documents() -> int:
                                     extracted = _extract_binary_text(full_path)
                                     if extracted:
                                         content = extracted
+                                else:
+                                    # No extractor available: try reading as text
+                                    try:
+                                        raw = full_path.read_text(encoding="utf-8")
+                                        body = _strip_frontmatter(raw).strip()
+                                        if body:
+                                            content = body
+                                    except UnicodeDecodeError:
+                                        pass  # binary file with no extractor — will use fallback below
+                        # Fall back to description field when file extraction yielded nothing
+                        if not content:
+                            content = entry.get("description", "")
                         with db.transaction("self") as conn:
                             conn.execute(
                                 """INSERT INTO documents
