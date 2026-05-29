@@ -1,15 +1,15 @@
 ---
-habit_name: Journaling      
-id: hab_journaling          
-category: awareness         
-frequency: daily            
-start_date: 2026-05-29      
-current_streak: 0           
-total_completions: 0        
-last_completed:             
-target_streak:              
-status: active              
+id: h-journal
+habit_name: Diário Pessoal
+category: bem-estar
+frequency: daily
+start_date: 2026-05-24
+current_streak: 3
+total_completions: 5
+last_completed: 2026-05-28
+target_streak:
+status: active
 ---
 
 ### DESCRIPTION
-this habit rely simply on me being constant, day after day, to write my obsidian daily notes.
+Escrita diária no Obsidian para reflexão e registro de ideias. Constância dia após dia.
