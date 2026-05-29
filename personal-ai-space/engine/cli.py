@@ -868,6 +868,106 @@ if HAS_RICH:
         for sid, tools in data.get("tools_by_server", {}).items():
             console.print(f"  [bold]{sid}[/bold]: {', '.join(tools)}")
 
+    # ── jobs ─────────────────────────────────────────────────────────────────
+
+    @cli.group()
+    def jobs():
+        """Track job applications — companies, applications, interviews."""
+
+    @jobs.command("sync")
+    @click.option("--dir", type=click.Path(exists=True), default=None,
+                  help=f"Path to jobs .md files (default: obsidian/jobs/)")
+    @click.option("--dry-run", is_flag=True, help="Preview only, no DB writes")
+    def jobs_sync(dir, dry_run):
+        """Sync Obsidian .md files → jobs.db."""
+        from sync.sync_jobs import sync_jobs, format_summary, dry_run as dr_preview
+
+        if dry_run:
+            info = dr_preview(Path(dir) if dir else None)
+            console.print(f"\n[bold]JOBS SYNC — DRY RUN (no changes written)[/bold]")
+            console.print(f"  Directory: {info.get('directory', '?')}")
+            if info["files"] == 0:
+                console.print("  [dim]No .md files found — nothing to sync.[/dim]")
+                return
+            console.print(f"  Files found:           {info['files']}")
+            console.print(f"  Would create/update →")
+            console.print(f"    Companies:           {info['companies']}")
+            console.print(f"    Applications:        {info['applications']}")
+            console.print(f"    Interviews:          {info['interviews']}")
+            console.print(f"    Contacts:            {info['contacts']}")
+            return
+
+        with console.status("[bold green]Syncing jobs...[/bold green]"):
+            results = sync_jobs(Path(dir) if dir else None)
+        format_summary(results)
+
+    @jobs.command("list")
+    @click.option("--status", "-s", default=None,
+                  help="Filter by status (saved, applied, interview, offer, ...)")
+    def jobs_list(status):
+        """List all job applications from jobs.db."""
+        import db_manager as _db
+
+        if status:
+            status = status.strip().lower()
+            rows = _db.query("jobs",
+                "SELECT a.id, a.job_title, c.name as company, a.status, a.applied_date, a.location "
+                "FROM applications a JOIN companies c ON a.company_id = c.id "
+                "WHERE a.status = ? ORDER BY a.created_at DESC", (status,))
+        else:
+            rows = _db.query("jobs",
+                "SELECT a.id, a.job_title, c.name as company, a.status, a.applied_date, a.location "
+                "FROM applications a JOIN companies c ON a.company_id = c.id "
+                "ORDER BY a.created_at DESC")
+
+        if not rows:
+            console.print("[dim]No job applications found.[/dim]")
+            return
+
+        t = Table(title=f"Job Applications{' (' + status + ')' if status else ''}",
+                  show_header=True)
+        t.add_column("Title")
+        t.add_column("Company")
+        t.add_column("Status")
+        t.add_column("Applied")
+        t.add_column("Location")
+
+        for r in rows:
+            t.add_row(
+                r.get("job_title", "?")[:40],
+                r.get("company", "?")[:25],
+                r.get("status", "?"),
+                str(r.get("applied_date", ""))[:10],
+                r.get("location", "")[:20],
+            )
+        console.print(t)
+
+    @jobs.command("statuses")
+    def jobs_statuses():
+        """Show application pipeline counts."""
+        import db_manager as _db
+
+        rows = _db.query("jobs",
+            "SELECT status, count(*) as n FROM applications GROUP BY status ORDER BY n DESC")
+
+        if not rows:
+            console.print("[dim]No applications yet.[/dim]")
+            return
+
+        t = Table(title="Application Pipeline", show_header=True)
+        t.add_column("Status")
+        t.add_column("Count")
+
+        status_colors = {
+            "saved": "dim", "applied": "blue", "screening": "cyan",
+            "interview": "yellow", "offer": "green", "rejected": "red",
+            "withdrawn": "dim", "accepted": "green",
+        }
+        for r in rows:
+            color = status_colors.get(r["status"], "white")
+            t.add_row(f"[{color}]{r['status']}[/]", str(r["n"]))
+        console.print(t)
+
     # ── natural language ────────────────────────────────────────────────────
 
     @cli.command()

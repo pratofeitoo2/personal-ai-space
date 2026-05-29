@@ -95,6 +95,12 @@ class Scheduler:
             "interval_minutes": 60,
         })
         self._jobs.append({
+            "name": "jobs_sync",
+            "handler": self._run_jobs_sync,
+            "type": "interval",
+            "interval_minutes": 60,
+        })
+        self._jobs.append({
             "name": "archive_tasks",
             "handler": self._run_task_archiver,
             "type": "interval",
@@ -280,6 +286,23 @@ class Scheduler:
             logger.warning("sync_knowledge module not available, skipping")
         except Exception as e:
             logger.warning("knowledge_sync failed: %s", e)
+
+    def _run_jobs_sync(self):
+        """Sync obsidian/jobs/ .md files into jobs.db."""
+        try:
+            from sync.sync_jobs import sync_jobs
+            result = sync_jobs()
+            logger.info(
+                "jobs_sync done — companies:%s applications:%s interviews:%s contacts:%s",
+                result.get("companies", "?"),
+                result.get("applications", "?"),
+                result.get("interviews", "?"),
+                result.get("contacts", "?"),
+            )
+        except ImportError:
+            logger.warning("sync_jobs module not available, skipping")
+        except Exception as e:
+            logger.warning("jobs_sync failed: %s", e)
 
     def _run_automations(self):
         """Run automation rules — briefings, checkpoints, real-time alerts."""
