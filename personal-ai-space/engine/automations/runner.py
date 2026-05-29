@@ -29,19 +29,19 @@ STATE_FILE = STATE_DIR / "automation_state.json"
 QUERIES: dict[str, tuple] = {
     "tasks_due_today": (
         "tasks",
-        "SELECT title, due_date, priority FROM tasks WHERE due_date=date('now','localtime') AND status NOT IN ('completed','cancelled')",
+        "SELECT t.title, t.due_date, t.priority, p.name AS project FROM tasks t LEFT JOIN projects p ON t.project_id=p.id WHERE t.status NOT IN ('completed','cancelled') ORDER BY CASE t.priority WHEN 'critical' THEN 0 WHEN 'high' THEN 1 WHEN 'normal' THEN 2 ELSE 3 END, t.due_date ASC NULLS LAST",
         "title",
         (),
     ),
     "overdue_tasks": (
         "tasks",
-        "SELECT title, due_date, priority FROM tasks WHERE due_date<date('now','localtime') AND status NOT IN ('completed','cancelled')",
+        "SELECT t.title, t.due_date, t.priority, p.name AS project FROM tasks t LEFT JOIN projects p ON t.project_id=p.id WHERE t.due_date<date('now','localtime') AND t.status NOT IN ('completed','cancelled') ORDER BY CASE t.priority WHEN 'critical' THEN 0 WHEN 'high' THEN 1 ELSE 2 END, t.due_date",
         "title",
         (),
     ),
     "tasks_remaining": (
         "tasks",
-        "SELECT title, due_date, priority FROM tasks WHERE due_date<=date('now','localtime') AND status NOT IN ('completed','cancelled')",
+        "SELECT t.title, t.due_date, t.priority, p.name AS project FROM tasks t LEFT JOIN projects p ON t.project_id=p.id WHERE t.due_date<=date('now','localtime') AND t.status NOT IN ('completed','cancelled') ORDER BY t.due_date, CASE t.priority WHEN 'critical' THEN 0 WHEN 'high' THEN 1 ELSE 2 END",
         "title",
         (),
     ),
@@ -71,25 +71,25 @@ QUERIES: dict[str, tuple] = {
     ),
     "goals_active": (
         "self",
-        "SELECT title, category FROM needs WHERE status='active' ORDER BY priority",
+        "SELECT title, category FROM goals WHERE status LIKE '%in_progress%' OR status LIKE '%active%' ORDER BY priority",
         "title",
         (),
     ),
     "goals_near_deadline": (
         "self",
-        "SELECT title, deadline FROM needs WHERE status='active' AND deadline IS NOT NULL AND deadline <= date('now','localtime','+7 days') ORDER BY deadline",
+        "SELECT title, target_date AS deadline FROM goals WHERE (status LIKE '%in_progress%' OR status LIKE '%active%') AND target_date IS NOT NULL AND target_date <= date('now','localtime','+7 days') ORDER BY target_date",
         "title",
         (),
     ),
     "calendar_today": (
         "calendar",
-        "SELECT title, start_time FROM events WHERE date(start_time)=date('now','localtime') ORDER BY start_time",
+        "SELECT event_name AS title, event_time AS start_time FROM upcoming WHERE event_date=date('now','localtime') ORDER BY event_time",
         "title",
         (),
     ),
     "calendar_upcoming": (
         "calendar",
-        "SELECT title, start_time FROM events WHERE start_time >= datetime('now','localtime') AND start_time <= datetime('now','localtime','+30 minutes') ORDER BY start_time",
+        "SELECT event_name AS title, event_time AS start_time FROM upcoming WHERE event_date=date('now','localtime') AND event_time >= strftime('%H:%M','now','localtime') AND event_time <= strftime('%H:%M','now','localtime','+30 minutes') ORDER BY event_time",
         "title",
         (),
     ),
@@ -244,6 +244,8 @@ class AutomationRunner:
         val = row.get(field, "")
         extras = []
         if query_name in ("overdue_tasks", "tasks_due_today", "tasks_remaining"):
+            if row.get("project"):
+                extras.append(f"#{row['project']}")
             if row.get("due_date"):
                 extras.append(f"({row['due_date']})")
             if row.get("priority") and row["priority"] not in (None, "medium"):
