@@ -100,6 +100,12 @@ class Scheduler:
             "type": "interval",
             "interval_minutes": 5,
         })
+        self._jobs.append({
+            "name": "automation_runner",
+            "handler": self._run_automations,
+            "type": "interval",
+            "interval_minutes": 0.5,
+        })
 
         logger.info("Scheduler: %d jobs loaded", len(self._jobs))
 
@@ -274,6 +280,20 @@ class Scheduler:
             logger.warning("sync_knowledge module not available, skipping")
         except Exception as e:
             logger.warning("knowledge_sync failed: %s", e)
+
+    def _run_automations(self):
+        """Run automation rules — briefings, checkpoints, real-time alerts."""
+        try:
+            from automations.runner import AutomationRunner
+            if hasattr(self, '_automation_runner'):
+                self._automation_runner.run()
+            else:
+                self._automation_runner = AutomationRunner(self._engine)
+                self._automation_runner.run()
+        except ImportError:
+            logger.debug("automations module not available, skipping")
+        except Exception as e:
+            logger.error("automation_runner failed: %s", e)
 
     def _run_monthly_analysis(self):
         logger.info("Monthly analysis triggered (placeholder)")
