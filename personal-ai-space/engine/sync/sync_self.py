@@ -20,6 +20,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+# Allow running from anywhere by resolving engine/ sibling dir
+_ENGINE_DIR = Path(__file__).resolve().parent.parent
+if str(_ENGINE_DIR) not in sys.path:
+    sys.path.insert(0, str(_ENGINE_DIR))
+
 import yaml
 
 import db_manager as db

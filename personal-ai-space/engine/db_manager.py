@@ -29,6 +29,7 @@ DB_PATHS = {
     "git":        DB_DIR / "git" / "git.db",
     "activities": DB_DIR / "activities" / "activities.db",
     "calendar":   DB_DIR / "calendar" / "calendar.db",
+    "jobs":       DB_DIR / "jobs" / "jobs.db",
 }
 
 # ── Thread-Local Connections ─────────────────────────────────────────────────
