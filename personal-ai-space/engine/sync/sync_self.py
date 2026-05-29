@@ -705,7 +705,7 @@ def sync_documents() -> int:
                                         pass  # binary file with no extractor — will use fallback below
                         # Fall back to description field when file extraction yielded nothing
                         if not content:
-                            content = entry.get("description", "")
+                            content = entry.get("description", "").strip()
                         with db.transaction("self") as conn:
                             conn.execute(
                                 """INSERT INTO documents

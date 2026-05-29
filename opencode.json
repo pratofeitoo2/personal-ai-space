@@ -33,15 +33,13 @@
     "whatsapp-mcp": {
       "type": "local",
       "command": [
-        "docker",
-        "run",
-        "-i",
-        "--rm",
-        "--add-host", "host.docker.internal:host-gateway",
-        "-e", "WHATSAPP_API_URL=http://host.docker.internal:8080/api",
-        "-v", "/Users/paulorezende/Documents/Cline/MCP/whatsapp-mcp/whatsapp-bridge/store:/data",
-        "mcp/whatsapp-mcp:latest"
+        "/Users/paulorezende/Documents/Cline/MCP/whatsapp-mcp/whatsapp-mcp-server/.venv/bin/python",
+        "/Users/paulorezende/Documents/Cline/MCP/whatsapp-mcp/whatsapp-mcp-server/main.py"
       ],
+      "env": {
+        "WHATSAPP_API_URL": "http://127.0.0.1:8080/api",
+        "WHATSAPP_DB_PATH": "/Users/paulorezende/Documents/Cline/MCP/whatsapp-mcp/whatsapp-bridge/store/messages.db"
+      },
       "enabled": true
     }
   }
