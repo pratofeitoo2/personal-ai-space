@@ -37,4 +37,8 @@ def generate_greeting() -> str:
 
 def generate_opener(tasks_due: int, overdue: int, habits_at_risk: int, habit_count: int) -> Optional[str]:
     """Generate LLM opener via existing bridge. Returns None if offline."""
-    return enrich_digest_opener(tasks_due, overdue, habits_at_risk, habit_count)
+    try:
+        return enrich_digest_opener(tasks_due, overdue, habits_at_risk, habit_count)
+    except Exception:
+        logger.warning("LLM opener unavailable (Ollama bridge exception)", exc_info=True)
+        return None

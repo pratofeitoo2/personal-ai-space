@@ -4,7 +4,7 @@ from unittest.mock import patch
 import pytest
 
 from automations.templates import (
-    format_section, build_brief_message, generate_greeting,
+    format_section, build_brief_message, generate_greeting, generate_opener,
 )
 
 
@@ -69,3 +69,24 @@ class TestGenerateGreeting:
         with patch("automations.templates.datetime") as mock_dt:
             mock_dt.now.return_value = datetime(2026, 5, 29, 20, 0, 0)
             assert "Boa noite" in generate_greeting()
+
+
+class TestGenerateOpener:
+    def test_returns_text_when_bridge_available(self):
+        with patch("automations.templates.enrich_digest_opener") as mock_bridge:
+            mock_bridge.return_value = "Bom dia! Você tem 3 tarefas hoje."
+            result = generate_opener(3, 1, 2, 5)
+            assert result == "Bom dia! Você tem 3 tarefas hoje."
+            mock_bridge.assert_called_once_with(3, 1, 2, 5)
+
+    def test_returns_none_when_bridge_offline(self):
+        with patch("automations.templates.enrich_digest_opener") as mock_bridge:
+            mock_bridge.return_value = None
+            result = generate_opener(0, 0, 0, 0)
+            assert result is None
+
+    def test_handles_exception_gracefully(self):
+        with patch("automations.templates.enrich_digest_opener") as mock_bridge:
+            mock_bridge.side_effect = RuntimeError("Ollama not responding")
+            result = generate_opener(0, 0, 0, 0)
+            assert result is None

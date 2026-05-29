@@ -35,6 +35,9 @@ def send_whatsapp(text: str, recipient: str) -> bool:
     except requests.ConnectionError:
         logger.warning("WhatsApp bridge unreachable")
         return False
+    except requests.Timeout:
+        logger.warning("WhatsApp bridge timed out after 10s")
+        return False
 
 
 def enqueue_pending(text: str, recipient: str) -> None:

@@ -1,7 +1,10 @@
 """Tests for automations/delivery.py"""
 from pathlib import Path
-import json, tempfile, pytest
+import json
+import pytest
 from unittest.mock import patch, Mock
+from requests import ConnectionError
+from requests.exceptions import Timeout
 
 from automations.delivery import send_whatsapp, enqueue_pending, retry_pending
 
@@ -20,8 +23,13 @@ class TestSendWhatsApp:
 
     def test_returns_false_on_connection_error(self):
         with patch("automations.delivery.requests.post") as mock_post:
-            from requests import ConnectionError
             mock_post.side_effect = ConnectionError()
+            result = send_whatsapp("hello", "+5511999999999")
+            assert result is False
+
+    def test_returns_false_on_timeout(self):
+        with patch("automations.delivery.requests.post") as mock_post:
+            mock_post.side_effect = Timeout()
             result = send_whatsapp("hello", "+5511999999999")
             assert result is False
 
