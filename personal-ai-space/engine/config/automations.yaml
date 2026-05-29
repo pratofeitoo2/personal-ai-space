@@ -1,0 +1,68 @@
+# Personal AI Automations — declarative rules
+# Schedule types: "HH:MM" (daily at time), {type: interval, seconds: N}
+# state_track: true → only alerts on state change (for interval rules)
+
+settings:
+  whatsapp_recipient: ""                     # ← SET YOUR NUMBER
+  timezone: "America/Sao_Paulo"
+
+automations:
+
+  - id: morning_brief
+    name: "Briefing Matinal"
+    schedule: "07:00"
+    sections:
+      - {type: greeting}
+      - {type: llm_opener}
+      - {query: tasks_due_today,      label: "📋 Tarefas do dia",     empty_msg: "Nenhuma tarefa para hoje"}
+      - {query: calendar_today,       label: "📅 Agenda de hoje",     empty_msg: "Sem compromissos hoje"}
+      - {query: habits_at_risk,       label: "🎯 Hábitos em risco",   empty_msg: "Todos os hábitos em dia"}
+      - {query: goals_active,         label: "🎯 Metas ativas",       empty_msg: "Nenhuma meta ativa no momento"}
+
+  - id: midday_checkpoint
+    name: "Checkpoint Meio-dia"
+    schedule: "12:00"
+    sections:
+      - {type: greeting}
+      - {query: tasks_remaining,      label: "📋 Restam do dia",      empty_msg: "Tarefas todas concluídas!"}
+      - {query: habits_today_status,  label: "🎯 Hábitos hoje",       empty_msg: "Nenhum hábito registrado ainda hoje"}
+      - {query: habits_at_risk,       label: "⚠️ Hábitos em risco",   empty_msg: ""}
+
+  - id: end_of_day
+    name: "Fechamento do Dia"
+    schedule: "18:00"
+    sections:
+      - {query: tasks_completed_today, label: "✅ Concluído hoje",    empty_msg: "Nenhuma tarefa concluída hoje"}
+      - {query: habits_completed_today,label: "💪 Hábitos do dia",    empty_msg: "Nenhum hábito hoje"}
+
+  - id: alert_overdue_tasks
+    name: "Tarefas Atrasadas"
+    schedule: {type: interval, seconds: 60}
+    state_track: true
+    min_items: 1
+    sections:
+      - {query: overdue_tasks,        label: "⚠️ Tarefas atrasadas",  empty_msg: ""}
+
+  - id: alert_habits_at_risk
+    name: "Hábitos em Risco"
+    schedule: {type: interval, seconds: 300}
+    state_track: true
+    min_items: 1
+    sections:
+      - {query: habits_at_risk,       label: "⚠️ Hábitos precisando de atenção", empty_msg: ""}
+
+  - id: alert_calendar_soon
+    name: "Agenda Iminente"
+    schedule: {type: interval, seconds: 120}
+    state_track: true
+    min_items: 1
+    sections:
+      - {query: calendar_upcoming,    label: "🔔 Em breve na agenda", empty_msg: ""}
+
+  - id: alert_goal_deadlines
+    name: "Metas Próximas do Prazo"
+    schedule: {type: interval, seconds: 3600}
+    state_track: true
+    min_items: 1
+    sections:
+      - {query: goals_near_deadline,  label: "🎯 Metas perto do prazo", empty_msg: ""}
