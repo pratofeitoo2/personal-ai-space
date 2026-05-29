@@ -1,0 +1,17 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+	precomposeunicode = true
+[remote "origin"]
+	url = https://github.com/pratofeitoo/awesome-llm-skills
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+	vscode-merge-base = origin/master
+[remote "upstream"]
+	url = https://github.com/Prat011/awesome-llm-skills.git
+	fetch = +refs/heads/*:refs/remotes/upstream/*
