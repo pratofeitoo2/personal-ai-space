@@ -183,29 +183,188 @@ def send_reminder(title: str, notes: str = "") -> bool:
         return False
 
 
+# ── Per-section reminder titles ───────────────────────────────────────────
+
+_SECTION_TITLES = {
+    "tasks_due_today": "📋 Tarefas do Dia",
+    "tasks_remaining": "📋 Restam do Dia",
+    "overdue_tasks": "⚠️ Tarefas Atrasadas",
+    "calendar_today": "📅 Agenda de Hoje",
+    "calendar_upcoming": "🔔 Em Breve na Agenda",
+    "habits_at_risk": "🎯 Hábitos em Risco",
+    "habits_completed_today": "💪 Hábitos Concluídos Hoje",
+    "habits_today_status": "🎯 Status dos Hábitos",
+    "goals_active": "🎯 Metas Ativas",
+    "goals_near_deadline": "🎯 Metas Próximas do Prazo",
+    "tasks_completed_today": "✅ Concluído Hoje",
+}
+
+# Time-scheduled rules get per-section Reminder tiles; interval alerts get one
+# grouped reminder to avoid thrash from frequent re-creation.
+_SECTION_REMINDER_RULES = {"morning_brief", "midday_checkpoint", "end_of_day"}
+
+
+# ── Message builders per channel ──────────────────────────────────────────
+
+
+def _build_whatsapp_message(message: str, sections: list[dict], rule_name: str) -> str:
+    """Enhance WhatsApp message with compact summary header and footer."""
+    greeting = ""
+    summary_bits = []
+    has_data = False
+
+    for sec in sections:
+        it = sec.get("item_type", "")
+        items = sec.get("items", [])
+        if it == "greeting":
+            greeting = sec.get("formatted", "")
+        elif items:
+            has_data = True
+            title = _SECTION_TITLES.get(it, "")
+            if title:
+                summary_bits.append(f"{title}: {len(items)}")
+
+    footer = "\n\n[Sisyphus — assistente pessoal]"
+
+    if not has_data:
+        return message + footer
+
+    # Build header: greeting + compact per-section counts
+    if greeting and summary_bits:
+        header = f"{greeting}  {' · '.join(summary_bits)}"
+    elif summary_bits:
+        header = " · ".join(summary_bits)
+    else:
+        header = ""
+
+    # Remove greeting from message body (it's in the header now)
+    body = message
+    if greeting and body.startswith(greeting):
+        body = body[len(greeting):].strip("\n")
+
+    result = body + footer if not header else f"{header}\n\n{body}{footer}"
+    return result.strip()
+
+
+def _build_notification_text(rule_id: str, sections: list[dict], rule_name: str, message: str = "") -> str:
+    """Build rule-specific macOS notification text from section data."""
+    counts = {}
+    first_items = {}
+    for sec in sections:
+        it = sec.get("item_type", "")
+        items = sec.get("items", [])
+        if items:
+            counts[it] = len(items)
+            if it not in first_items:
+                first_items[it] = items[0].lstrip("• ")
+
+    if rule_id == "morning_brief":
+        parts = []
+        if c := counts.get("tasks_due_today"):
+            parts.append(f"{c} tasks")
+        if c := counts.get("calendar_today"):
+            parts.append(f"{c} eventos")
+        if c := counts.get("habits_at_risk"):
+            parts.append(f"{c} hábitos em risco")
+        if c := counts.get("goals_active"):
+            parts.append(f"{c} metas")
+        if parts:
+            return " · ".join(parts)
+
+    elif rule_id == "midday_checkpoint":
+        parts = []
+        if c := counts.get("tasks_remaining"):
+            parts.append(f"{c} tasks restam")
+        if c := counts.get("habits_today_status"):
+            parts.append(f"{c} hábitos")
+        if c := counts.get("habits_at_risk"):
+            parts.append(f"{c} em risco")
+        if parts:
+            return " · ".join(parts)
+
+    elif rule_id == "end_of_day":
+        parts = []
+        if c := counts.get("tasks_completed_today"):
+            parts.append(f"{c} tasks concluídas")
+        if c := counts.get("habits_completed_today"):
+            parts.append(f"{c} hábitos hoje")
+        if parts:
+            return " · ".join(parts)
+
+    elif rule_id == "alert_overdue_tasks":
+        c = counts.get("overdue_tasks", 0)
+        return f"⚠️ {c} tarefas atrasadas"
+
+    elif rule_id == "alert_habits_at_risk":
+        c = counts.get("habits_at_risk", 0)
+        return f"🎯 {c} hábitos em risco"
+
+    elif rule_id == "alert_calendar_soon":
+        first = first_items.get("calendar_upcoming", "")
+        return f"🔔 {first}"[:120]
+
+    elif rule_id == "alert_goal_deadlines":
+        first = first_items.get("goals_near_deadline", "")
+        return f"🎯 {first}"[:120]
+
+    # Fallback: first line of the formatted message
+    first_line = (message.split("\n")[0] if message else "")[:120]
+    return first_line
+
+
 # ── Unified delivery ─────────────────────────────────────────────────────
 
 
-def deliver_all(message: str, rule_id: str, rule_name: str, recipient: str = "") -> None:
+def deliver_all(message: str, sections: list[dict], rule_id: str, rule_name: str, recipient: str = "") -> None:
     """Deliver a message to all configured channels.
 
     Channels
     --------
-    - **WhatsApp**  – only if *recipient* is non-empty; enqueues on failure.
-    - **macOS Notification Center** – fire-and-forget osascript banner.
-    - **Apple Reminders** – only for rule types listed in ``_REMINDER_TITLES``.
+    - **WhatsApp** – overview with summary header and footer.
+    - **macOS Notification Center** – rule-specific summary text.
+    - **Apple Reminders** – per-section tiles for briefings, grouped for alerts.
     """
-    # 1. WhatsApp
+    # 1. WhatsApp – enhanced with summary header and footer
     if recipient:
-        ok = send_whatsapp(message, recipient)
+        whatsapp_msg = _build_whatsapp_message(message, sections, rule_name)
+        ok = send_whatsapp(whatsapp_msg, recipient)
         if not ok:
-            enqueue_pending(message, recipient)
+            enqueue_pending(whatsapp_msg, recipient)
 
-    # 2. macOS Notification
-    first_line = (message.split("\n")[0] or message)[:120]
-    send_macos_notification(title="Sisyphus", subtitle=rule_name, text=first_line)
+    # 2. macOS Notification – rule-specific preview
+    notif_text = _build_notification_text(rule_id, sections, rule_name, message)
+    send_macos_notification(title="Sisyphus", subtitle=rule_name, text=notif_text)
 
-    # 3. Apple Reminder (only for designated rule types)
-    rem_title = _REMINDER_TITLES.get(rule_id)
-    if rem_title:
-        send_reminder(rem_title, message[:500])
+    # 3. Apple Reminders
+    list_title = _REMINDER_TITLES.get(rule_id)
+    if list_title:
+        if rule_id in _SECTION_REMINDER_RULES:
+            # Per-section tiles for time-scheduled briefings
+            send_section_reminders(sections, list_title)
+        else:
+            # Grouped single reminder for interval alerts
+            send_reminder(list_title, message[:500])
+
+
+def send_section_reminders(sections: list[dict], list_title: str) -> None:
+    """Create one grouped reminder per data section.
+
+    Skips greeting and llm_opener sections.  Query sections with no items
+    are also skipped (they returned *None* from the runner and won't appear
+    in the list).
+    """
+    created = 0
+    for sec in sections:
+        item_type = sec.get("item_type", "")
+        items = sec.get("items", [])
+        if not items or item_type in ("greeting", "llm_opener"):
+            continue
+        section_title = _SECTION_TITLES.get(item_type)
+        if not section_title:
+            continue
+        rem_title = f"{section_title} ({list_title})"
+        notes = "\n".join(items)[:500]
+        if send_reminder(rem_title, notes):
+            created += 1
+    if created:
+        logger.info("Created %d section reminders for %s", created, list_title)

@@ -161,7 +161,7 @@ class AutomationRunner:
         if not message:
             return
 
-        deliver_all(message, rule_id, rule.get("name", "Automation"), recipient)
+        deliver_all(message, sections, rule_id, rule.get("name", "Automation"), recipient)
 
     # ── Schedule check ────────────────────────────────────────────────────
 
@@ -201,14 +201,14 @@ class AutomationRunner:
     def _execute_section(self, sec: dict) -> Optional[dict]:
         stype = sec.get("type", "query")
         if stype == "greeting":
-            return {"formatted": generate_greeting(), "items": []}
+            return {"formatted": generate_greeting(), "items": [], "raw_rows": [], "item_type": "greeting"}
         if stype == "llm_opener":
             tasks_due = len(self._query_db("tasks_due_today"))
             overdue = len(self._query_db("overdue_tasks"))
             habits_at_risk = len(self._query_db("habits_at_risk"))
             opener = generate_opener(tasks_due, overdue, habits_at_risk, 0)
             if opener:
-                return {"formatted": opener, "items": []}
+                return {"formatted": opener, "items": [], "raw_rows": [], "item_type": "llm_opener"}
             return None
         if stype == "query":
             qname = sec.get("query", "")
@@ -218,7 +218,7 @@ class AutomationRunner:
             items = [self._format_item(row, qname) for row in data]
             formatted = format_section(items, label, empty_msg)
             if formatted:
-                return {"formatted": formatted, "items": items}
+                return {"formatted": formatted, "items": items, "raw_rows": data, "item_type": qname}
             return None
         return None
 

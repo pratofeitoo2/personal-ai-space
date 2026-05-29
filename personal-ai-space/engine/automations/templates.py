@@ -16,10 +16,11 @@ def build_brief_message(sections: list[dict]) -> str:
 
 
 def format_section(items: list[str], label: str, empty_msg: str = "") -> Optional[str]:
-    """Format items under a header. Returns None to skip section."""
+    """Format items under a header with item count. Returns None to skip section."""
     if not items:
         return empty_msg if empty_msg else None
-    lines = [label]
+    section_label = f"{label} ({len(items)})"
+    lines = [section_label]
     lines.extend(f"• {item}" for item in items)
     return "\n".join(lines)
 
