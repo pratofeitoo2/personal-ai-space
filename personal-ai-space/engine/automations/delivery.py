@@ -1,5 +1,6 @@
-"""WhatsApp delivery for automations with retry queue."""
+"""Multi-channel delivery for automations: WhatsApp, macOS notifications, Reminders."""
 import json
+import subprocess
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -15,16 +16,32 @@ PENDING_FILE = STATE_DIR / "pending_deliveries.json"
 MAX_PENDING = 50
 MAX_RETRIES = 3
 
+REMINDRES_BRIDGE = Path.home() / ".claude" / "reminders-bridge"
+REMINDRES_LIST = "Sisyphus"
+
+# Rule types that warrant a persistent Reminder (not every interval tick)
+_REMINDER_TITLES = {
+    "morning_brief": "Sisyphus - Briefing Matinal",
+    "midday_checkpoint": "Sisyphus - Briefing Meio-Dia",
+    "end_of_day": "Sisyphus - Briefing Fim do Dia",
+    "alert_overdue_tasks": "Sisyphus - Tarefas Atrasadas",
+    "alert_habits_at_risk": "Sisyphus - Habitos em Risco",
+    "alert_calendar_soon": "Sisyphus - Compromisso Proximo",
+    "alert_goal_deadlines": "Sisyphus - Metas Proximas",
+}
+
 
 def send_whatsapp(text: str, recipient: str) -> bool:
     """Send message via WhatsApp bridge. Returns True on success."""
     if not recipient:
         logger.error("WhatsApp recipient not configured")
         return False
+    # Strip leading '+' — bridge expects digits-only format
+    clean_recipient = recipient.lstrip("+")
     try:
         resp = requests.post(
             WHATSAPP_API,
-            json={"recipient": recipient, "message": text},
+            json={"recipient": clean_recipient, "message": text},
             timeout=10,
         )
         if resp.ok:
@@ -84,3 +101,111 @@ def _read_pending() -> list[dict]:
         except (json.JSONDecodeError, OSError):
             return []
     return []
+
+
+# ── macOS Notification Center ────────────────────────────────────────────
+
+
+def send_macos_notification(title: str, subtitle: str = "", text: str = "") -> bool:
+    """Show a notification in macOS Notification Center via osascript."""
+    try:
+        safe_title = title.replace('"', '\\"')
+        safe_subtitle = subtitle.replace('"', '\\"')
+        safe_text = text.replace('"', '\\"')
+
+        script = f'display notification "{safe_text}" with title "{safe_title}"'
+        if safe_subtitle:
+            script += f' subtitle "{safe_subtitle}"'
+
+        subprocess.run(["osascript", "-e", script], timeout=5, capture_output=True)
+        logger.info("macOS notification sent: %s", title)
+        return True
+    except Exception as e:
+        logger.warning("macOS notification failed: %s", e)
+        return False
+
+
+# ── Apple Reminders ──────────────────────────────────────────────────────
+
+
+def _ensure_sisyphus_list() -> bool:
+    """Create the Sisyphus reminders list if it doesn't exist."""
+    try:
+        result = subprocess.run(
+            [str(REMINDRES_BRIDGE), "lists"],
+            timeout=10, capture_output=True, text=True,
+        )
+        if REMINDRES_LIST not in (result.stdout or ""):
+            subprocess.run(
+                [str(REMINDRES_BRIDGE), "create-list", REMINDRES_LIST],
+                timeout=10, capture_output=True,
+            )
+            logger.info("Created '%s' reminders list", REMINDRES_LIST)
+        return True
+    except Exception as e:
+        logger.warning("Failed to ensure reminders list: %s", e)
+        return False
+
+
+def send_reminder(title: str, notes: str = "") -> bool:
+    """Create/update a reminder in the Sisyphus list with due date = now.
+
+    Completes any existing reminder with the same title first, then creates
+    a new one.  This keeps at most one reminder per title type at any time.
+    """
+    if not _ensure_sisyphus_list():
+        return False
+
+    try:
+        # Complete any old reminder with the same title
+        subprocess.run(
+            [str(REMINDRES_BRIDGE), "complete", REMINDRES_LIST, title],
+            timeout=10, capture_output=True,
+        )
+
+        # Create new reminder
+        add_args = [str(REMINDRES_BRIDGE), "add", REMINDRES_LIST, title]
+        if notes:
+            add_args.append(notes[:500])
+        subprocess.run(add_args, timeout=10, capture_output=True)
+
+        # Set due date = now so it appears in Today view + badge
+        now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
+        subprocess.run(
+            [str(REMINDRES_BRIDGE), "set-due", REMINDRES_LIST, title, now_str],
+            timeout=10, capture_output=True,
+        )
+
+        logger.info("Reminder created: %s", title)
+        return True
+    except Exception as e:
+        logger.warning("Failed to create reminder: %s", e)
+        return False
+
+
+# ── Unified delivery ─────────────────────────────────────────────────────
+
+
+def deliver_all(message: str, rule_id: str, rule_name: str, recipient: str = "") -> None:
+    """Deliver a message to all configured channels.
+
+    Channels
+    --------
+    - **WhatsApp**  – only if *recipient* is non-empty; enqueues on failure.
+    - **macOS Notification Center** – fire-and-forget osascript banner.
+    - **Apple Reminders** – only for rule types listed in ``_REMINDER_TITLES``.
+    """
+    # 1. WhatsApp
+    if recipient:
+        ok = send_whatsapp(message, recipient)
+        if not ok:
+            enqueue_pending(message, recipient)
+
+    # 2. macOS Notification
+    first_line = (message.split("\n")[0] or message)[:120]
+    send_macos_notification(title="Sisyphus", subtitle=rule_name, text=first_line)
+
+    # 3. Apple Reminder (only for designated rule types)
+    rem_title = _REMINDER_TITLES.get(rule_id)
+    if rem_title:
+        send_reminder(rem_title, message[:500])

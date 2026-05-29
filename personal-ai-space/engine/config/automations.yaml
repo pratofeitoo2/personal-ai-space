@@ -3,7 +3,7 @@
 # state_track: true → only alerts on state change (for interval rules)
 
 settings:
-  whatsapp_recipient: ""                     # ← SET YOUR NUMBER
+  whatsapp_recipient: "+5521966394764"        # ← SET YOUR NUMBER
   timezone: "America/Sao_Paulo"
 
 automations:

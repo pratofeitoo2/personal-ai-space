@@ -9,7 +9,7 @@ import yaml
 
 from log_manager import get_logger
 import db_manager as db
-from automations.delivery import send_whatsapp, enqueue_pending, retry_pending
+from automations.delivery import deliver_all, retry_pending
 from automations.templates import (
     build_brief_message,
     format_section,
@@ -116,9 +116,6 @@ class AutomationRunner:
             return
 
         recipient = str(self._settings.get("whatsapp_recipient") or "")
-        if not recipient:
-            return
-
         retry_pending()
 
         now = datetime.now()
@@ -164,9 +161,7 @@ class AutomationRunner:
         if not message:
             return
 
-        ok = send_whatsapp(message, recipient)
-        if not ok:
-            enqueue_pending(message, recipient)
+        deliver_all(message, rule_id, rule.get("name", "Automation"), recipient)
 
     # ── Schedule check ────────────────────────────────────────────────────
 
