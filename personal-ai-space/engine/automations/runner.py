@@ -93,6 +93,37 @@ QUERIES: dict[str, tuple] = {
         "title",
         (),
     ),
+    # New queries for expanded briefings
+    "habits_streaks": (
+        "self",
+        "SELECT habit_name, current_streak, total_completions FROM habits WHERE status='active' AND current_streak > 0 ORDER BY current_streak DESC",
+        "habit_name",
+        (),
+    ),
+    "needs_active": (
+        "self",
+        "SELECT name, category, priority FROM needs WHERE status='active' ORDER BY CASE priority WHEN 'critical' THEN 0 WHEN 'high' THEN 1 WHEN 'medium' THEN 2 ELSE 3 END",
+        "name",
+        (),
+    ),
+    "jobs_status_summary": (
+        "jobs",
+        "SELECT status, COUNT(*) as cnt FROM applications GROUP BY status ORDER BY cnt DESC",
+        "status",
+        (),
+    ),
+    "applications_stale": (
+        "jobs",
+        "SELECT a.job_title, c.name AS company, a.status, CAST(julianday('now','localtime') - julianday(a.updated_at) AS INTEGER) AS days_stale FROM applications a JOIN companies c ON a.company_id=c.id WHERE a.status='saved' AND a.updated_at < date('now','localtime','-7 days') ORDER BY a.updated_at ASC LIMIT 5",
+        "job_title",
+        (),
+    ),
+    "tasks_unscheduled": (
+        "tasks",
+        "SELECT t.title, t.priority, p.name AS project FROM tasks t LEFT JOIN projects p ON t.project_id=p.id WHERE t.due_date IS NULL AND t.status NOT IN ('completed','cancelled') ORDER BY CASE t.priority WHEN 'critical' THEN 0 WHEN 'high' THEN 1 ELSE 2 END",
+        "title",
+        (),
+    ),
 }
 
 
@@ -262,6 +293,26 @@ class AutomationRunner:
         if query_name == "habits_today_status":
             status = row.get("status", "⬜")
             return f"{status} {val}"
+        if query_name == "habits_streaks":
+            if row.get("current_streak") is not None:
+                extras.append(f"🔥{row['current_streak']}")
+            if row.get("total_completions") is not None:
+                extras.append(f"total:{row['total_completions']}")
+        if query_name == "needs_active":
+            if row.get("priority"):
+                extras.append(f"[{row['priority']}]")
+            if row.get("category"):
+                extras.append(f"({row['category']})")
+        if query_name == "jobs_status_summary":
+            return f"  {val}: {row.get('cnt', 0)}"
+        if query_name == "applications_stale":
+            if row.get("days_stale") is not None:
+                extras.append(f"{row['days_stale']}d sem update")
+            if row.get("company"):
+                extras.append(f"@{row['company']}")
+        if query_name == "tasks_unscheduled":
+            if row.get("priority") and row["priority"] not in (None, "normal"):
+                extras.append(f"[{row['priority']}]")
         suffix = f" {', '.join(extras)}" if extras else ""
         return f"{val}{suffix}"
 

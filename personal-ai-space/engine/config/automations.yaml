@@ -15,8 +15,12 @@ automations:
       - {type: greeting}
       - {type: llm_opener}
       - {query: tasks_due_today,      label: "📋 Tarefas do dia",     empty_msg: "Nenhuma tarefa para hoje"}
+      - {query: tasks_unscheduled,    label: "📝 Para agendar",       empty_msg: ""}
       - {query: calendar_today,       label: "📅 Agenda de hoje",     empty_msg: "Sem compromissos hoje"}
+      - {query: jobs_status_summary,  label: "💼 Pipeline de vagas",   empty_msg: ""}
       - {query: habits_at_risk,       label: "🎯 Hábitos em risco",   empty_msg: "Todos os hábitos em dia"}
+      - {query: habits_streaks,       label: "🔥 Sequências ativas",  empty_msg: ""}
+      - {query: needs_active,         label: "🧭 Necessidades",       empty_msg: ""}
       - {query: goals_active,         label: "🎯 Metas ativas",       empty_msg: "Nenhuma meta ativa no momento"}
 
   - id: midday_checkpoint
@@ -66,3 +70,11 @@ automations:
     min_items: 1
     sections:
       - {query: goals_near_deadline,  label: "🎯 Metas perto do prazo", empty_msg: ""}
+
+  - id: alert_stale_applications
+    name: "Vagas Paradas"
+    schedule: {type: interval, seconds: 3600}
+    state_track: true
+    min_items: 1
+    sections:
+      - {query: applications_stale,   label: "📦 Vagas sem update (7d+)", empty_msg: ""}

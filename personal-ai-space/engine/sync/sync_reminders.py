@@ -333,6 +333,25 @@ def _update_sync_state_modified(file_path: str):
         (now, now, file_path))
 
 
+def _seed_sync_state_for_completed(compound_key: str, reminder: dict):
+    """Create a sync_state entry for a completed reminder with no linked task.
+
+    Prevents the sync from re-creating a task for this reminder on every cycle.
+    Uses a unique entity_id per compound_key to avoid the DELETE-broadside
+    problem in _upsert_sync_state.
+    """
+    content_hash = _reminder_hash(reminder)
+    now = _now()
+    dummy_id = f"completed::{compound_key.replace('::', '/')[:50]}"
+    dummy_id = dummy_id.replace(" ", "_").lower()
+    db.execute("tasks",
+        """INSERT OR IGNORE INTO sync_state
+           (id, entity_type, entity_id, file_path, file_hash, last_modified, direction)
+           VALUES (?, 'apple-reminder', ?, ?, ?, ?, 'bidirectional')""",
+        (for_sync_state("apple-reminder", dummy_id),
+         dummy_id, compound_key, content_hash, now))
+
+
 # ── Sync: Reminders → Tasks ────────────────────────────────────────────────
 
 class RemindersSync:
@@ -394,6 +413,16 @@ class RemindersSync:
                 sync_row = _get_sync_state_by_file_path(compound_key)
 
                 if sync_row and sync_row.get("file_hash") == _reminder_hash(reminder):
+                    self.stats["r_to_t_skipped"] += 1
+                    continue
+
+                # Skip completed reminders without an existing sync_state entry.
+                # These are legacy/automation items that should not create new tasks.
+                if not sync_row and reminder.get("completed"):
+                    if self.dry_run:
+                        print(f"  SKIP (completed): {compound_key}")
+                    else:
+                        _seed_sync_state_for_completed(compound_key, reminder)
                     self.stats["r_to_t_skipped"] += 1
                     continue
 

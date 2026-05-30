@@ -259,6 +259,39 @@ if HAS_RICH:
             if h.get("recommendation"):
                 console.print(f"   [dim]{h['recommendation']}[/dim]")
 
+    @habit.command("complete")
+    @click.argument("habit_id")
+    @click.option("--notes", "-n", default=None, help="Optional notes")
+    def habit_complete(habit_id, notes):
+        """Mark a habit as completed for today (atomic: updates streak + log)."""
+        from sync.sync_habits import mark_habit_complete
+        try:
+            result = mark_habit_complete(habit_id, notes)
+            console.print(f"[green]✅ {result['habit_id']}[/green] — streak: {result['new_streak']}")
+        except ValueError as e:
+            console.print(f"[red]✗ {e}[/red]")
+
+    @habit.command("today")
+    def habit_today():
+        """Show today's habit completion status."""
+        from sync.sync_habits import get_habits_today_status
+        habits = get_habits_today_status()
+        for h in habits:
+            icon = "[green]✅[/green]" if h["status"] == "completed" else "⬜"
+            console.print(f"  {icon} {h['habit_name']}")
+
+    @habit.command("at-risk")
+    def habit_at_risk():
+        """Show habits needing attention (streak at risk)."""
+        from sync.sync_habits import get_habits_at_risk
+        habits = get_habits_at_risk()
+        if not habits:
+            console.print("[green]Todos os hábitos em dia![/green]")
+            return
+        for h in habits:
+            last = h['last_completed'] or 'nunca'
+            console.print(f"  [yellow]⚠️[/yellow] {h['habit_name']} — streak: {h['current_streak']}, último: {last}")
+
     # ── reminders ─────────────────────────────────────────────────────────
 
     @cli.command()
