@@ -12,4 +12,4 @@ status: active
 ---
 
 ### DESCRIPTION
-Enviar pelo menos uma candidatura por dia para vagas alinhadas ao perfil.
+Enviar pelo menos 3 candidaturas por dia para vagas alinhadas ao perfil.

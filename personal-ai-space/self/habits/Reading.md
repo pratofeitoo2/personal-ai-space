@@ -2,11 +2,12 @@
 id: h-reading
 habit_name: Leitura (30min)
 category: aprendizado
-frequency: daily
-start_date: 2026-05-19
-current_streak: 2
-total_completions: 7
-last_completed: 2026-05-28
+frequency:
+  - weekly
+start_date: 2026-05-30
+current_streak: 0
+total_completions: 0
+last_completed:
 target_streak:
 status: active
 ---
