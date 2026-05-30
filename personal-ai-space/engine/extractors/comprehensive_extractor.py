@@ -10,11 +10,11 @@ import logging
 from pathlib import Path
 from datetime import datetime, timedelta
 import yaml
-import uuid
 from collections import defaultdict
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from db_manager import execute, query
+from db.id_helpers import for_behavior, for_task_unique, slugify
 from synthesis import propagator
 from extractors.behavior_vocab import extract_emotions, extract_activities
 
@@ -199,7 +199,7 @@ class ComprehensiveExtractor:
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(behavior_type, response, observed_date) DO UPDATE SET
                       frequency = frequency + 1
-                """, (uuid.uuid4().hex, 'emotion', trigger, word, 1, effectiveness, datetime.now().isoformat()))
+                """, (for_behavior('emotion'), 'emotion', trigger, word, 1, effectiveness, datetime.now().isoformat()))
                 self.stats['behaviors_emotions'] += 1
             except Exception as e:
                 logger.warning("Failed to insert emotion behavior '%s': %s", word, e)
@@ -213,7 +213,7 @@ class ComprehensiveExtractor:
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(behavior_type, response, observed_date) DO UPDATE SET
                       frequency = frequency + 1
-                """, (uuid.uuid4().hex, 'activity', trigger, word, 1, 0.5, datetime.now().isoformat()))
+                """, (for_behavior('activity'), 'activity', trigger, word, 1, 0.5, datetime.now().isoformat()))
                 self.stats['behaviors_activities'] += 1
             except Exception as e:
                 logger.warning("Failed to insert activity behavior '%s': %s", word, e)
@@ -303,7 +303,6 @@ class ComprehensiveExtractor:
                 logger.warning("Failed to read learning file: %s", e)
         
         # Insert learning interests as needs
-        import uuid
         from datetime import datetime
         for topic in topics_found:
             try:
@@ -311,7 +310,7 @@ class ComprehensiveExtractor:
                     INSERT OR IGNORE INTO needs
                     (id, category, name, priority, status, description, created_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
-                """, (uuid.uuid4().hex, 'learning', topic, 'medium', 'active', topic, datetime.now().isoformat()))
+                """, (f"need-{slugify(topic, 32)}", 'learning', topic, 'medium', 'active', topic, datetime.now().isoformat()))
                 self.stats['learning_needs'] += 1
             except Exception as e:
                 logger.warning("Failed to insert learning need '%s': %s", topic, e)
@@ -345,8 +344,7 @@ class ComprehensiveExtractor:
                         task_text = match.strip()
                         if len(task_text) > 5:
                             try:
-                                import uuid as _uid
-                                tid = _uid.uuid4().hex
+                                tid = for_task_unique(task_text[:100])
                                 execute("tasks", """
                                     INSERT INTO tasks
                                     (id, title, description, priority, status, created_at, category)

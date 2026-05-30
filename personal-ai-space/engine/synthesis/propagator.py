@@ -14,7 +14,7 @@ All failures are caught and logged — never raised. MCP bridge is optional.
 
 import json
 import logging
-import uuid
+from db.id_helpers import for_history
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -57,7 +57,7 @@ def _log_history(task_id: str, field: str, old_value, new_value):
             "INSERT INTO task_history (id, task_id, field, old_value, new_value, changed_by, changed_at) "
             "VALUES (?,?,?,?,?,?,?)",
             (
-                uuid.uuid4().hex,
+                for_history(task_id),
                 task_id,
                 field,
                 str(old_value) if old_value is not None else None,

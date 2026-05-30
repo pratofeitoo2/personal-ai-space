@@ -6,7 +6,6 @@ Run once before first engine start.
 import sys
 import json
 import json5
-import uuid
 from pathlib import Path
 from datetime import datetime, date
 
@@ -14,6 +13,7 @@ ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT))
 
 import db_manager as db
+from db.id_helpers import slugify
 from log_manager import setup_logging, get_logger
 from synthesis import propagator
 
@@ -90,7 +90,7 @@ def seed_habits():
             "(id, habit_name, category, frequency, current_streak, total_completions, "
             "start_date, target_streak, status) "
             "VALUES (?,?,?,?,?,?,?,?,?)",
-            (uuid.uuid4().hex, h["name"], h["category"], h["frequency"],
+            (h["id"], h["name"], h["category"], h["frequency"],
              0, 0, date.today().isoformat(), h.get("target_streak", 30), "active")
         )
     print(f"  ✓ {len(habits)} habits seeded")
@@ -110,7 +110,7 @@ def seed_needs():
             "self",
             "INSERT OR IGNORE INTO needs (id, category, name, priority, status, description, created_at) "
             "VALUES (?,?,?,?,?,?,?)",
-            (uuid.uuid4().hex, n["category"], n["name"], n["priority"],
+            (f"need-{slugify(n['name'], 32)}", n["category"], n["name"], n["priority"],
              n["status"], n["description"], datetime.now().isoformat())
         )
     print(f"  ✓ {len(needs)} needs seeded")

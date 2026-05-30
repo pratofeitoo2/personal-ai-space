@@ -19,7 +19,7 @@ import argparse
 import json
 import logging
 import re
-import uuid
+from db.id_helpers import for_project
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -278,7 +278,7 @@ def absorb_task_projects(dry_run: bool = False) -> int:
     created = 0
     now = _now()
     for name in sorted(missing):
-        pid = uuid.uuid4().hex
+        pid = for_project(name)
         with db.transaction("tasks") as conn:
             conn.execute(
                 """INSERT INTO projects

@@ -7,11 +7,11 @@ import logging
 from pathlib import Path
 from datetime import datetime
 import yaml
-import uuid
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from extractors.behavior_vocab import extract_emotions, extract_activities
 from db_manager import execute, query
+from db.id_helpers import for_behavior
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 
@@ -193,7 +193,7 @@ class DailyNoteExtractor:
                         VALUES (?, ?, ?, ?, ?, ?, ?)
                         ON CONFLICT(behavior_type, response, observed_date) DO UPDATE SET
                           frequency = frequency + 1
-                    """, (uuid.uuid4().hex, 'emotion', trigger, emotion['word'], 1, effectiveness, datetime.now().isoformat()))
+                    """, (for_behavior('emotion'), 'emotion', trigger, emotion['word'], 1, effectiveness, datetime.now().isoformat()))
                     count += 1
                 except Exception as e:
                     logger.debug("Failed to insert emotion behavior: %s", e)
@@ -208,7 +208,7 @@ class DailyNoteExtractor:
                         VALUES (?, ?, ?, ?, ?, ?, ?)
                         ON CONFLICT(behavior_type, response, observed_date) DO UPDATE SET
                           frequency = frequency + 1
-                    """, (uuid.uuid4().hex, 'activity', activity['context'], activity['word'], 1, 0.5, datetime.now().isoformat()))
+                    """, (for_behavior('activity'), 'activity', activity['context'], activity['word'], 1, 0.5, datetime.now().isoformat()))
                     count += 1
                 except Exception as e:
                     logger.debug("Failed to insert activity behavior: %s", e)

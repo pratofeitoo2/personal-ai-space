@@ -14,8 +14,9 @@ from __future__ import annotations
 
 import json
 import logging
-import uuid
 from datetime import datetime, timezone
+
+from db.id_helpers import for_habit_log, for_observation
 from pathlib import Path
 from typing import Any, Optional
 
@@ -170,7 +171,7 @@ class DataHub:
 
             # Wrap INSERT + UPDATE in a single atomic transaction
             with db.transaction("self") as conn:
-                log_id = uuid.uuid4().hex
+                log_id = for_habit_log(habit_id)
                 conn.execute(
                     "INSERT INTO habit_logs (id, habit_id, completed_at, notes, confidence_level) VALUES (?,?,?,?,?)",
                     (log_id, habit_id, now_iso, notes, duration_min / 60.0 if duration_min else None),
@@ -452,10 +453,9 @@ class DataHub:
             True if stored successfully.
         """
         try:
-            import uuid as _uid
             import json as _json
             from datetime import timezone
-            obs_id = _uid.uuid4().hex
+            obs_id = for_observation(obs_type)
             now_iso = datetime.now(timezone.utc).isoformat()
             db.execute("self", """
                 INSERT INTO observations (id, obs_type, observed_at, data, source)

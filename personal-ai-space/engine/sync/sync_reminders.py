@@ -18,7 +18,7 @@ import logging
 import re
 import subprocess
 import sys
-import uuid
+from db.id_helpers import for_project, for_task_unique, for_sync_state
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -237,7 +237,7 @@ def _find_or_create_project(list_name: str) -> str:
     if rows:
         return rows[0]["id"]
 
-    project_id = uuid.uuid4().hex
+    project_id = for_project(list_name)
     now = _now()
     try:
         db.execute("tasks",
@@ -273,7 +273,7 @@ def _upsert_task(
             (title, description, project_id, due_date, priority, status, now, task_id))
         return task_id
     else:
-        task_id = uuid.uuid4().hex
+        task_id = for_task_unique(title, project_id)
         db.execute("tasks",
             """INSERT INTO tasks (id, title, description, project_id,
                due_date, priority, status, created_at, updated_at)
@@ -294,7 +294,7 @@ def _upsert_sync_state(compound_key: str, task_id: str, reminder: dict):
     db.execute("tasks",
         """INSERT INTO sync_state (id, entity_type, entity_id, file_path, file_hash, last_modified, direction)
            VALUES (?, 'apple-reminder', ?, ?, ?, ?, 'bidirectional')""",
-        (uuid.uuid4().hex, task_id, compound_key, content_hash, now))
+        (for_sync_state("apple-reminder", task_id), task_id, compound_key, content_hash, now))
 
 
 def _get_sync_state_by_file_path(file_path: str) -> Optional[dict]:

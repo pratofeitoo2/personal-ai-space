@@ -9,7 +9,7 @@ Safety: Phase 3 is read-only (file → DB). No file writes.
 
 import hashlib
 import logging
-import uuid
+from db.id_helpers import for_doc_link, for_sync_state
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -76,7 +76,7 @@ def _load_goals_cache(db) -> dict[str, dict]:
 
 def _upsert_doc_link(db, entity_type: str, entity_id: str, file_path: str,
                      fm_status: Optional[str]) -> str:
-    link_id = uuid.uuid4().hex
+    link_id = for_doc_link(entity_type, entity_id)
     db.execute(
         "tasks",
         "INSERT OR IGNORE INTO doc_links "
@@ -119,7 +119,7 @@ def _upsert_sync_state(db, entity_type: str, entity_id: Optional[str],
             "tasks",
             "INSERT INTO sync_state (id, entity_type, entity_id, file_path, file_hash, last_modified, last_synced, direction) "
             "VALUES (?,?,?,?,?,?,?,?)",
-            (uuid.uuid4().hex, entity_type, entity_id or "", str(file_path),
+            (for_sync_state(entity_type, entity_id), entity_type, entity_id or "", str(file_path),
              file_hash_val, mtime, datetime.now(timezone.utc).isoformat(), "file_to_db"),
         )
 

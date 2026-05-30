@@ -2,7 +2,7 @@
 Task Coordinator Agent.
 Manages tasks, projects, priority scoring, and deadlines.
 """
-import uuid
+from db.id_helpers import for_task_unique, for_dependency
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import Optional
@@ -52,7 +52,7 @@ class TaskCoordinator(BaseAgent):
         return sorted(tasks, key=self._score, reverse=True)
 
     def create_task(self, data: dict) -> str:
-        task_id = data.get("id") or f"task_{uuid.uuid4().hex[:8]}"
+        task_id = data.get("id") or for_task_unique(data.get("title", "Untitled"), data.get("project_id"))
         now = datetime.now().isoformat()
         db.execute(
             "tasks",
@@ -145,7 +145,7 @@ class TaskCoordinator(BaseAgent):
         """Create a dependency: task_id depends_on depends_on.
         If the source is not completed, auto-mark task_id as blocked.
         """
-        dep_id = uuid.uuid4().hex
+        dep_id = for_dependency(task_id, depends_on)
         db.execute("tasks", """
             INSERT OR IGNORE INTO task_dependencies
             (id, task_id, depends_on, dependency_type, created_at)

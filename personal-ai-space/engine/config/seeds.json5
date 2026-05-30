@@ -73,9 +73,9 @@
 
   "tasks": [
     {
-      "id": "task_001",
+      "id": "task-pai-init-engine-dbs",
       "title": "Initialize engine databases",
-      "project_id": "personal-ai",
+      "project_id": "proj-pai",
       "priority": "critical",
       "status": "completed",
       "description": "Initialize all databases and seed starter data",
@@ -83,9 +83,9 @@
       "category": "general"
     },
     {
-      "id": "task_002",
+      "id": "task-pai-design-agent-protocol",
       "title": "Design agent communication protocol",
-      "project_id": "personal-ai",
+      "project_id": "proj-pai",
       "priority": "high",
       "status": "pending",
       "description": "Define message format and routing between agents",
@@ -93,9 +93,9 @@
       "category": "general"
     },
     {
-      "id": "task_003",
+      "id": "task-pai-build-habit-tracking",
       "title": "Build habit tracking system",
-      "project_id": "personal-ai",
+      "project_id": "proj-pai",
       "priority": "high",
       "status": "pending",
       "description": "Implement habit logging and streak tracking",
@@ -103,9 +103,9 @@
       "category": "general"
     },
     {
-      "id": "task_004",
+      "id": "task-pai-connect-first-integration",
       "title": "Connect first integration",
-      "project_id": "personal-ai",
+      "project_id": "proj-pai",
       "priority": "medium",
       "status": "pending",
       "description": "Set up first external tool integration via MCP",
@@ -113,9 +113,9 @@
       "category": "general"
     },
     {
-      "id": "task_005",
+      "id": "task-knowledge-review-curate-base",
       "title": "Review and curate knowledge base",
-      "project_id": "knowledge",
+      "project_id": "proj-knowledge",
       "priority": "medium",
       "status": "pending",
       "description": "Organize and deduplicate knowledge notes",
@@ -126,7 +126,7 @@
 
   "projects": [
     {
-      "id": "personal-ai",
+      "id": "proj-pai",
       "name": "Personal AI Powerhouse",
       "description": "Build the personal agentic AI system",
       "status": "active"

@@ -127,7 +127,8 @@ class OpenCodeReader:
 
 
 import re
-import uuid
+
+from db.id_helpers import for_session_signal, for_session_metadata
 
 PATTERNS_TOOL_CALL = re.compile(r'^\[tool:\s*\w+\]$')
 REASONING_MIN_LENGTH = 50
@@ -137,14 +138,14 @@ class SignalFilter:
     """Filter and extract behavioral signals from session messages."""
 
     @staticmethod
-    def filter_user_messages(messages: list[dict]) -> list[dict]:
+    def filter_user_messages(messages: list[dict], session_id: str = "unknown") -> list[dict]:
         signals = []
-        for msg in messages:
+        for i, msg in enumerate(messages):
             if msg.get('role') == 'user' and msg.get('content'):
                 content = msg['content']
                 if not PATTERNS_TOOL_CALL.match(content):
                     signals.append({
-                        'id': uuid.uuid4().hex,
+                        'id': for_session_signal(session_id, i),
                         'signal_type': 'user_message',
                         'content': content[:2000],
                         'observed_at': datetime.now(timezone.utc).isoformat(),
@@ -152,15 +153,15 @@ class SignalFilter:
         return signals
 
     @staticmethod
-    def filter_assistant_reasoning(messages: list[dict]) -> list[dict]:
+    def filter_assistant_reasoning(messages: list[dict], session_id: str = "unknown") -> list[dict]:
         signals = []
-        for msg in messages:
+        for i, msg in enumerate(messages):
             if msg.get('role') == 'assistant' and msg.get('content'):
                 content = msg['content']
                 if (not PATTERNS_TOOL_CALL.match(content) and
                         len(content) >= REASONING_MIN_LENGTH):
                     signals.append({
-                        'id': uuid.uuid4().hex,
+                        'id': for_session_signal(session_id, i),
                         'signal_type': 'assistant_reasoning',
                         'content': content[:2000],
                         'observed_at': datetime.now(timezone.utc).isoformat(),
@@ -168,7 +169,7 @@ class SignalFilter:
         return signals
 
     @staticmethod
-    def filter_error_solutions(messages: list[dict]) -> list[dict]:
+    def filter_error_solutions(messages: list[dict], session_id: str = "unknown") -> list[dict]:
         signals = []
         error_keywords = ['error', 'fail', 'bug', 'issue', 'broken', 'exception', 'traceback']
         solution_keywords = ['fixed', 'solution', 'resolved', 'corrected', 'patched', 'updated']
@@ -184,7 +185,7 @@ class SignalFilter:
                         if next_msg.get('role') == 'assistant':
                             if any(kw in next_content for kw in solution_keywords):
                                 signals.append({
-                                    'id': uuid.uuid4().hex,
+                                    'id': for_session_signal(session_id, i),
                                     'signal_type': 'error_solution',
                                     'content': f"Error: {msg['content'][:500]}\nSolution: {next_msg['content'][:500]}",
                                     'observed_at': datetime.now(timezone.utc).isoformat(),
@@ -217,7 +218,7 @@ class SignalFilter:
         tokens_total = session.get('tokens_input', 0) + session.get('tokens_output', 0)
 
         return {
-            'id': uuid.uuid4().hex,
+            'id': for_session_metadata(session['id']),
             'session_id': session['id'],
             'title': session.get('title', ''),
             'agent': session.get('agent', ''),
@@ -265,9 +266,9 @@ def extract_all_sessions(
 
             messages = reader.read_session_messages(session_id)
 
-            user_signals = SignalFilter.filter_user_messages(messages)
-            reasoning_signals = SignalFilter.filter_assistant_reasoning(messages)
-            error_signals = SignalFilter.filter_error_solutions(messages)
+            user_signals = SignalFilter.filter_user_messages(messages, session_id)
+            reasoning_signals = SignalFilter.filter_assistant_reasoning(messages, session_id)
+            error_signals = SignalFilter.filter_error_solutions(messages, session_id)
 
             all_signals = user_signals + reasoning_signals + error_signals
 

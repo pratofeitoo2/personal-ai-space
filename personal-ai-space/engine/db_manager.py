@@ -11,11 +11,13 @@ import sqlite3
 import json
 import logging
 import threading
+import uuid as _uid
 from pathlib import Path
 from contextlib import contextmanager
 from datetime import datetime
 from typing import Any, Optional
 from collections.abc import Sequence
+from db.id_helpers import for_interaction, for_agent_memory, for_context_snapshot
 
 logger = logging.getLogger("engine.db")
 
@@ -224,9 +226,8 @@ def log_interaction(
     context: dict = None
 ) -> str:
     """Log an agent interaction to memories.db."""
-    import uuid as _uid
     import json as _json
-    interaction_id = _uid.uuid4().hex
+    interaction_id = for_interaction(agent_id)
     execute("memories", """
         INSERT INTO interactions
         (id, agent_id, action, input_data, output_data, duration_ms,
@@ -247,8 +248,7 @@ def store_agent_memory(
     ttl_seconds: int = None
 ) -> bool:
     """Upsert a key-value pair into agent_memory table."""
-    import uuid as _uid
-    memory_id = _uid.uuid4().hex
+    memory_id = for_agent_memory(agent_id)
     try:
         execute("memories", """
             INSERT OR REPLACE INTO agent_memory
@@ -276,10 +276,9 @@ def store_context_snapshot(
     ttl_hours: int = 24
 ) -> str:
     """Store a context snapshot with expiry. Keeps newest 50 entries."""
-    import uuid as _uid
     import json as _json
     from datetime import timedelta, timezone
-    cid = _uid.uuid4().hex
+    cid = for_context_snapshot(session_id)
     now = datetime.now(timezone.utc)
     execute("memories", """
         INSERT INTO context_window (id, session_id, timestamp, content, relevance_score, expires_at)
