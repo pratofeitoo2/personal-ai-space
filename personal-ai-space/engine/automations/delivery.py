@@ -368,3 +368,64 @@ def send_section_reminders(sections: list[dict], list_title: str) -> None:
             created += 1
     if created:
         logger.info("Created %d section reminders for %s", created, list_title)
+
+
+# ── Habit reminders ──────────────────────────────────────────────────────
+
+
+_HABIT_REMINDER_LIST = REMINDRES_LIST  # reuse Sisyphus list
+
+
+def create_habit_reminders(habits: list[dict]) -> None:
+    """Create one daily reminder per active habit.
+
+    Each reminder has:
+    - Title: "🔲 {habit_name}"
+    - Notes: JSON with habit_id and type=habit (for completion detection)
+    - Due: today (appears in Today view + badge)
+
+    Completes any existing reminder with the same title first to avoid duplicates.
+    """
+    if not _ensure_sisyphus_list():
+        return
+
+    for habit in habits:
+        habit_id = habit.get("id", "")
+        habit_name = habit.get("habit_name", habit_id)
+        title = f"🔲 {habit_name}"
+        notes = json.dumps({"habit_id": habit_id, "type": "habit"})
+
+        try:
+            # Complete old reminder with same title
+            subprocess.run(
+                [str(REMINDRES_BRIDGE), "complete", _HABIT_REMINDER_LIST, title],
+                timeout=10, capture_output=True,
+            )
+
+            # Create new reminder
+            add_args = [str(REMINDRES_BRIDGE), "add", _HABIT_REMINDER_LIST, title, notes]
+            subprocess.run(add_args, timeout=10, capture_output=True)
+
+            # Set due = now so it appears in Today view
+            now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
+            subprocess.run(
+                [str(REMINDRES_BRIDGE), "set-due", _HABIT_REMINDER_LIST, title, now_str],
+                timeout=10, capture_output=True,
+            )
+        except Exception as e:
+            logger.warning("Failed to create habit reminder '%s': %s", title, e)
+
+    logger.info("Created %d habit reminders", len(habits))
+
+
+def deliver_all_with_habits(message: str, sections: list[dict], rule_id: str,
+                            rule_name: str, recipient: str = "",
+                            habits: list[dict] = None) -> None:
+    """Deliver message + create individual habit reminders.
+
+    Same as deliver_all but also creates one reminder per active habit.
+    """
+    deliver_all(message, sections, rule_id, rule_name, recipient)
+
+    if habits:
+        create_habit_reminders(habits)

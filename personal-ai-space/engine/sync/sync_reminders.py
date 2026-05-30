@@ -352,6 +352,41 @@ def _seed_sync_state_for_completed(compound_key: str, reminder: dict):
          dummy_id, compound_key, content_hash, now))
 
 
+# ── Habit reminder detection ─────────────────────────────────────────────
+
+
+def _is_habit_reminder(reminder: dict) -> bool:
+    """Check if a reminder is a habit completion reminder.
+
+    Habit reminders have JSON notes with {"type": "habit", "habit_id": "..."}.
+    """
+    notes = reminder.get("notes", "")
+    if not notes:
+        return False
+    try:
+        data = json.loads(notes)
+        return isinstance(data, dict) and data.get("type") == "habit"
+    except (json.JSONDecodeError, TypeError):
+        return False
+
+
+def _parse_habit_id(reminder: dict) -> Optional[str]:
+    """Extract habit_id from a habit reminder's notes.
+
+    Returns the habit_id string, or None if not a habit reminder.
+    """
+    notes = reminder.get("notes", "")
+    if not notes:
+        return None
+    try:
+        data = json.loads(notes)
+        if isinstance(data, dict) and data.get("type") == "habit":
+            return data.get("habit_id")
+    except (json.JSONDecodeError, TypeError):
+        pass
+    return None
+
+
 # ── Sync: Reminders → Tasks ────────────────────────────────────────────────
 
 class RemindersSync:
@@ -422,6 +457,24 @@ class RemindersSync:
                     if self.dry_run:
                         print(f"  SKIP (completed): {compound_key}")
                     else:
+                        _seed_sync_state_for_completed(compound_key, reminder)
+                    self.stats["r_to_t_skipped"] += 1
+                    continue
+
+                # Habit completion detection — route to self.db instead of tasks.db
+                if _is_habit_reminder(reminder) and reminder.get("completed"):
+                    habit_id = _parse_habit_id(reminder)
+                    if habit_id:
+                        try:
+                            from sync.sync_habits import mark_habit_complete
+                            mark_habit_complete(habit_id)
+                            logger.info("Habit completed via reminder: %s", habit_id)
+                        except ValueError as e:
+                            logger.warning("Habit completion failed: %s", e)
+                        except Exception as e:
+                            logger.error("Habit completion error: %s", e)
+                    # Seed sync_state so we don't process this again
+                    if not self.dry_run:
                         _seed_sync_state_for_completed(compound_key, reminder)
                     self.stats["r_to_t_skipped"] += 1
                     continue
