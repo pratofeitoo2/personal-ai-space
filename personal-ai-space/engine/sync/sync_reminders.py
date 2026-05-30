@@ -528,7 +528,7 @@ class RemindersSync:
         logger.info("=== Initial Push (Tasks → Reminders) ===")
 
         tasks = db.query("tasks", """
-            SELECT t.* FROM tasks_v t
+            SELECT t.* FROM tasks t
             LEFT JOIN sync_state s
                 ON s.entity_type='apple-reminder' AND s.entity_id=t.id
             WHERE s.id IS NULL

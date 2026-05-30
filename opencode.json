@@ -33,7 +33,7 @@
     "whatsapp-mcp": {
       "type": "local",
       "command": [
-        "/Users/paulorezende/Documents/Cline/MCP/whatsapp-mcp/whatsapp-mcp-server/.venv/bin/python",
+        "/Users/paulorezende/venvs/whatsapp-mcp/bin/python",
         "/Users/paulorezende/Documents/Cline/MCP/whatsapp-mcp/whatsapp-mcp-server/main.py"
       ],
       "env": {
