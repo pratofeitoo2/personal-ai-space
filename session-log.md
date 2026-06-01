@@ -33,3 +33,38 @@ Decisions:
 - Created DATABASES.md reference documentation
 Rejected: Nothing — all tasks executed as planned
 Open: None
+
+## 2026-05-30 04:30 [saved]
+Goal: Habit system improvements + individual reminders
+Decisions:
+- Habits get individual Apple Reminders (not just section-level)
+- Auto-mark habit complete when reminder is completed
+- Updated habit definitions in Obsidian .md files
+- Added new goals (clinical career, consistency streak)
+Rejected: Nothing
+Open: None
+
+## 2026-06-01 18:48 [saved]
+Goal: Project fit analysis — evaluate Obsidian vault vs local web app
+Decisions:
+- Recommended: Local web app as primary interface (solves multi-device access)
+- Keep Obsidian as data input layer (goals, habits, knowledge)
+- Hybrid architecture: Obsidian input → sync → SQLite → Engine → Web dashboard
+- Created comprehensive report at docs/PROJECT-FIT-ANALYSIS.md
+- Key finding: Obsidian can't run Python engine, background services, or LLM integration
+- Key finding: Daemon HTTP API + DaemonProxy already provide 40-50% of web app foundation
+Rejected: Obsidian vault as primary interface (can't run engine, background services, or LLM)
+Open: None — report complete, ready for implementation when user decides
+
+## 2026-06-01 19:30 [saved]
+Goal: Write complete implementation plan for local web app
+Decisions:
+- 7-task plan: Config → App Factory → Tasks API → Habits/Calendar/Jobs API → Engine Proxy/Chat → Dashboard Frontend → Start Script
+- Flask + Flask-SocketIO backend, Tailwind + Chart.js + HTMX frontend
+- Extend existing dashboard_server.py pattern into full web app package
+- Engine daemon (port 19876) handles all business logic; web server only reads DB + proxies writes
+- Ollama integration for NL chat queries with keyword fallback
+- Read-only DB access for web server, writes proxied to daemon
+- Mobile-responsive SPA with dark mode, panel navigation
+Rejected: Starting from scratch (existing dashboard.html + server.js provide foundation)
+Open: None — plan saved at docs/plans/2026-06-01-local-web-app.md, ready for execution
