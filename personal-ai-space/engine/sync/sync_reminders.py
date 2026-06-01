@@ -352,6 +352,26 @@ def _seed_sync_state_for_completed(compound_key: str, reminder: dict):
          dummy_id, compound_key, content_hash, now))
 
 
+def _seed_sync_state_for_section_tile(compound_key: str, reminder: dict):
+    """Seed sync_state for a per-briefing section tile so it stays out of tasks.db.
+
+    Section tiles are intentional Reminder entries for the phone UI. They are
+    NOT durable tasks — the underlying items already exist in tasks.db. We
+    seed sync_state with a synthetic entity_id so subsequent sync cycles skip
+    the reminder without re-creating it as a task.
+    """
+    content_hash = _reminder_hash(reminder)
+    now = _now()
+    dummy_id = f"section_tile::{compound_key.replace('::', '/')[:50]}"
+    dummy_id = dummy_id.replace(" ", "_").lower()
+    db.execute("tasks",
+        """INSERT OR IGNORE INTO sync_state
+           (id, entity_type, entity_id, file_path, file_hash, last_modified, direction)
+           VALUES (?, 'apple-reminder', ?, ?, ?, ?, 'bidirectional')""",
+        (for_sync_state("apple-reminder", dummy_id),
+         dummy_id, compound_key, content_hash, now))
+
+
 # ── Habit reminder detection ─────────────────────────────────────────────
 
 
@@ -368,6 +388,48 @@ def _is_habit_reminder(reminder: dict) -> bool:
         return isinstance(data, dict) and data.get("type") == "habit"
     except (json.JSONDecodeError, TypeError):
         return False
+
+
+def _get_section_tile_prefixes() -> set[str]:
+    """Return the set of section-tile title prefixes that should NOT become tasks.
+
+    Section tiles are per-briefing snapshots created by
+    `automations/delivery.py:send_section_reminders`. They are glanceable views
+    for the Reminders app; the underlying data already lives in tasks.db as
+    the individual tasks/habits/goals. Syncing them back as tasks pollutes the
+    task list with duplicates.
+    """
+    try:
+        from automations.delivery import _SECTION_TITLES  # type: ignore
+        return {t for t in _SECTION_TITLES.values() if t}
+    except (ImportError, AttributeError):
+        # Fallback: hardcoded list matching delivery._SECTION_TITLES as of 2026-06-01
+        return {
+            "📋 Tarefas do Dia",
+            "📋 Restam do Dia",
+            "⚠️ Tarefas Atrasadas",
+            "📅 Agenda de Hoje",
+            "🔔 Em Breve na Agenda",
+            "🎯 Hábitos em Risco",
+            "💪 Hábitos Concluídos Hoje",
+            "🎯 Status dos Hábitos",
+            "🎯 Metas Ativas",
+            "🎯 Metas Próximas do Prazo",
+            "✅ Concluído Hoje",
+        }
+
+
+def _is_section_tile_reminder(reminder: dict) -> bool:
+    """True if this reminder is a per-briefing section tile (ephemeral view).
+
+    Detection: title starts with any prefix in `_SECTION_TITLES`. Tiles are
+    formatted as `"{section_title} ({list_title})"` in delivery.py, so a
+    startswith match is sufficient.
+    """
+    title = reminder.get("title", "") or ""
+    if not title:
+        return False
+    return any(title.startswith(p) for p in _get_section_tile_prefixes())
 
 
 def _parse_habit_id(reminder: dict) -> Optional[str]:
@@ -449,6 +511,22 @@ class RemindersSync:
 
                 if sync_row and sync_row.get("file_hash") == _reminder_hash(reminder):
                     self.stats["r_to_t_skipped"] += 1
+                    continue
+
+                # Skip per-briefing section tiles. These are ephemeral glanceable
+                # views in Apple Reminders; their underlying items already live
+                # in tasks.db as individual tasks. Syncing them back as tasks
+                # pollutes the task list with duplicates. Seed sync_state so
+                # subsequent cycles skip them.
+                if not sync_row and _is_section_tile_reminder(reminder):
+                    if self.dry_run:
+                        print(f"  SKIP (section tile): {compound_key}")
+                    else:
+                        _seed_sync_state_for_section_tile(compound_key, reminder)
+                    self.stats["r_to_t_skipped"] += 1
+                    self.stats["r_to_t_section_tile_skipped"] = (
+                        self.stats.get("r_to_t_section_tile_skipped", 0) + 1
+                    )
                     continue
 
                 # Skip completed reminders without an existing sync_state entry.
