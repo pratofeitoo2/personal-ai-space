@@ -11,6 +11,16 @@ logs/
 *.swo
 *~
 
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
 # Environment
 .env
 .env.local

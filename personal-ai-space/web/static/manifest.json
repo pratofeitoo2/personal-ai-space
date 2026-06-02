@@ -1,0 +1,10 @@
+{
+  "name": "Personal AI Powerhouse",
+  "short_name": "PAI",
+  "description": "Personal AI assistant dashboard",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#1e293b",
+  "icons": []
+}

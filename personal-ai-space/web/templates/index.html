@@ -1,0 +1,83 @@
+<!-- personal-ai-space/web/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal AI Powerhouse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#1e293b">
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 min-h-screen transition-colors">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-slate-800 shadow-sm border-b border-gray-200 dark:border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <h1 class="text-xl font-bold text-gray-900 dark:text-white">PAI Powerhouse</h1>
+                    <div class="hidden md:flex space-x-4">
+                        <button onclick="showPanel('dashboard')" class="nav-btn active" data-panel="dashboard">Dashboard</button>
+                        <button onclick="showPanel('tasks')" class="nav-btn" data-panel="tasks">Tasks</button>
+                        <button onclick="showPanel('habits')" class="nav-btn" data-panel="habits">Habits</button>
+                        <button onclick="showPanel('calendar')" class="nav-btn" data-panel="calendar">Calendar</button>
+                        <button onclick="showPanel('jobs')" class="nav-btn" data-panel="jobs">Jobs</button>
+                        <button onclick="showPanel('chat')" class="nav-btn" data-panel="chat">Chat</button>
+                        <button onclick="showPanel('automations')" class="nav-btn" data-panel="automations">Automations</button>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="daemon-status" class="text-xs text-gray-400">Checking...</span>
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                        <span id="theme-icon">&#9790;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Dashboard Panel -->
+        <div id="panel-dashboard" class="panel">
+            <div id="dashboard-content">Loading...</div>
+        </div>
+
+        <!-- Tasks Panel -->
+        <div id="panel-tasks" class="panel hidden">
+            <div id="tasks-content">Loading...</div>
+        </div>
+
+        <!-- Habits Panel -->
+        <div id="panel-habits" class="panel hidden">
+            <div id="habits-content">Loading...</div>
+        </div>
+
+        <!-- Calendar Panel -->
+        <div id="panel-calendar" class="panel hidden">
+            <div id="calendar-content">Loading...</div>
+        </div>
+
+        <!-- Jobs Panel -->
+        <div id="panel-jobs" class="panel hidden">
+            <div id="jobs-content">Loading...</div>
+        </div>
+
+        <!-- Chat Panel -->
+        <div id="panel-chat" class="panel hidden">
+            <div id="chat-content">Loading...</div>
+        </div>
+
+        <!-- Automations Panel -->
+        <div id="panel-automations" class="panel hidden">
+            <div id="automations-content">Loading...</div>
+        </div>
+    </main>
+
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
