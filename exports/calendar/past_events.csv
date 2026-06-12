@@ -1,0 +1,11 @@
+id,event_date,event_name,event_time,duration_hours,category,account,calendar_name,location,source,notes,outcome,completed_at,created_at
+1,2026-05-18,Entrevista por competência (Instituto Alana) (Paulo Rezende),18:00,0.75,general,pfrezendehs@gmail.com,pfrezendehs@gmail.com,,apple-calendar,,,2026-05-26 19:56:01,2026-05-26 19:56:01
+2,2026-05-29,Revisão de Candidaturas,10:00,1.0,personal,,,,manual,,,2026-05-30 00:15:06,2026-05-30 00:15:06
+3,2026-05-29,Estudo — Data-Intensive Apps,14:00,1.0,personal,,,,manual,,,2026-05-30 00:15:06,2026-05-30 00:15:06
+4,2026-05-29,Diário + Planejamento,21:00,1.0,personal,,,,manual,,,2026-05-30 00:15:06,2026-05-30 00:15:06
+5,2026-05-29,Revisão de Candidaturas,10:00,1.0,personal,,,,manual,,,2026-05-30 00:15:06,2026-05-30 00:15:06
+6,2026-05-30,Call — Networking,11:00,1.0,personal,,,,manual,,,2026-05-31 00:22:06,2026-05-31 00:22:06
+7,2026-05-30,Standup Diário 2026-05-30,09:00,1.0,meeting,,,,manual,,,2026-05-31 00:22:06,2026-05-31 00:22:06
+8,2026-05-30,Revisão de Código 2026-05-30,14:00,0.5,personal,,,,manual,,,2026-05-31 00:22:06,2026-05-31 00:22:06
+9,2026-05-31,Revisão Semanal de Projetos,09:00,1.0,personal,,,,manual,,,2026-06-01 00:15:31,2026-06-01 00:15:31
+10,2026-06-08,CPM Gestor de Operações e Expansão - Paulo Rezende,15:00,0.75,general,pfrezendehs@gmail.com,pfrezendehs@gmail.com,,apple-calendar,,,2026-06-09 00:17:59,2026-06-09 00:17:59

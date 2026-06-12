@@ -1,0 +1,12 @@
+id,name,description,status,priority,start_date,end_date,progress_pct,total_tasks,completed_tasks,category,created_at,updated_at
+proj-knowledge-management,Knowledge Management,Auto-created from task import,active,normal,,,100,1,1,general,2026-05-21T18:20:38.553946+00:00,2026-05-29T18:35:40.519100
+proj-personal-ai-powerhouse,Personal AI Powerhouse,Auto-created from task import,active,normal,,,100,9,9,general,2026-05-21T18:20:38.553946+00:00,2026-05-29T18:35:40.519100
+proj-projects,Projects,,active,normal,,,100,5,5,general,2026-05-21 19:48:04,2026-05-29T18:35:40.519100
+proj-everyday,everyday,,active,normal,,,60,5,3,general,2026-05-22 00:22:49,2026-05-29T18:35:40.519100
+proj-groceries,Groceries,,active,normal,,,0,2,0,general,2026-05-23 17:40:39,2026-05-29T18:35:40.519100
+proj-work,work,,active,normal,,,0,1,0,general,2026-05-23 23:43:20,2026-05-29T18:35:40.519100
+proj-job-applications,Job applications,,active,normal,,,66,3,2,general,2026-05-27 15:18:07,2026-05-29T18:35:40.519100
+proj-sisyphus,Sisyphus,,active,normal,,,62,8,5,general,2026-05-29 08:02:10,2026-05-29T18:35:40.519100
+proj-automations,Personal AI Automations,"Daily briefing system (morning/midday/eod), multi-channel delivery (WhatsApp, macOS Notifications, Apple Reminders)",active,high,,,100,12,12,engineering,2026-05-29T18:23:54.989811,2026-05-29T18:44:18.792350
+proj-data-pipeline,Data Pipeline & Sync,"Sync scripts, database management, and data flow across 8 databases",active,high,,,75,8,6,engineering,2026-05-29T18:23:54.989811,2026-05-29T18:44:18.792350
+proj-job-tracking,Job Application Tracking,"WhatsApp import, job CLI, position tracker, application status management",active,normal,,,80,5,4,career,2026-05-29T18:24:02.815095,2026-05-29T18:44:18.792350

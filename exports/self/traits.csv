@@ -1,0 +1,33 @@
+id,trait_name,category,confidence_score,inferred_from,discovered_date,updated_at
+session_peak_hours,"Peak Hours: afternoon (21/64, 33%)",session_inferred,0.8,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_secondary_window,Secondary Window: evening (19/64),session_inferred,0.75,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_depth,"Session Depth: extended_deep_work (19376s avg, 72.2 msgs avg, n=64)",session_inferred,0.8,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_avg_duration_seconds,Avg Duration: 19376s,session_inferred,0.8,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_avg_messages_per_session,Avg Messages: 72.2,session_inferred,0.85,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_model_primary_big,"Model Primary: big (22/64, 34%)",session_inferred,0.8,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_model_secondary_claude,"Model Secondary: claude (22/64, 34%)",session_inferred,0.7200000000000001,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_model_secondary_gpt,"Model Secondary: gpt (14/64, 22%)",session_inferred,0.64,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_model_minor_deepseek,"Model Minor: deepseek (6/64, 9%)",session_inferred,0.56,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_agent_primary_sisyphus_-_ultraworker,"Agent Primary: Sisyphus - ultraworker (19/64, 30%)",session_inferred,0.8,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_agent_secondary_sisyphus_-_ultraworker,"Agent Secondary: Sisyphus - Ultraworker (11/64, 17%)",session_inferred,0.7200000000000001,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_agent_secondary_explore,"Agent Secondary: explore (11/64, 17%)",session_inferred,0.64,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_agent_minor_sisyphus-junior,"Agent Minor: Sisyphus-Junior (10/64, 16%)",session_inferred,0.56,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_agent_minor_general,"Agent Minor: general (4/64, 6%)",session_inferred,0.5,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_volume_daily,Daily Volume: 8.0 sessions avg across 8 day(s),session_inferred,0.8,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_peak_day,Peak Day: 2026-05-21 (20 sessions),session_inferred,0.85,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_volume_level,Volume Level: high (heavy user),session_inferred,0.8,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+session_density,"Session Density: high (complex interactions) (72.2 msgs, 19376s avg)",session_inferred,0.8,session_analysis,2026-05-28,2026-05-28T17:50:15.841384+00:00
+personality_INTJ,INTJ,personality_type,0.95,personality_assessment,2026-06-03,2026-06-03T01:53:47.804965+00:00
+core_systems_thinker,Systems Thinker,core,0.85,personality_assessment,2026-06-03,2026-06-03T01:53:47.804965+00:00
+core_independent,Independent,core,0.85,personality_assessment,2026-06-03,2026-06-03T01:53:47.804965+00:00
+core_knowledge_driven,Knowledge Driven,core,0.85,personality_assessment,2026-06-03,2026-06-03T01:53:47.804965+00:00
+core_perfectionist_tendency,Perfectionist Tendency,core,0.85,personality_assessment,2026-06-03,2026-06-03T01:53:47.804965+00:00
+core_fast_learner,Fast Learner,core,0.85,personality_assessment,2026-06-03,2026-06-03T01:53:47.804965+00:00
+work_focus_level,Focus Level: high,work_style,0.8,behavior_analysis,2026-06-03,2026-06-03T01:53:47.804965+00:00
+work_attention_span,Attention Span: extended_deep_work,work_style,0.8,behavior_analysis,2026-06-03,2026-06-03T01:53:47.804965+00:00
+work_context_switching,Context Switching: low_tolerance,work_style,0.8,behavior_analysis,2026-06-03,2026-06-03T01:53:47.804965+00:00
+work_collaboration,Collaboration: async_preferred,work_style,0.8,behavior_analysis,2026-06-03,2026-06-03T01:53:47.804965+00:00
+decision_style,Style: analytical,decision_pattern,0.75,behavior_analysis,2026-06-03,2026-06-03T01:53:47.804965+00:00
+decision_speed,Speed: slow_deliberate,decision_pattern,0.75,behavior_analysis,2026-06-03,2026-06-03T01:53:47.804965+00:00
+decision_risk_tolerance,Risk Tolerance: calculated,decision_pattern,0.75,behavior_analysis,2026-06-03,2026-06-03T01:53:47.804965+00:00
+decision_regret_tendency,Regret Tendency: low,decision_pattern,0.75,behavior_analysis,2026-06-03,2026-06-03T01:53:47.804965+00:00

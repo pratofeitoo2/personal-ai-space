@@ -1,0 +1,2 @@
+id,company_id,name,role,email,linkedin,phone,notes,created_at,updated_at
+company_acme_corp_contact_john_doe,company_acme_corp,John Doe,Senior Engineer,john@acme.com,https://linkedin.com/in/johndoe,,Met at Silicon Valley Meetup,2026-06-09T08:05:25.680388+00:00,2026-06-09T08:05:25.680388+00:00

@@ -1,0 +1,1089 @@
+id,behavior_type,trigger,response,frequency,effectiveness,observed_date
+beh-emotion-2026-05-30-bc22,emotion,Quite fucking sad.,sad,5,0.5,2026-05-27T13:24:03.113257
+beh-emotion-2026-05-30-d5f7,emotion,"I'm quite confused, even desperate about what is happening and how i should react.",confused,2,0.5,2026-05-27T13:24:03.114559
+beh-emotion-2026-05-30-c8fa,emotion,"I barely can remember all i've thought, much less the content of those things.",content,2,0.5,2026-05-27T13:24:03.114809
+beh-emotion-2026-05-30-344a,emotion,"<font color=""#2DC26B"">(sent to tasks)</font>
+
+And another thing that i noticed is this habit of mine of keeping #complaining about things when im #journaling, which is a habit that keeps me even more focused on just the bad things.",focused,2,0.5,2026-05-27T13:24:03.115682
+beh-emotion-2026-05-30-e318,emotion,"Put all of my energy on that have two possible outcomes: a fucking awesome, never seen before project; or, the experience of a bike with no brakes running down a mountain with all related possibilities.",down,4,0.5,2026-05-27T13:24:03.115912
+beh-emotion-2026-05-30-21b1,emotion,"I was angry as fuck, and had too little in me to run the script we usually do.",angry,4,0.5,2026-05-27T13:24:03.116245
+beh-emotion-2026-05-30-dacb,emotion,"This looping kept going all day long, until eventually we're both to tired to keep fighting, crying and arguing about anything.",tired,2,0.5,2026-05-27T13:24:03.116476
+beh-emotion-2026-05-30-8185,emotion,I'm so #afraid of all.,afraid,3,0.5,2026-05-27T13:24:03.116353
+beh-emotion-2026-05-30-2f02,emotion,This got me #worried again.,worried,6,0.5,2026-05-27T13:24:03.116016
+beh-emotion-2026-05-30-c88d,emotion,"I’m incapable of being the support of her #immaturity, of being stuck her incapacity to live as an adult woman.",stuck,2,0.5,2026-05-27T13:24:03.116676
+beh-emotion-2026-05-30-08db,emotion,And I’m #exhausted of #feeling this eternal gravitational pull of her drawing and dragging me in.,exhausted,2,0.5,2026-05-27T13:24:03.114219
+beh-emotion-2026-05-30-f054,emotion,"She kept proposing many compromises for us to make to each other, she said we must do things together, we must be able to rely on each other, we must capable of #feeling safe as a #couple and so on...",safe,3,0.5,2026-05-27T13:24:03.116767
+beh-activity-2026-05-30-f6b8,activity,I learned i had my own tears to dry.,learned,2,0.5,2026-05-27T13:24:03.117006
+beh-emotion-2026-05-30-95b1,emotion,"Again, i don't think that this was meant to be of any harm, but still remember me of very unhappy stuff about how she behaves and how her mind functions.",unhappy,2,0.5,2026-05-27T13:24:03.116847
+beh-emotion-2026-05-30-058f,emotion,"I am happy they're all here together, but i'm also feeling trapped insight my thoughts.",happy,3,0.5,2026-05-27T13:24:03.115252
+beh-emotion-2026-05-30-1924,emotion,I’m just starting to believe that this isn’t some kind of #depressed #mood causing some cognitive fog.,depressed,2,0.5,2026-05-27T13:24:03.116923
+beh-emotion-2026-05-30-9fd8,emotion,"Green intensity shows your note creation activity."",
+    separateMonths: true,
+    showCurrentDayBorder: true,
+    defaultEntryIntensity: 1
+}
+
+// Get all pages from Daily Notes folder and subfolders using wildcard path
+const allPages = dv.pages('""PERSONAL/Daily Notes""') || [];
+
+for(let page of allPages){
+    let dateStr = null;
+    let parseMethod = '';
+    
+    // Skip dashboard file
+    if(page.file.name === 'Daily Notes Dashboard.md') {
+        continue;
+    }
+    
+    // Try created property first (most reliable)
+    if(page.created) {
+        const createdDate = new Date(page.created);
+        if(!isNaN(createdDate)) {
+            dateStr = createdDate.toISOString().split('T')[0];
+            parseMethod = 'created property';
+        }
+    }
+    
+    // If still no date, fallback to filename parsing
+    if(!dateStr && page.file && page.file.name) {
+        const fileName = page.file.name.replace('.md', '').trim();
+        
+        // Format 1: YYYY-MM-DD (e.g., ""2025-01-03"")
+        let match = fileName.match(/(\d{4})-(\d{2})-(\d{2})/);
+        if(match) {
+            dateStr = `${match[1]}-${match[2]}-${match[3]}`;
+            parseMethod = 'filename format 1 (YYYY-MM-DD)';
+        }
+        
+        // Format 2: DD Mon YYYY (e.g., ""27 Nov 2025"")
+        if(!dateStr) {
+            match = fileName.match(/(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/i);
+            if(match) {
+                const day = match[1].padStart(2, '0');
+                const monthStr = match[2];
+                const year = match[3];
+                
+                const monthMap = {
+                    'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+                    'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+                    'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+                };
+                
+                const month = monthMap[monthStr];
+                if(month) {
+                    dateStr = `${year}-${month}-${day}`;
+                    parseMethod = 'filename format 2 (DD Mon YYYY)';
+                }
+            }
+        }
+        
+        // Format 3: MMM DD, YYYY (e.g., ""Dec 06, 2025"")
+        if(!dateStr) {
+            match = fileName.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s+(\d{4})/i);
+            if(match) {
+                const monthStr = match[1];
+                const day = match[2].padStart(2, '0');
+                const year = match[3];
+                
+                const monthMap = {
+                    'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+                    'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+                    'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+                };
+                
+                const month = monthMap[monthStr];
+                if(month) {
+                    dateStr = `${year}-${month}-${day}`;
+                    parseMethod = 'filename format 3 (MMM DD, YYYY)';
+                }
+            }
+        }
+    }
+    
+    if(dateStr) {
+        trackerData.entries.push({
+            date: dateStr,
+            filePath: page.file.path,
+            intensity: 1
+        })
+    }
+}
+
+
+trackerData.basePath = 'PERSONAL/Daily Notes';
+
+renderHeatmapTracker(this.container, trackerData)
+```
+
+
+---
+
+---
+
+## 🎯 MOOD ANALYSIS
+
+### 🏆 Top 15 Moods (Most Frequent)
+```dataviewjs
+const pages = dv.pages('""PERSONAL/Daily Notes""').where(p => p.mood);
+const moods = {};
+
+pages.forEach(page => {
+  if (page.mood && Array.isArray(page.mood)) {
+    page.mood.forEach(mood => {
+      moods[mood] = (moods[mood] || 0) + 1;
+    });
+  }
+});
+
+const sorted = Object.entries(moods)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 15);
+
+let chart = {
+  type: 'bar',
+  data: {
+    labels: sorted.map(s => s[0]),
+    datasets: [
+      {
+        label: 'Frequency',
+        data: sorted.map(s => s[1]),
+        borderColor: '#0ea5e9',
+        backgroundColor: '#0ea5e933',
+        borderWidth: 2,
+        borderRadius: 8,
+        borderSkipped: false,
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      x: { ticks: { font: { size: 11 } } },
+      y: { ticks: { font: { size: 11 } } }
+    }
+  }
+};
+
+window.renderChart(chart, this.container);
+```
+
+### 🔴 Mood Distribution (Pie Chart)
+```dataviewjs
+const pages = dv.pages('""PERSONAL/Daily Notes""').where(p => p.mood);
+const moods = {};
+
+pages.forEach(page => {
+  if (page.mood && Array.isArray(page.mood)) {
+    page.mood.forEach(mood => {
+      moods[mood] = (moods[mood] || 0) + 1;
+    });
+  }
+});
+
+const sorted = Object.entries(moods)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10);
+
+const labels = sorted.map(([mood]) => mood);
+const data = sorted.map(([, count]) => count);
+
+if (labels.length > 0) {
+  const chartData = {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Frequency',
+        data: data,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.8)',
+          'rgba(54, 162, 235, 0.8)',
+          'rgba(255, 206, 86, 0.8)',
+          'rgba(75, 192, 192, 0.8)',
+          'rgba(153, 102, 255, 0.8)',
+          'rgba(255, 159, 64, 0.8)',
+          'rgba(199, 199, 199, 0.8)',
+          'rgba(83, 102, 255, 0.8)',
+          'rgba(255, 99, 200, 0.8)',
+          'rgba(100, 200, 100, 0.8)'
+        ],
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        title: {
+          display: true,
+          text: '😊 Top 10 Moods Distribution',
+          font: { size: 16, weight: 'bold' }
+        },
+        legend: { 
+          display: true, 
+          position: 'right',
+          labels: {
+            font: { size: 11 },
+            padding: 15
+          }
+        }
+      }
+    }
+  };
+  
+  window.renderChart(chartData, this.container);
+}
+```
+
+---
+
+## 📚 TOPICS ANALYSIS
+
+### 🏆 Top 12 Topics
+```dataviewjs
+const pages = dv.pages('""PERSONAL/Daily Notes""');
+const topics = {};
+
+pages.forEach(page => {
+  if (page.topics && Array.isArray(page.topics)) {
+    page.topics.forEach(topic => {
+      topics[topic] = (topics[topic] || 0) + 1;
+    });
+  }
+});
+
+const sorted = Object.entries(topics)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 12);
+
+let chart = {
+  type: 'bar',
+  data: {
+    labels: sorted.map(s => s[0]),
+    datasets: [
+      {
+        label: 'Count',
+        data: sorted.map(s => s[1]),
+        borderColor: '#10b981',
+        backgroundColor: '#10b98133',
+        borderWidth: 2,
+        borderRadius: 8,
+        borderSkipped: false,
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      x: { ticks: { font: { size: 11 } } },
+      y: { ticks: { font: { size: 11 } } }
+    }
+  }
+};
+
+window.renderChart(chart, this.container);
+```
+
+---
+
+## 🏷️ TAGS ANALYSIS
+
+### 🏆 Top 12 Tags (Frontmatter + Inline)
+```dataviewjs
+const pages = dv.pages('""PERSONAL/Daily Notes""');
+const tags = {};
+
+pages.forEach(page => {
+  if (page.file.tags && Array.isArray(page.file.tags)) {
+    page.file.tags.forEach(tag => {
+      tags[tag] = (tags[tag] || 0) + 1;
+    });
+  }
+});
+
+const sorted = Object.entries(tags)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 12);
+
+const allTagsCount = Object.keys(tags).length;
+
+dv.paragraph(`🏷️ Showing top 12 of ${allTagsCount} total tags (frontmatter + inline)\n`);
+
+dv.paragraph(`
+| Tag | Count | % |
+|:---|---:|---:|
+${sorted.map(([tag, count]) => 
+  `| **${tag}** | ${count} | ${((count/Object.values(tags).reduce((a,b) => a+b, 0))*100).toFixed(1)}% |`
+).join('\n')}
+`);
+
+if (sorted.length > 0) {
+  const labels = sorted.map(([tag]) => tag);
+  const data = sorted.map(([, count]) => count);
+
+  const chartData = {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Frequency',
+        data: data,
+        backgroundColor: 'rgba(75, 159, 192, 0.8)',
+        borderColor: 'rgba(75, 159, 192, 1)',
+        borderWidth: 2,
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      indexAxis: 'y',
+      plugins: {
+        title: {
+          display: true,
+          text: '🏷️ Top 12 Tags by Frequency',
+          font: { size: 16, weight: 'bold' }
+        },
+        legend: { display: true }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          ticks: { 
+            stepSize: 1,
+            font: { size: 11 }
+          }
+        },
+        y: {
+          ticks: {
+            font: { size: 11 }
+          }
+        }
+      }
+    }
+  };
+  
+  window.renderChart(chartData, this.container);
+}
+```
+
+---
+
+## 😤 MOOD INFLUENCERS
+
+### 🏆 Top 12 Mood Influencers
+```dataviewjs
+const pages = dv.pages('""PERSONAL/Daily Notes""');
+const influencers = {};
+
+pages.forEach(page => {
+  if (page['mood-influencers'] && Array.isArray(page['mood-influencers'])) {
+    page['mood-influencers'].forEach(inf => {
+      influencers[inf] = (influencers[inf] || 0) + 1;
+    });
+  }
+});
+
+const sorted = Object.entries(influencers)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 12);
+
+let chart = {
+  type: 'bar',
+  data: {
+    labels: sorted.map(s => s[0]),
+    datasets: [
+      {
+        label: 'Frequency',
+        data: sorted.map(s => s[1]),
+        borderColor: '#f59e0b',
+        backgroundColor: '#f59e0b33',
+        borderWidth: 2,
+        borderRadius: 8,
+        borderSkipped: false,
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      x: { ticks: { font: { size: 11 } } },
+      y: { ticks: { font: { size: 11 } } }
+    }
+  }
+};
+
+window.renderChart(chart, this.container);
+```
+
+---
+
+## 📈 ANALYSIS INSIGHTS
+
+### High Stress Days (5+ moods)
+```dataview
+TABLE
+  file.name as ""📝 Date"",
+  length(mood) as ""😠 Moods"",
+  mood as ""Moods""
+FROM ""PERSONAL/Daily Notes""
+WHERE length(mood) >= 5
+SORT file.name DESC
+LIMIT 15
+```
+
+### 😰 Anxious/Worried Days
+```dataview
+TABLE
+  file.name as ""📝 Date"",
+  mood as ""💭 Moods""
+FROM ""PERSONAL/Daily Notes""
+WHERE any(mood, (m) => contains(lower(m), ""anxious"") or contains(lower(m), ""worried""))
+SORT file.name DESC
+LIMIT 10
+```
+
+### 😢 Sad/Hopeless Days
+```dataview
+TABLE
+  file.name as ""📝 Date"",
+  mood as ""💭 Moods""
+FROM ""PERSONAL/Daily Notes""
+WHERE any(mood, (m) => contains(lower(m), ""sad"") or contains(lower(m), ""hopeless""))
+SORT file.name DESC
+LIMIT 10
+```
+
+---
+
+## 📊 COMPREHENSIVE DATA TABLES
+
+### All Moods (Complete List)
+```dataview
+TABLE WITHOUT ID
+  mood_item as ""Mood"",
+  length(rows) as ""Count"",
+  round(length(rows) / 40 * 100, 1) as ""%""
+FROM ""PERSONAL/Daily Notes""
+WHERE mood
+FLATTEN mood as mood_item
+GROUP BY mood_item
+SORT length(rows) DESC
+```
+
+### All Topics (Complete List)
+```dataview
+TABLE WITHOUT ID
+  topic_item as ""Topic"",
+  length(rows) as ""Count"",
+  round(length(rows) / 40 * 100, 1) as ""%""
+FROM ""PERSONAL/Daily Notes""
+WHERE topics
+FLATTEN topics as topic_item
+GROUP BY topic_item
+SORT length(rows) DESC
+```
+
+### All Tags (Complete List)
+```dataview
+TABLE WITHOUT ID
+  tag_item as ""Tag"",
+  length(rows) as ""Count"",
+  round(length(rows) / 40 * 100, 1) as ""%""
+FROM ""PERSONAL/Daily Notes""
+FLATTEN file.tags as tag_item
+GROUP BY tag_item
+SORT length(rows) DESC
+```
+
+### All Influencers (Complete List)
+```dataview
+TABLE WITHOUT ID
+  influencer as ""Influencer"",
+  length(rows) as ""Count"",
+  round(length(rows) / 40 * 100, 1) as ""%""
+FROM ""PERSONAL/Daily Notes""
+WHERE mood-influencers
+FLATTEN mood-influencers as influencer
+GROUP BY influencer
+SORT length(rows) DESC
+```
+
+---
+
+## 📝 TOPICS & TAGS BY DATE
+
+### Topics Distribution by Date
+```dataview
+TABLE
+  file.name as ""📝 Date"",
+  length(topics) as ""🎯 Topics"",
+  topics as ""�� Topics List""
+FROM ""PERSONAL/Daily Notes""
+WHERE topics
+SORT file.name DESC
+LIMIT 20
+```
+
+### Tags Distribution by Date
+```dataview
+TABLE
+  file.name as ""📝 Date"",
+  length(file.tags) as ""🏷️ Tags"",
+  file.tags as ""🔖 Tags List""
+FROM ""PERSONAL/Daily Notes""
+SORT file.name DESC
+LIMIT 20
+```
+
+---
+
+## 📅 RECENT DAILY NOTES
+
+### Recent Entries (Last 20)
+```dataviewjs
+const pages = dv.pages('""PERSONAL/Daily Notes""').filter(p => p.file && p.file.name);
+
+dv.paragraph(`
+### 📋 Most Recent Notes
+
+| 📝 Date | 😊 Moods | 🎯 Topics | 🏷️ Tags |
+|:---|:---:|:---:|:---:|
+${pages.slice(0, 20).map(p => {
+  const mood = p.mood && Array.isArray(p.mood) ?",anxious,3,0.5,2026-05-27T13:24:03.113776
+beh-activity-2026-05-30-35a5,activity,"p.file.tags.length : 0;
+  
+  return `| [[${p.file.name}|${p.file.name}]] | ${mood} | ${topics} | ${tags} |`;
+}).join('\n')}
+`);
+```
+
+### All Daily Notes
+```dataview
+TABLE
+  file.name as ""📝 Date"",
+  length(mood) as ""😊 Moods"",
+  mood as ""Moods""
+FROM ""PERSONAL/Daily Notes""
+SORT file.name DESC
+```
+
+---
+
+## ⚙️ DASHBOARD INFORMATION
+
+**Layout & Design:**
+- 📊 Daily notes snapshot with metrics
+- 💭 Mood analysis (top 15 + distribution)
+- 📚 Topics breakdown (top 12)
+- 🏷️ Tags analysis (top 12, including inline)
+- 😤 Mood influencers (top 12)
+- 📈 Analysis insights (stress days, worries, sadness)
+- 📋 Complete data tables (all moods, topics, tags, influencers)
+- 📅 Recent entries
+
+**Features:**
+✅ Real-time calculations
+✅ Percentage calculations
+✅ Horizontal bar charts for easy reading
+✅ Doughnut chart for mood distribution
+✅ Both frontmatter + inline tags tracked
+✅ Status indicators (😊 💭 🎯 🏷️)
+✅ Complete data with percentages
+✅ Recent entries highlighted
+✅ Analysis of negative emotions
+
+**Data Completeness:**
+- All notes from PERSONAL/Daily Notes folder
+- Dynamic calculations (no hard-coded values)
+- All moods tracked
+- All topics tracked
+- All tags tracked (frontmatter + inline)
+- All mood influencers tracked
+- Complete note history with dates
+
+**Last Updated:** 2025-12-07 17:44 UTC",coded,2,0.5,2026-05-27T13:24:03.117080
+beh-emotion-2026-05-30-aa4f,emotion,"---
+type: daily-note
+mood:
+- annoyed
+- impatient
+- frustrated
+- Bleh
+date: 2025-12-07 01:03:00
+tags:
+- behavior
+- command
+- dailynote
+- emotional
+- feeling
+- feelings
+- inbox
+- instability
+- journaling
+- moods
+- reactions
+- truth
+created: '2025-12-07'
+updated: 2025-12-07T18:10
+mood-influencers:
+- family
+- partner
+Cover: https://i.pinimg.com/originals/69/48/23/694823769d999cb95e37284a685406a7.jpg
+topics:
+- Marriage 
+- emotions
+- conflict
+---
+
+## 🎯 Today’s Focus
+
+
+
+  
+
+## 📝 Notes & Thoughts
+
+Well, yesterday hasn't come to an end.",frustrated,1,0.5,2026-05-27T13:24:03.114951
+beh-emotion-2026-05-30-2306,emotion,"---
+type: daily-note
+mood:
+- annoyed
+- impatient
+- frustrated
+- Bleh
+date: 2025-12-07 01:03:00
+tags:
+- behavior
+- command
+- dailynote
+- emotional
+- feeling
+- feelings
+- inbox
+- instability
+- journaling
+- moods
+- reactions
+- truth
+created: '2025-12-07'
+updated: 2025-12-07T18:10
+mood-influencers:
+- family
+- partner
+Cover: https://i.pinimg.com/originals/69/48/23/694823769d999cb95e37284a685406a7.jpg
+topics:
+- Marriage 
+- emotions
+- conflict
+---
+
+## 🎯 Today’s Focus
+
+
+
+  
+
+## 📝 Notes & Thoughts
+
+Well, yesterday hasn't come to an end.",annoyed,1,0.5,2026-05-27T13:24:03.115123
+beh-emotion-2026-05-30-6f72,emotion,"---
+type: daily-note
+mood:
+- Happy
+- Excited
+- anxious
+- exhausted 
+date: '2024-12-29'
+tags:
+- command
+- dailynote
+- inbox
+created: 2025-12-05T18:50
+updated: 2025-12-06T23:27
+Cover: https://i.pinimg.com/originals/69/48/23/694823769d999cb95e37284a685406a7.jpg
+---
+
+## 🎯 Today’s Focus
+
+- [ ] 
+
+  
+
+## 📝 Notes & Thoughts
+
+  -
+
+## ✅ Tasks
+
+  -
+
+### Must Do
+- [ ] 
+
+  
+
+### Should Do
+- [ ] 
+
+  
+
+### Could Do
+- [ ] 
+
+  
+
+## 📅 Meetings & Events
+
+  
+
+## 💡 Ideas & Insights
+
+  
+
+## 📚 Learning
+
+  
+
+## 🏆 Wins
+
+  
+
+## 🔗 Links & References
+
+  
+
+## 🌙 Evening Reflection
+
+  
+
+**What went well:**
+
+  
+
+**What could be improved:**
+
+  
+
+**Tomorrow’s priorities:**
+
+  
+
+   
+## 🎯 Today’s Focus
+
+- [ ] 
+
+   
+
+## 📝 Notes & Thoughts
+
+  -
+
+## ✅ Tasks
+
+  -
+
+### Must Do
+- [ ] 
+
+   
+
+### Should Do
+- [ ] 
+
+   
+
+### Could Do
+- [ ] 
+
+   
+
+## 📅 Meetings & Events
+
+   
+
+## 💡 Ideas & Insights
+
+   
+
+## 📚 Learning
+
+   
+
+## 🏆 Wins
+
+   
+
+## 🔗 Links & References
+
+   
+
+## 🌙 Evening Reflection
+
+   
+
+**What went well:**
+
+   
+
+**What could be improved:**
+
+   
+
+**Tomorrow’s priorities:**",excited,1,0.5,2026-05-27T13:24:03.115375
+beh-emotion-2026-05-30-c183,emotion,"---
+type: daily-note
+mood:
+- lost
+- Overthinking
+- confused
+- motivated
+date: 2025-12-07 03:28:00
+tags:
+- 2dc26b
+- career
+- command
+- complaining
+- dailynote
+- engage
+- future
+- goals
+- inbox
+- journaling
+- management
+- planning
+- spirituality
+- studies
+- thoughts
+created: '2025-12-07'
+updated: 2025-12-07T18:10
+mood-influencers:
+- mental-health
+- self
+- study
+- spirituality
+- career
+- work
+topics:
+- Daily Notes
+- Journaling 
+- Habits
+- Obsidian
+- Self Care 
+- Spirituality
+- career
+- study
+Cover: https://i.pinimg.com/originals/69/48/23/694823769d999cb95e37284a685406a7.jpg
+---
+
+## 🎯 Today’s Focus
+
+
+
+  
+
+## 📝 Notes & Thoughts
+
+I need to start semi organizing and #planning some of the things i need to be addressing on my obsidian daily notes to ensure im covering the topics that matter and not just the topics im usually remembering to cry around when #journaling.",motivated,1,0.5,2026-05-27T13:24:03.115498
+beh-emotion-2026-05-30-b25c,emotion,"---
+type: daily-note
+mood:
+- Good
+- Calm
+date: '2025-11-16'
+tags:
+- command
+- dailynote
+- inbox
+created: 2025-11-16T00:00
+updated: 2025-12-05T23:41
+---
+
+## 🎯 Today’s Focus
+
+- [ ] 
+
+   
+
+## 📝 Notes & Thoughts
+
+  -
+
+## ✅ Tasks
+
+  -
+
+### Must Do
+- [ ] 
+
+   
+
+### Should Do
+- [ ] 
+
+   
+
+### Could Do
+- [ ] 
+
+   
+
+## 📅 Meetings & Events
+
+   
+
+## 💡 Ideas & Insights
+
+   
+
+## 📚 Learning
+
+   
+
+## 🏆 Wins
+
+   
+
+## 🔗 Links & References
+
+   
+
+## 🌙 Evening Reflection
+
+   
+
+**What went well:**
+
+   
+
+**What could be improved:**
+
+   
+
+**Tomorrow’s priorities:**",calm,1,0.5,2026-05-27T13:24:03.115789
+beh-emotion-2026-05-30-6137,emotion,"---
+type: daily-note
+mood:
+- Joyful
+date: '2024-12-27'
+tags:
+- command
+- dailynote
+- inbox
+created: 2024-12-27T00:00
+updated: 2025-12-05T23:41
+---
+
+## 🎯 Today’s Focus
+
+- [ ] 
+
+   
+
+## 📝 Notes & Thoughts
+
+  -
+
+## ✅ Tasks
+
+  -
+
+### Must Do
+- [ ] 
+
+   
+
+### Should Do
+- [ ] 
+
+   
+
+### Could Do
+- [ ] 
+
+   
+
+## 📅 Meetings & Events
+
+   
+
+## 💡 Ideas & Insights
+
+   
+
+## 📚 Learning
+
+   
+
+## 🏆 Wins
+
+   
+
+## 🔗 Links & References
+
+   
+
+## 🌙 Evening Reflection
+
+   
+
+**What went well:**
+
+   
+
+**What could be improved:**
+
+   
+
+**Tomorrow’s priorities:**",joyful,1,0.5,2026-05-27T13:24:03.116122
+beh-emotion-2026-05-30-62a2,emotion,"---
+type: daily-note
+mood:
+- disappointed
+- exhausted 
+- frustrated
+- Overthinking
+- worried
+- suspicious
+date: 2025-12-07 00:00:00
+tags:
+- command
+- dailynote
+- inbox
+created: '2025-12-07'
+updated: 2025-12-07T18:10
+mood-influencers:
+- partner
+Cover: https://i.pinimg.com/originals/69/48/23/694823769d999cb95e37284a685406a7.jpg
+topics:
+- Marriage 
+- emotions
+- conflict
+---
+
+## 🎯 Today’s Focus
+
+- [ ] 
+
+  
+
+## 📝 Notes & Thoughts
+
+  Im as still trying to wrap around things about my day.",disappointed,1,0.5,2026-05-27T13:24:03.116580

@@ -1,0 +1,5 @@
+id,habit_name,category,frequency,start_date,current_streak,total_completions,last_completed,target_streak,status
+h-plan-next-day,Planejar Próximo Dia,produtividade,daily,2026-05-30,1,1,2026-06-02T18:06:02.044833+00:00,,active
+h-job-applications,Candidaturas Diárias,carreira,daily,2026-05-29,1,1,2026-06-02T18:06:02.046166+00:00,,active
+h-journal,Diário Pessoal,bem-estar,daily,2026-05-24,1,1,2026-06-02T18:06:02.046455+00:00,,active
+h-reading,Leitura (30min),aprendizado,['weekly'],2026-05-30,1,1,2026-06-02T18:06:02.046720+00:00,,active

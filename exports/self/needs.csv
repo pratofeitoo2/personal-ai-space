@@ -1,0 +1,5 @@
+id,category,name,priority,status,description,linked_tasks,created_at
+need_004,health,Consistent routines,medium,active,Establish and track daily disciplined habits.,,2026-05-27
+need_001,professional,Functional AI system,critical,in_progress,Build a personal AI space that actually works and solves real problems.,,2026-05-27
+need_003,professional,Knowledge management,high,active,"Stop knowledge hoarding, build systematic organization.",,2026-05-27
+need_002,personal,Time clarity,high,active,Better understanding of where time actually goes.,,2026-05-27

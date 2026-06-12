@@ -1,0 +1,42 @@
+id,entity_type,entity_id,file_path,file_hash,last_modified,last_synced,direction
+sync-apple-re-completed::personal_ai_powerho,apple-reminder,completed::personal_ai_powerhouse/complete_personal_ai_space_,Personal AI Powerhouse::Complete personal AI space setup,8188d6c58fe10708,2026-05-30 03:56:38,,bidirectional
+sync-apple-re-completed::sisyphus/test_compl,apple-reminder,completed::sisyphus/test_completed_reminder,Sisyphus::Test Completed Reminder,df0bdd28924d0561,2026-05-30 05:05:57,,bidirectional
+fc7d5c9e9c6a4d13b4ec8afc82362fc9,apple-reminder,46adb55d85dc482da546babe626aa61f,Sisyphus::🔲 Planejar Próximo Dia,cfb81b3719eedf36,2026-06-01 19:07:34,,bidirectional
+f3eb659b74d941419e7a632f0d2b31c2,apple-reminder,908759cc015944e8b4d144046e0bba8d,Sisyphus::🔲 Candidaturas Diárias,e4eb6c36d9acd780,2026-06-01 19:07:34,,bidirectional
+872a3b1c73a542edb49c3ef5a1f16fbc,apple-reminder,b13cd5e2bd2843c2a038a7d46f52317f,Sisyphus::🔲 Diário Pessoal,64fdb267d75776a3,2026-06-01 19:07:34,,bidirectional
+1112137fcc774169b72a98fd72d762ce,apple-reminder,f8ead4f4d52645b698b057c5901776f4,Sisyphus::🔲 Leitura (30min),2c699ab2649fb550,2026-06-01 19:07:34,,bidirectional
+sync-apple-re-completed::sisyphus/🔲_planejar,apple-reminder,completed::sisyphus/🔲_planejar_próximo_dia,Sisyphus::🔲 Planejar Próximo Dia,651c980285e12b2f,2026-06-01 19:08:08,,bidirectional
+sync-apple-re-completed::sisyphus/🔲_candidat,apple-reminder,completed::sisyphus/🔲_candidaturas_diárias,Sisyphus::🔲 Candidaturas Diárias,d73d560b6f2ef6c2,2026-06-01 19:08:08,,bidirectional
+sync-apple-re-completed::sisyphus/🔲_diário_p,apple-reminder,completed::sisyphus/🔲_diário_pessoal,Sisyphus::🔲 Diário Pessoal,5165f0db43b2cdcb,2026-06-01 19:08:08,,bidirectional
+sync-apple-re-completed::sisyphus/🔲_leitura_,apple-reminder,completed::sisyphus/🔲_leitura_(30min),Sisyphus::🔲 Leitura (30min),fff85358fe7a2b75,2026-06-01 19:08:08,,bidirectional
+sync-apple-re-everyday-set-up-the-date-with-,apple-reminder,task-everyday-set-up-the-date-with-the-car-evaluat-3863e9,everyday::Set up the date with the car evaluation with evangelist !!,f14c4cb140d285a3,2026-06-02 17:01:52,,bidirectional
+sync-apple-re-everyday-terminar-as-configura,apple-reminder,task-everyday-terminar-as-configuracoes-de-rotina-088a60,everyday::Terminar as configurações de rotina no family wall,85e0e07f0e44bd08,2026-06-02 17:31:39,,bidirectional
+sync-apple-re-finish-opencode-config,apple-reminder,task-personal-ai-powerhouse-finish-opencode-global-config-23653c,Personal AI Powerhouse::Finish opencode global config,manual-fix,2026-06-09 09:06:59,,bidirectional
+sync-apple-re-completed::data_pipeline_&_syn,apple-reminder,completed::data_pipeline_&_sync/add_due_dates_to_tasks_!,Data Pipeline & Sync::Add Due Dates to Tasks !,e5e55ea4c5682c1f,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::groceries/comprar_p,apple-reminder,completed::groceries/comprar_pregador,Groceries::Comprar pregador,3ce137b6a8588342,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::groceries/comprar_s,apple-reminder,completed::groceries/comprar_saco_de_lixo,Groceries::Comprar saco de lixo,515d433f916bd7c4,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::job_applications/up,apple-reminder,completed::job_applications/update_job_application_list,Job applications::Update job application list,b3453604cc7c23b9,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::job_applications/cr,apple-reminder,completed::job_applications/create_a_position_tracker_databas,Job applications::Create a position tracker database,81b73d0671fe659c,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-job-applications-apply-my-prof,apple-reminder,task-job-applications-apply-my-profile-on-the-job-position-9e723e,Job applications::Apply my profile on the job positions !!,02f7a3b6d47f7950,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::personal_ai_automat,apple-reminder,completed::personal_ai_automations/consider_coding_a_web_app_,Personal AI Automations::Consider coding a web app as a unique frontendq,fc90b3732f7882a3,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::projects/write_and_,apple-reminder,completed::projects/write_and_send_email_about_the_neds_proje,Projects::write and send email about the NEDS project !!,4e5e3117aec52f4f,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::projects/create_pdf,apple-reminder,completed::projects/create_pdf_for_neds_project,Projects::Create pdf for Neds project,22e06bb4c5ea3ca8,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-projects-review-the-future-pla,apple-reminder,task-projects-review-the-future-plans-for-neds-171d39,Projects::Review the future plans for NEDS !,7e75417fcfa450c0,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::everyday/pick_up_th,apple-reminder,completed::everyday/pick_up_the_laundry_!!,everyday::Pick up the laundry !!,a9b7138c7576c1aa,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-everyday-lavar-panos-de-chao,apple-reminder,task-everyday-lavar-panos-de-chao,everyday::Lavar panos de chão,7cfeea3196ce9a2d,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::everyday/tirar_roup,apple-reminder,completed::everyday/tirar_roupa_varal,everyday::Tirar roupa varal,c109b21ec7ef5933,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-everyday-estender-roupa,apple-reminder,task-everyday-estender-roupa,everyday::Estender roupa,f9d4631cd169c1fc,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::everyday/daily_note,apple-reminder,completed::everyday/daily_note,everyday::Daily note,8f131e321b1ccc43,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-completed::work/look_the_diver,apple-reminder,completed::work/look_the_diversematch_lp_copy_for_tams,work::Look the diversematch LP copy for tams,321af29b643bc8b6,2026-06-09 09:08:02,,bidirectional
+sync-apple-re-personal-ai-powerhouse-finish-,apple-reminder,task-personal-ai-powerhouse-finish-opencode-global-config-and-pr-b015b8,Personal AI Powerhouse::Finish opencode global config and project config,4f712f1a7966db60,2026-06-09 09:09:03,,bidirectional
+sync-apple-re-work-terminar-o-planejamento-d,apple-reminder,task-work-terminar-o-planejamento-da-campanha-e6aae7,work::Terminar o planejamento da campanha de lançamento do livro da tamara !!,8e89bf1a8d0d6a26,2026-06-09 09:14:06,,bidirectional
+sync-apple-re-personal-ai-powerhouse-new-rem,apple-reminder,task-personal-ai-powerhouse-new-reminder-01d0ea,Personal AI Powerhouse::New Reminder,acdf8b531d40078a,2026-06-09 09:28:18,,bidirectional
+sync-apple-re-everyday-do-the-laundry-723c36,apple-reminder,task-everyday-do-the-laundry-723c36,everyday::Do the laundry,dacb5bb2a9e54297,2026-06-09 09:32:21,,bidirectional
+sync-apple-re-section_tile::sisyphus/💪_hábit,apple-reminder,section_tile::sisyphus/💪_hábitos_concluídos_hoje_(sisyphus_-_bri,Sisyphus::💪 Hábitos Concluídos Hoje (Sisyphus - Briefing Fim do Dia),ba599e35bab37978,2026-06-09 09:37:25,,bidirectional
+sync-apple-re-section_tile::sisyphus/🎯_statu,apple-reminder,section_tile::sisyphus/🎯_status_dos_hábitos_(sisyphus_-_briefing,Sisyphus::🎯 Status dos Hábitos (Sisyphus - Briefing Meio-Dia),5ca4d518b3429abb,2026-06-12 06:31:45,,bidirectional
+sync-apple-re-section_tile::sisyphus/🎯_hábit,apple-reminder,section_tile::sisyphus/🎯_hábitos_em_risco_(sisyphus_-_briefing_m,Sisyphus::🎯 Hábitos em Risco (Sisyphus - Briefing Matinal),eece9bd96a55db9b,2026-06-12 06:31:45,,bidirectional
+sync-apple-re-completed::sisyphus/sisyphus_-,apple-reminder,completed::sisyphus/sisyphus_-_habitos_em_risco,Sisyphus::Sisyphus - Habitos em Risco,13f27c5b04db6c6f,2026-06-12 06:31:45,,bidirectional
+sync-apple-re-section_tile::sisyphus/📋_resta,apple-reminder,section_tile::sisyphus/📋_restam_do_dia_(sisyphus_-_briefing_meio,Sisyphus::📋 Restam do Dia (Sisyphus - Briefing Meio-Dia),99bc712a2757e7a1,2026-06-12 06:31:45,,bidirectional
+sync-apple-re-section_tile::sisyphus/📅_agend,apple-reminder,section_tile::sisyphus/📅_agenda_de_hoje_(sisyphus_-_briefing_mat,Sisyphus::📅 Agenda de Hoje (Sisyphus - Briefing Matinal),6b504262a02e4353,2026-06-12 06:31:45,,bidirectional
+sync-apple-re-section_tile::sisyphus/📋_taref,apple-reminder,section_tile::sisyphus/📋_tarefas_do_dia_(sisyphus_-_briefing_mat,Sisyphus::📋 Tarefas do Dia (Sisyphus - Briefing Matinal),d1babde7ecdab3e5,2026-06-12 06:31:45,,bidirectional
+sync-apple-re-completed::sisyphus/🎯_metas_at,apple-reminder,completed::sisyphus/🎯_metas_ativas_(sisyphus_-_briefing_matin,Sisyphus::🎯 Metas Ativas (Sisyphus - Briefing Matinal),ec959392752358b1,2026-06-12 06:31:45,,bidirectional

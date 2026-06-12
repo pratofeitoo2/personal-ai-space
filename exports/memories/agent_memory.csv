@@ -1,0 +1,30 @@
+id,agent_id,key,value,ttl_seconds,created_at
+2a0c9c909c664c16a9dfe17ee5bca948,pattern_learner,pattern.Morning deep work block,12,,2026-05-25 01:23:26
+405814ac53a54d6398f7b7825ed8b2d0,pattern_learner,pattern.Read technical articles,8,,2026-05-25 01:23:26
+fcaf5642abb547319f3e51b022f1e664,pattern_learner,pattern.Exercise,5,,2026-05-25 01:23:26
+797628a9e9ea48cc880074f4d879d885,pattern_learner,pattern.Review and reflect,4,,2026-05-25 01:23:26
+7059b56ea4734dc89bd4e7e62d149072,pattern_learner,pattern.Side project work,3,,2026-05-25 01:23:26
+bd41dd46717241efbd5c1b66be12f506,pattern_learner,pattern.completion_rate_testing_normal,0.0,,2026-05-27 13:04:49
+2626165a1a364ce4a42fe1e0402adbad,pattern_learner,pattern.Journaling,0,,2026-05-29 20:39:39
+mem-pattern-learner-8cdea8b9,pattern_learner,pattern.completion_rate_general_high,0.0,,2026-05-30 15:12:08
+mem-pattern-learner-c8a83c21,pattern_learner,pattern.Diário Pessoal,3,,2026-06-03 01:48:22
+mem-pattern-learner-1a08c9df,pattern_learner,pattern.Planejar Próximo Dia,0,,2026-06-03 01:48:22
+mem-pattern-learner-645fe14c,pattern_learner,pattern.Candidaturas Diárias,0,,2026-06-03 01:48:22
+mem-pattern-learner-366883c1,pattern_learner,pattern.Leitura (30min),0,,2026-06-03 01:48:22
+mem-pattern-learner-88334543,pattern_learner,pattern.completion_rate_laundry_high,0.0,,2026-06-09 08:05:23
+mem-pattern-learner-69f9364a,pattern_learner,pattern.task_creation_hour,18,,2026-06-12 04:19:21
+mem-pattern-learner-c4fc37a2,pattern_learner,pattern.top_categories,"['general', 'automation', 'data-pipeline', 'tooling', 'habit']",,2026-06-12 04:19:21
+mem-pattern-learner-80db5a69,pattern_learner,pattern.completion_rate_Knowledge Management_normal,1.0,,2026-06-12 04:19:21
+mem-pattern-learner-70a39ba5,pattern_learner,pattern.completion_rate_Personal AI Powerhouse_normal,1.0,,2026-06-12 04:19:21
+mem-pattern-learner-ee877e4a,pattern_learner,pattern.completion_rate_automation_high,1.0,,2026-06-12 04:19:21
+mem-pattern-learner-412671cb,pattern_learner,pattern.completion_rate_automation_normal,1.0,,2026-06-12 04:19:21
+mem-pattern-learner-3210c736,pattern_learner,pattern.completion_rate_car_high,0.0,,2026-06-12 04:19:21
+mem-pattern-learner-6f7a41b8,pattern_learner,pattern.completion_rate_data-pipeline_high,1.0,,2026-06-12 04:19:21
+mem-pattern-learner-a9510d2d,pattern_learner,pattern.completion_rate_data-pipeline_normal,1.0,,2026-06-12 04:19:21
+mem-pattern-learner-9b7cdc50,pattern_learner,pattern.completion_rate_documentation_low,1.0,,2026-06-12 04:19:21
+mem-pattern-learner-144a4483,pattern_learner,pattern.completion_rate_general_normal,0.8709677419354839,,2026-06-12 04:19:21
+mem-pattern-learner-926edf0f,pattern_learner,pattern.completion_rate_habit_high,0.0,,2026-06-12 04:19:21
+mem-pattern-learner-0e795b43,pattern_learner,pattern.completion_rate_habit_normal,0.0,,2026-06-12 04:19:21
+mem-pattern-learner-650352dd,pattern_learner,pattern.completion_rate_laundry_normal,1.0,,2026-06-12 04:19:21
+mem-pattern-learner-d1be5d63,pattern_learner,pattern.completion_rate_tooling_high,1.0,,2026-06-12 04:19:21
+mem-pattern-learner-55c10e65,pattern_learner,pattern.completion_rate_tooling_normal,1.0,,2026-06-12 04:19:21

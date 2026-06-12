@@ -1,0 +1,37 @@
+id,title,description,category,status,priority,progress,target_date,progress_source,created_at,updated_at,completed_at,tags
+14,"Complete the ""Personal AI Powerhouse"" project","## DESCRIPTION 
+Build a ai powerhouse to help me automate and manage my every day different types of tasks and projects that builds my personal life itself
+
+
+**Why this matters:** to speed up my life management so i can be faster on managing the many sides/aspects of my life, and doing this with better quality and keep monitoring myself by tracking almost every action i take using this system.
+
+**Success criteria:**
+- Complete all integrations
+- Confirm that the monitoring i build is working and really useful after a month
+- Confirm that the system provide me consistency on similar tasks across different sessions
+
+**Notes / context:**",['goal'],['in_progress'],1,90.0,2026-06-27,sync,2026-05-27,2026-05-27,,"[""ai"", ""task-management"", ""career-planning""]"
+87,Blow the dust off  my clinical career,"## DESCRIPTION 
+Write the goal description, motivation, success criteria, etc.
+
+
+**Why this matters:** [motivation]
+
+**Success criteria:**
+- [criterion 1]
+- [criterion 2]
+
+**Notes / context:**
+[any additional details]","['career-plan', 'goal']",['active'],1,10.0,2026-08-30,sync,2026-05-27,2026-05-27,,"[""sexology""]"
+89,have a 30 streak of consistency using the powerhouse,"## DESCRIPTION 
+Build a ai powerhouse to help me automate and manage my every day different types of tasks and projects that builds my personal life itself
+
+
+**Why this matters:** to speed up my life management so i can be faster on managing the many sides/aspects of my life, and doing this with better quality and keep monitoring myself by tracking almost every action i take using this system.
+
+**Success criteria:**
+- Complete all integrations
+- Confirm that the monitoring i build is working and really useful after a month
+- Confirm that the system provide me consistency on similar tasks across different sessions
+
+**Notes / context:**",['goal'],['in_progress'],1,0.0,2026-06-28,sync,2026-05-30,2026-05-30,,"[""ai"", ""task-management""]"

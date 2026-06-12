@@ -1,0 +1,50 @@
+id,repo_id,name,path,branch,created_at
+a716951fb17e,3640305057ca,Personal_AI_powerhouse updated,/Users/paulorezende/Documents/Personal_AI_powerhouse updated,feature/llm-integration,2026-05-26T16:24:01.609968
+11daf328caeb,ccf5ea13fb3e,claude-apple-bridges,/Users/paulorezende/Documents/Personal_AI_powerhouse updated/claude-apple-bridges,main,2026-05-26T16:24:01.752861
+4f9f1689e138,1228a83b6d2a,oh-my-opencode-slim,/Users/paulorezende/Documents/Personal_AI_powerhouse updated/oh-my-opencode-slim,master,2026-05-26T16:24:01.910270
+2259fc3bcb1e,fcd8c88d2134,tmpfxm0kko6,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpfxm0kko6,main,2026-05-28T06:51:47.836252
+9cd99bc23b7e,b8ff2fa23f03,tmp1hb53qej,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp1hb53qej,main,2026-05-28T06:51:48.101848
+b46d6dd76dbc,9438be39f3b8,tmpnjib1efb,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpnjib1efb,main,2026-05-28T06:51:48.367337
+12ac77f2a964,5bed4ac554ab,tmphlxu2occ,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmphlxu2occ,main,2026-05-28T06:51:48.692184
+b0dffdbfc7ee,3a9155ac2b1a,tmpbh61m7vt,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpbh61m7vt,main,2026-05-28T06:51:49.094346
+bf5d78cf2896,fbee3b49c97c,tmpwnefq1gm,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpwnefq1gm,main,2026-05-28T14:06:30.685899
+ff2a82a30dab,b9ea3a586947,tmpo3gbbj67,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpo3gbbj67,main,2026-05-28T14:06:30.939326
+74faac7394b2,0a7090dc6024,tmpyrl27j5i,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpyrl27j5i,main,2026-05-28T14:06:31.197714
+05d6361ea1f1,9c6d897b8776,tmpp6a3mu96,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpp6a3mu96,main,2026-05-28T14:06:31.520164
+e7702461d9a9,a4b7f503d566,tmpnks4cx4k,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpnks4cx4k,main,2026-05-28T14:06:31.843909
+a94227a9bce3,bff998b2a724,tmp74majulv,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp74majulv,main,2026-05-28T15:36:48.216224
+acfe909776d5,9449d8f7ff82,tmp1xrd7d3s,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp1xrd7d3s,main,2026-05-28T15:36:48.466375
+0f7b8842dc25,5a1972286dfd,tmp3gq4w967,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp3gq4w967,main,2026-05-28T15:36:48.714450
+c6840f9fa1dd,ad651abd5152,tmpqefzfdp_,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpqefzfdp_,main,2026-05-28T15:36:49.029441
+7b5f41c6a8f0,c15b7bf9ed74,tmptpgtxdzw,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmptpgtxdzw,main,2026-05-28T15:36:49.346295
+e7de97e242e9,0bb030a0978b,tmpf084498f,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpf084498f,main,2026-05-28T15:37:08.955064
+e92af23ec9cd,1f51494c86c6,tmp0t0v429_,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp0t0v429_,main,2026-05-28T15:37:09.205649
+4dc5b8ac109d,6716fc08dc74,tmpb11ztx5a,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpb11ztx5a,main,2026-05-28T15:37:09.455980
+33bbc03ae4fa,2ef4580dc639,tmp7a59udpd,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp7a59udpd,main,2026-05-28T15:37:09.773204
+55d5ad81e019,097c88c57d44,tmpe5ly208x,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpe5ly208x,main,2026-05-28T15:37:10.095810
+5ced29e7d678,30cb4e2885e9,tmp5mfpj8oz,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp5mfpj8oz,main,2026-05-28T15:37:45.526593
+f3fef47e7c5d,0f022fc20f5a,tmpuv4stwl8,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpuv4stwl8,main,2026-05-28T15:37:45.777646
+91d6071694b6,0a6856eb094d,tmpo28ulxb_,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpo28ulxb_,main,2026-05-28T15:37:46.028298
+f027748ffec8,b91e703af1e0,tmpof6zpeth,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpof6zpeth,main,2026-05-28T15:37:46.348245
+40843bb5993c,0af2d4287dc0,tmpqjpl31fh,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpqjpl31fh,main,2026-05-28T15:37:46.669050
+2833db51cd07,aeeae82d6316,tmp35jhtzwl,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp35jhtzwl,main,2026-05-29T04:41:35.190769
+9b1ff802935f,cc068bf76148,tmp9hfcejud,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp9hfcejud,main,2026-05-29T04:41:35.448248
+53548efb5ade,6c59e7f635c6,tmp__ncx2_d,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp__ncx2_d,main,2026-05-29T04:41:35.698485
+7d98edfa065f,89b55ef1dbde,tmppahv1gmj,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmppahv1gmj,main,2026-05-29T04:41:36.021961
+3fb6b8def368,bd78e51e43d6,tmpcxsujs1c,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpcxsujs1c,main,2026-05-29T04:41:36.351686
+897abe0f7da2,4cbce477dce6,tmppcs0ns88,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmppcs0ns88,main,2026-05-29T05:02:31.987485
+93ac774ddddc,b5ebd60f5c1d,tmpk97wu1lz,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpk97wu1lz,main,2026-05-29T05:02:32.247507
+4e625ced1dfd,458f5db236b0,tmp0s_wehh7,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp0s_wehh7,main,2026-05-29T05:02:32.504153
+18409eba94fc,1db4817e0843,tmp0y09ooxg,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp0y09ooxg,main,2026-05-29T05:02:32.832274
+5511473e6672,700842b31465,tmp9ii4ja89,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp9ii4ja89,main,2026-05-29T05:02:33.158403
+5d8b12dfad85,34521f9d336c,tmpj6s_540x,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpj6s_540x,main,2026-05-29T16:03:45.552826
+66d815dbf591,c0853763993b,tmp3yp0dmfz,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp3yp0dmfz,main,2026-05-29T16:03:45.822787
+a9ccc8014214,3c4548755503,tmpstuxc96r,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpstuxc96r,main,2026-05-29T16:03:46.073252
+3b6debda8039,67173b50c01f,tmp8w3xkln2,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp8w3xkln2,main,2026-05-29T16:03:46.392102
+54ec4dc6c5e8,a40846749360,tmp6nwhvnw2,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp6nwhvnw2,main,2026-05-29T16:03:46.724649
+ecad9fee5e94,03b5ffb44ee0,tmp4qngi1x6,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp4qngi1x6,main,2026-05-29T16:54:38.553613
+a6b1a3ef7cd6,17415ce3953f,tmpwqhxncsc,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpwqhxncsc,main,2026-05-29T16:54:38.799876
+58c434be1c0b,8255ad5035df,tmpu6kku3m7,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpu6kku3m7,main,2026-05-29T16:54:39.055936
+c628a3697259,20262cc684db,tmpxma7eem9,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmpxma7eem9,main,2026-05-29T16:54:39.375971
+f3df400b30cd,4de281d71f71,tmp_p8utx_5,/private/var/folders/gv/1l_q69_166l4_7jmrh_n1m640000gn/T/tmp_p8utx_5,main,2026-05-29T16:54:39.690071
+22997b456d3e,b54470d8cff6,personal-ai-space,/Users/paulorezende/Documents/Personal_AI_powerhouse updated/personal-ai-space,main,2026-05-30T12:12:07.986226
