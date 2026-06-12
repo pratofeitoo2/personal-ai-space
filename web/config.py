@@ -3,9 +3,9 @@ import os
 from pathlib import Path
 
 # Paths
-BASE_DIR = Path(__file__).resolve().parent.parent  # personal-ai-space/
+BASE_DIR = Path(__file__).resolve().parent.parent  # repo root
 ENGINE_DIR = BASE_DIR / "engine"
-DB_DIR = ENGINE_DIR / "db"
+DB_DIR = BASE_DIR / "db"
 
 # Database paths (read-only)
 DB_PATHS = {

@@ -10,7 +10,7 @@ from pathlib import Path
 from datetime import datetime
 
 ROOT = Path(__file__).parent.parent
-DB_DIR = ROOT / "personal-ai-space" / "engine" / "db"
+DB_DIR = ROOT / "db"
 EXPORT_DIR = ROOT / "exports"
 
 # Database paths and their subdirectories

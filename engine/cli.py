@@ -1515,7 +1515,7 @@ if HAS_RICH:
         import sqlite3
         from pathlib import Path
 
-        db_path = self_db or str(Path(__file__).parent / "db" / "self" / "self.db")
+        db_path = self_db or str(Path(__file__).parent.parent / "db" / "self" / "self.db")
         conn = sqlite3.connect(db_path)
 
         try:

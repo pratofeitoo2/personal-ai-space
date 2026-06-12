@@ -21,7 +21,7 @@ from db.id_helpers import for_interaction, for_agent_memory, for_context_snapsho
 
 logger = logging.getLogger("engine.db")
 
-DB_DIR = Path(__file__).parent / "db"
+DB_DIR = Path(__file__).parent.parent / "db"
 
 DB_PATHS = {
     "memories":   DB_DIR / "memories" / "memories.db",

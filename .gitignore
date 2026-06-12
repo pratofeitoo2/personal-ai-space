@@ -5,6 +5,7 @@ __pycache__/
 *.pyd
 .Python
 .venv/
+venv/
 dist/
 build/
 *.egg-info/
@@ -21,13 +22,15 @@ vault/
 
 # System files
 .DS_Store
-
-# SQLite databases (runtime data, not source)
-*.db
 *.swp
 *.swo
 *~
 Thumbs.db
+
+# SQLite databases (runtime data, not source)
+*.db
+*.db-shm
+*.db-wal
 
 # IDE
 .vscode/
@@ -42,8 +45,6 @@ logs/
 .pytest_cache/
 .coverage
 htmlcov/
-*.db-shm
-*.db-wal
 
 # MemPalace per-project files (issue #185)
 mempalace.yaml
@@ -54,16 +55,8 @@ entities.json
 .omo/
 .slim/
 
-# Python virtual environments
-venv/
-.venv/
-personal-ai-space/venv/
-personal-ai-space/engine/venv/
-personal-ai-space/engine/.venv/
-
 # Runtime data
-personal-ai-space/engine/logs/
-personal-ai-space/self/documents/
+self/documents/
 
 # Redundant clones (installed elsewhere)
 oh-my-opencode-slim/
@@ -72,5 +65,3 @@ claude-apple-bridges/
 
 # Stale artifacts
 fix_articles.py
-session-log.md
-state.md
