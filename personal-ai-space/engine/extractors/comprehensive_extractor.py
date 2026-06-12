@@ -346,7 +346,7 @@ class ComprehensiveExtractor:
                             try:
                                 tid = for_task_unique(task_text[:100])
                                 execute("tasks", """
-                                    INSERT INTO tasks
+                                    INSERT OR IGNORE INTO tasks
                                     (id, title, description, priority, status, created_at, category)
                                     VALUES (?, ?, ?, ?, ?, ?, ?)
                                 """, (tid, task_text[:100], "", "normal", "pending", datetime.now().isoformat(), "general"))

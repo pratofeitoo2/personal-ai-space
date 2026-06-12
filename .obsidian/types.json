@@ -12,6 +12,8 @@
     "completed": "date",
     "linked_tasks": "text",
     "priority": "number",
-    "id": "multitext"
+    "id": "multitext",
+    "frequency": "multitext",
+    "target_streak": "number"
   }
 }

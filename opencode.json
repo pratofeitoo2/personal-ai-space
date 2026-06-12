@@ -41,6 +41,14 @@
         "WHATSAPP_DB_PATH": "/Users/paulorezende/Documents/Cline/MCP/whatsapp-mcp/whatsapp-bridge/store/messages.db"
       },
       "enabled": true
+    },
+    "tablepro": {
+      "type": "local",
+      "command": [
+        "/usr/bin/python3",
+        "/Users/paulorezende/Documents/Personal_AI_powerhouse updated/.opencode/tablepro-mcp-bridge.py"
+      ],
+      "enabled": true
     }
   }
 }

@@ -72,12 +72,12 @@ def for_task(title: str, project_id: str | None = None, *, _suffix: str = "") ->
 
 
 def for_task_unique(title: str, project_id: str | None = None) -> str:
-    """Like for_task but appends a short nonce for collision safety.
+    """Deterministic task ID — same title+project always produces the same ID.
 
-    Use this when creating new tasks from external sources (reminders, CLI)
-    where identical titles in the same project are possible.
+    Use this when creating new tasks from external sources (reminders, CLI).
+    The caller should use INSERT OR IGNORE to skip duplicates silently.
     """
-    return for_task(title, project_id, _suffix=uuid.uuid4().hex[:6])
+    return for_task(title, project_id)
 
 
 def for_dependency(task_id: str, depends_on_id: str) -> str:

@@ -56,7 +56,7 @@ class TaskCoordinator(BaseAgent):
         now = datetime.now().isoformat()
         db.execute(
             "tasks",
-            "INSERT INTO tasks "
+            "INSERT OR IGNORE INTO tasks "
             "(id, title, description, project_id, priority, status, "
             "created_at, due_date, estimated_hours, actual_hours, "
             "assigned_to, tags, recurrence, category) "

@@ -275,7 +275,7 @@ def _upsert_task(
     else:
         task_id = for_task_unique(title, project_id)
         db.execute("tasks",
-            """INSERT INTO tasks (id, title, description, project_id,
+            """INSERT OR IGNORE INTO tasks (id, title, description, project_id,
                due_date, priority, status, created_at, updated_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (task_id, title, description, project_id, due_date, priority, status, now, now))
