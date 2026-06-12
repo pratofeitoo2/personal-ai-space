@@ -89,7 +89,7 @@ python engine/cli.py log-habit \
   --confidence high
 
 # Via direct file edit
-# Edit self/habits/tracking.csv
+# Edit 02 - Self/Habits/tracking.csv
 # Add: habit,meditation,date,duration,notes
 # Or append to database via API
 

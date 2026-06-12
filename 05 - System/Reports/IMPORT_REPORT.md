@@ -12,8 +12,8 @@
 | Category | Source | Destination | Files | Purpose |
 |----------|--------|-------------|-------|---------|
 | **Daily Notes** | Obsidian Daily Notes | `command/inbox/` | 40 | Task/mood tracking, daily reflections |
-| **Life Plans** | Clinical Sexology Study | `self/goals/` | 100 | Educational goals, career, credentials |
-| **People** | Contacts/Relationships | `self/relationships/` | 7 | Personal contacts, family |
+| **Life Plans** | Clinical Sexology Study | `02 - Self/Goals/` | 100 | Educational goals, career, credentials |
+| **People** | Contacts/Relationships | `02 - Self/Relationships/` | 7 | Personal contacts, family |
 | **Financial** | PF (Finanças Pessoais) | `command/finances/` | 19 | Financial analysis, CVs, planning |
 | **About Me** | Personal Data | `self/profile/` | 5 | Self-description, identity |
 
@@ -45,7 +45,7 @@ command/inbox/
 Comprehensive educational program: Clinical Sexology study, career planning, credentials, and theoretical framework.
 
 ```
-self/goals/
+02 - Self/Goals/
 ├── Study plan.md
 ├── Study Plan Ebook Outline.md
 ├── My Theoretical Framework to Approach.md
@@ -68,7 +68,7 @@ self/goals/
 Network of important people in your life with structured contact data.
 
 ```
-self/relationships/
+02 - Self/Relationships/
 ├── Liz.md
 ├── Luan.md
 ├── Mallu.md

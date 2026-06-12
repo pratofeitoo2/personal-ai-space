@@ -15,17 +15,17 @@ process_intake.py (route + convert + archive)
     │
     ├── command/inbox/     ← Daily Notes, timestamped captures
     ├── command/finances/  ← CVs, cover letters, financial docs
-    ├── knowledge/notes/   ← Notes without specific routing
-    ├── knowledge/articles/ ← Research articles
+    ├── 03 - Knowledge/Notes/   ← Notes without specific routing
+    ├── 03 - Knowledge/Articles/ ← Research articles
     └── processed/         ← Archived copies of all processed files
 ```
 
 ## Routing Rules
 - Filename contains "Daily Notes" or date prefix (YYYY-MM-DD) → `command/inbox/`
 - Filename contains "PF", "financial", "CV", "LinkedIn" → `command/finances/`
-- Frontmatter tag `article` → `knowledge/articles/`
+- Frontmatter tag `article` → `03 - Knowledge/Articles/`
 - Frontmatter tag `project` → `knowledge/projects/`
-- All other .md files → `knowledge/notes/`
+- All other .md files → `03 - Knowledge/Notes/`
 - Non-markdown files (.txt, .pdf, .docx) → auto-converted to .md first
 
 ## Files
@@ -39,6 +39,6 @@ process_intake.py (route + convert + archive)
 | `processed/` | Archive of imported files organized by category | — |
 
 ## Integration Points
-- **Outputs to**: `command/inbox/`, `command/finances/`, `knowledge/notes/`, `knowledge/articles/`
+- **Outputs to**: `command/inbox/`, `command/finances/`, `03 - Knowledge/Notes/`, `03 - Knowledge/Articles/`
 - **Triggered by**: macOS launchd service (`com.personalai.intake-watcher`)
 - **Post-process**: Imported files indexed by `knowledge_indexer` agent and logged via `log_manager`

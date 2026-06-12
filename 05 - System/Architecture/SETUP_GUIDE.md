@@ -438,7 +438,7 @@ After setup completes:
 2. **Populate your data**
    - Add your current tasks (command/tasks/)
    - Add your current events (command/calendar/)
-   - Add your habits (self/habits/)
+   - Add your habits (02 - Self/Habits/)
 
 3. **Connect integrations** (optional)
    - Google Calendar for scheduling

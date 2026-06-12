@@ -17,10 +17,10 @@ number: +55 12 920 011 084
 Married:
 - '[[Tamara]]'
 Filhos:
-- '[[PERSONAL/People/Mallu|Mallu]]'
-- '[[PERSONAL/People/Liz|Liz]]'
-- '[[PERSONAL/People/Ravi|Ravi]]'
-- '[[PERSONAL/People/Luan|Luan]]'
+- '[[02 - Self/Relationships/Mallu|Mallu]]'
+- '[[02 - Self/Relationships/Liz|Liz]]'
+- '[[02 - Self/Relationships/Ravi|Ravi]]'
+- '[[02 - Self/Relationships/Luan|Luan]]'
 Birth Date: 1997-08-22
 ---
 

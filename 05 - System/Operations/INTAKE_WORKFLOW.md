@@ -59,8 +59,8 @@ python3 process_intake.py
 python3 process_intake.py --history
 
 # View the files in their new locations
-ls knowledge/articles/
-ls knowledge/notes/
+ls 03 - Knowledge/Articles/
+ls 03 - Knowledge/Notes/
 ```
 
 ---
@@ -71,14 +71,14 @@ Files are automatically routed based on:
 
 | Rule | Destination | Example |
 |------|-------------|---------|
-| Tag: `article` or `research` | `knowledge/articles/` | Financial analysis |
+| Tag: `article` or `research` | `03 - Knowledge/Articles/` | Financial analysis |
 | Tag: `project` | `knowledge/projects/` | "Build API" |
 | Tag: `reference` | `knowledge/references/` | Links, citations |
 | Tag: `task` or `todo` | `command/tasks/` | Action items |
 | Filename: `project_*` | `knowledge/projects/` | `project_website.md` |
-| Filename: `note_*` or `idea_*` | `knowledge/notes/` | `note_morning_thoughts.md` |
-| Filename: `article_*` or `research_*` | `knowledge/articles/` | `article_economics.md` |
-| Default | `knowledge/notes/` | Unmarked files |
+| Filename: `note_*` or `idea_*` | `03 - Knowledge/Notes/` | `note_morning_thoughts.md` |
+| Filename: `article_*` or `research_*` | `03 - Knowledge/Articles/` | `article_economics.md` |
+| Default | `03 - Knowledge/Notes/` | Unmarked files |
 
 ---
 

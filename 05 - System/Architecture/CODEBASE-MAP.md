@@ -599,7 +599,7 @@ pie title Disk Usage by Directory
 | `personal-ai-space/engine/` | ~15 MB | Core engine Python code |
 | `personal-ai-space/command/` | ~1 MB | 86 command files |
 | `personal-ai-space/web/` | ~200 KB | Flask web API |
-| `personal-ai-space/self/` | ~100 KB | Profile, traits, goals |
+| `02 - Self/` | ~100 KB | Profile, traits, goals |
 | `personal-ai-space/docs/` | ~1 MB | Architecture docs |
 | `.opencode/skills/` | ~10 MB | 30 skill directories |
 | `.opencode/command/` | ~56 KB | 7 slash commands |

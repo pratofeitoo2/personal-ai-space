@@ -1,4 +1,4 @@
-# personal-ai-space/self/
+# 02 - Self/
 
 ## Responsibility
 Digital twin — the system's evolving model of the user. Stores personal profile, goals, habits, personality traits, relationships, and inferred behavioral patterns. Consumed by agents for context-aware personalization.

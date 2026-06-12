@@ -81,12 +81,12 @@ When files are processed, they're auto-routed based on:
 | Trigger | Destination |
 |---------|-------------|
 | Filename contains "Daily Notes" | `command/inbox/` |
-| Filename contains "Life Plans" | `self/goals/` |
-| Filename contains "People" | `self/relationships/` |
+| Filename contains "Life Plans" | `02 - Self/Goals/` |
+| Filename contains "People" | `02 - Self/Relationships/` |
 | Filename contains "PF" or "financial" | `command/finances/` |
-| Frontmatter tag: `article` | `knowledge/articles/` |
+| Frontmatter tag: `article` | `03 - Knowledge/Articles/` |
 | Frontmatter tag: `project` | `knowledge/projects/` |
-| Default | `knowledge/notes/` |
+| Default | `03 - Knowledge/Notes/` |
 
 ---
 

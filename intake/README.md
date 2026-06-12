@@ -10,9 +10,9 @@ Staging area for importing files from Obsidian vault (or any external source) in
 intake/
 ├── staging/           ← Drop files here for processing
 ├── processed/         ← Completed imports (logged for audit)
-├── knowledge/         ← Articles, research, references (→ knowledge/articles/)
-├── notes/             ← Notes and thoughts (→ knowledge/notes/)
-├── articles/          ← Long-form content (→ knowledge/articles/)
+├── knowledge/         ← Articles, research, references (→ 03 - Knowledge/Articles/)
+├── notes/             ← Notes and thoughts (→ 03 - Knowledge/Notes/)
+├── articles/          ← Long-form content (→ 03 - Knowledge/Articles/)
 ├── projects/          ← Project files (→ knowledge/projects/)
 └── reference/         ← Reference materials (→ knowledge/references/)
 ```

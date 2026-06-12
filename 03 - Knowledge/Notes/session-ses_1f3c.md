@@ -1205,14 +1205,14 @@ Changes not staged for commit:
 	modified:   mcp-servers/mcp-whatsapp (untracked content)
 	modified:   personal-ai-space/command/inbox/Daily Notes.base
 	modified:   personal-ai-space/docs/CLI_COMMANDS.md
-	deleted:    personal-ai-space/knowledge/notes/Getliner.md
-	deleted:    personal-ai-space/knowledge/notes/Grok.md
-	deleted:    personal-ai-space/knowledge/notes/MCP Server Guides/mail-mcp
-	deleted:    personal-ai-space/knowledge/notes/Microsoft Copilot.md
-	deleted:    personal-ai-space/knowledge/notes/Plataformas online.base
-	deleted:    personal-ai-space/knowledge/notes/Qwen.md
-	modified:   personal-ai-space/self/goals/Clinical_Sex_Therapist_Career.md
-	modified:   personal-ai-space/self/goals/Clinical_Sex_Therapist_Career_Brazil.md
+	deleted:    personal-ai-space/03 - Knowledge/Notes/Getliner.md
+	deleted:    personal-ai-space/03 - Knowledge/Notes/Grok.md
+	deleted:    personal-ai-space/03 - Knowledge/Notes/MCP Server Guides/mail-mcp
+	deleted:    personal-ai-space/03 - Knowledge/Notes/Microsoft Copilot.md
+	deleted:    personal-ai-space/03 - Knowledge/Notes/Plataformas online.base
+	deleted:    personal-ai-space/03 - Knowledge/Notes/Qwen.md
+	modified:   02 - Self/goals/Clinical_Sex_Therapist_Career.md
+	modified:   02 - Self/goals/Clinical_Sex_Therapist_Career_Brazil.md
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
@@ -1240,9 +1240,9 @@ Untracked files:
 	personal-ai-space/engine/db/tasks.db-wal
 	personal-ai-space/engine/synthesis_loop.py
 	personal-ai-space/engine/synthesis_run.py
-	"personal-ai-space/knowledge/notes/Getliner A pr\303\241tica da psicoterapia sexual no Brasil.md"
-	personal-ai-space/knowledge/notes/Microsoft Copilot Psicoterapia Sexual no Brasil.md
-	personal-ai-space/knowledge/notes/Qwen O Ecossistema da Psicoterapia Sexual no Brasil.md
+	"personal-ai-space/03 - Knowledge/Notes/Getliner A pr\303\241tica da psicoterapia sexual no Brasil.md"
+	personal-ai-space/03 - Knowledge/Notes/Microsoft Copilot Psicoterapia Sexual no Brasil.md
+	personal-ai-space/03 - Knowledge/Notes/Qwen O Ecossistema da Psicoterapia Sexual no Brasil.md
 
 no changes added to commit (use "git add" and/or "git commit -a")
 

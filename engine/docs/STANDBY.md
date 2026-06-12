@@ -20,7 +20,7 @@ Features that were designed or documented but consciously deferred from active d
 | 3 | **Empty tables (calendar_events, references, projects_knowledge, cross_references)** | No pipeline | `engine/db/DATABASE_ARCHITECTURE.md` | Build data ingestion pipelines for each table | Tables exist in schema, 0 rows each |
 | 4 | **FAISS vector DB** | No code populates it | `docs/MEMORY_SYSTEMS.md` (Vector Memory section); `engine/system.config.json` | Build embedding pipeline + indexer | Config exists, zero code, no index on disk |
 | 5 | **Test coverage** | Not improved | — | Write tests for 19 untested files | 43 tests pass across 3 test files |
-| 6 | **WhatsApp MCP** | Not wired | `knowledge/notes/MCP Server Guides/whatsapp-mcp.md`; `docs/INTEGRATIONS.md` | User copies plist to `~/Library/LaunchAgents/` and sets `$WHATSAPP_MCP_TOKEN` | Docker image built, plist ready, not deployed |
+| 6 | **WhatsApp MCP** | Not wired | `03 - Knowledge/Notes/MCP Server Guides/whatsapp-mcp.md`; `docs/INTEGRATIONS.md` | User copies plist to `~/Library/LaunchAgents/` and sets `$WHATSAPP_MCP_TOKEN` | Docker image built, plist ready, not deployed |
 
 ---
 
@@ -58,7 +58,7 @@ Features that were designed or documented but consciously deferred from active d
 
 ### 6. WhatsApp MCP
 - **What**: WhatsApp messaging daemon (Docker image built, plist ready)
-- **Design**: `knowledge/notes/MCP Server Guides/whatsapp-mcp.md`
+- **Design**: `03 - Knowledge/Notes/MCP Server Guides/whatsapp-mcp.md`
 - **Files**: plist at `~/Library/LaunchAgents/` (not yet copied)
 - **Why deferred**: Requires user action + project direction decision
 

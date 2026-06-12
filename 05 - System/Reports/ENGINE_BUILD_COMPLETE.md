@@ -380,7 +380,7 @@ These are enhancements, not blockers.
 
 ### User Data
 - `self/profile.json` - Your baseline profile
-- `self/habits/tracking.csv` - Habit data
+- `02 - Self/Habits/tracking.csv` - Habit data
 - `self/traits/inferred_personality.json` - Inferred you
 - `self/needs/current_needs.json` - Your goals
 - `command/tasks/active_tasks.json` - Active work

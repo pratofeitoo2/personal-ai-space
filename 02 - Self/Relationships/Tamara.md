@@ -15,6 +15,6 @@ Cover: '[[Screenshot 2025-10-30 at 16.29.17.png]]'
 cssclasses:
 - cover-circle
 kids:
-- '[[PERSONAL/People/Luan|Luan]]'
+- '[[02 - Self/Relationships/Luan|Luan]]'
 ---
 

@@ -233,8 +233,8 @@ Everything documented, nothing assumed.
 ```
 Task → Inbox (command/tasks/inbox/)
 Event → Calendar (command/calendar/)
-Habit → Log it (self/habits/)
-Note → Knowledge (knowledge/notes/)
+Habit → Log it (02 - Self/Habits/)
+Note → Knowledge (03 - Knowledge/Notes/)
   ↓
 Normalize format
 ```

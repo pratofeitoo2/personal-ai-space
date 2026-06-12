@@ -27,7 +27,7 @@ Extracted and populated comprehensive personal data from 162 imported Obsidian f
 ## Data Sources
 
 ### Relationships (6 records)
-Extracted from: `self/relationships/*.md`
+Extracted from: `02 - Self/Relationships/*.md`
 - Paulo Fábio de Rezende Junior (father)
 - Tamara Braga Silva Costa (family)
 - Luan Raffi Braga de Rezende (family)
@@ -36,7 +36,7 @@ Extracted from: `self/relationships/*.md`
 **Extracted Fields:** Name, Email, Phone, CPF, Birth Date
 
 ### Goals & Plans (165 records)
-Extracted from: `self/goals/*.md` (100 files)
+Extracted from: `02 - Self/Goals/*.md` (100 files)
 
 **Categorized by:**
 - Clinical Practice (sexual health, therapy, sexology) — 45 records
