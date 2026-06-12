@@ -1,8 +1,0 @@
-{
-  "autoSync": true,
-  "bidirectionalSync": false,
-  "autoConvertToNotebookOnRun": true,
-  "pythonInterpreter": "python3",
-  "notebookEditorCommand": "jupyter-lab",
-  "enableCodeBlocks": true
-}

@@ -50,5 +50,27 @@ mempalace.yaml
 entities.json
 
 # Runtime state (transient)
-.sisyphus/run-continuation/
-.omo/run-continuation/
+.sisyphus/
+.omo/
+.slim/
+
+# Python virtual environments
+venv/
+.venv/
+personal-ai-space/venv/
+personal-ai-space/engine/venv/
+personal-ai-space/engine/.venv/
+
+# Runtime data
+personal-ai-space/engine/logs/
+personal-ai-space/self/documents/
+
+# Redundant clones (installed elsewhere)
+oh-my-opencode-slim/
+store/
+claude-apple-bridges/
+
+# Stale artifacts
+fix_articles.py
+session-log.md
+state.md
