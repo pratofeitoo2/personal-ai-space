@@ -1,5 +1,5 @@
 {
-  "folder": "personal-ai-space/command/inbox",
-  "format": "dddd, MMMM Do YYYY, h mm a",
-  "template": "obsidian/templates/daily note/Daily Note Template"
+  "folder": "01 - Daily",
+  "format": "YYYY-MM-DD",
+  "template": "_System/_Templates/_Daily"
 }
