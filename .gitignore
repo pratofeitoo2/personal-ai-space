@@ -50,6 +50,10 @@ htmlcov/
 mempalace.yaml
 entities.json
 
+# Obsidian
+.obsidian/workspace.json
+.obsidian/cache
+
 # Runtime state (transient)
 .sisyphus/
 .omo/
