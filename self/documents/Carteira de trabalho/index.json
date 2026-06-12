@@ -1,0 +1,109 @@
+[
+  {
+    "title": "CTPS - Carteira de Trabalho",
+    "doc_type": "gov_docs",
+    "file": "CTPS_16802953730_2024-12-09T16-2.pdf",
+    "file_format": "pdf",
+    "tags": ["ctps", "work_card", "brazil"],
+    "full_name": "PAULO FABIO DE REZENDE JUNIOR",
+    "cpf": "168.029.537-30",
+    "birth_date": "22/08/1997",
+    "sexo": "Masculino",
+    "nacionalidade": "Brasileiro",
+    "mae": "KAREN ARAUJO COUTINHO",
+    "document_type": "CTPS Digital"
+  },
+  {
+    "title": "RG - Registro Geral",
+    "doc_type": "gov_docs",
+    "file": "RG.jpg",
+    "file_format": "jpg",
+    "tags": ["rg", "id", "brazil"],
+    "full_name": "PAULO FABIO DE REZENDE JUNIOR",
+    "rg": "24.059.184-2",
+    "validity": "22/08/2015",
+    "pai": "PAULO FABIO DE REZENDE",
+    "mae": "KAREN ARAUJO COUTINHO",
+    "document_type": "Carteira de Identidade"
+  },
+  {
+    "title": "NIS - Número de Identificação Social",
+    "doc_type": "gov_docs",
+    "file": "NIS.jpg",
+    "file_format": "jpg",
+    "tags": ["nis", "social_id", "brazil"],
+    "full_name": "PAULO FABIO DE REZENDE JUNIOR",
+    "nis": "207.62810.48-8",
+    "document_type": "NIS/PIS"
+  },
+  {
+    "title": "Documento CTPS - Página 1",
+    "doc_type": "gov_docs",
+    "file": "IMG_0307.pdf",
+    "file_format": "pdf",
+    "tags": ["ctps", "document_scan"],
+    "full_name": "PAULO FABIO DE REZENDE JUNIOR",
+    "mae": "KAREN ARAUJO COUTINHO",
+    "pai": "PAULO FABIO DE REZENDE",
+    "birth_date": "22/08/1997",
+    "page": 1
+  },
+  {
+    "title": "Documento CTPS - Página 2",
+    "doc_type": "gov_docs",
+    "file": "IMG_0308.pdf",
+    "file_format": "pdf",
+    "tags": ["ctps", "document_scan"],
+    "page": 2,
+    "content_type": "Ministry of Work header"
+  },
+  {
+    "title": "Documento CTPS - Página 3",
+    "doc_type": "gov_docs",
+    "file": "IMG_03080.pdf",
+    "file_format": "pdf",
+    "tags": ["ctps", "document_scan"],
+    "page": 3,
+    "content_type": "Ministry of Work header"
+  },
+  {
+    "title": "Documento CTPS - Página 4",
+    "doc_type": "gov_docs",
+    "file": "IMG_0307 2.pdf",
+    "file_format": "pdf",
+    "tags": ["ctps", "document_scan"],
+    "page": 4,
+    "full_name": "PAULO FABIO DE REZENDE JUNIOR",
+    "mae": "KAREN ARAUJO COUTINHO",
+    "pai": "PAULO FABIO DE REZENDE",
+    "birth_date": "22/08/1997",
+    "estado_civil": "SOLTEIRO",
+    "naturalidade": "NITERÓI - RJ",
+    "rg": "240591842",
+    "rg_emissao": "01/09/2016",
+    "rg_orgao": "DIC - RJ"
+  },
+  {
+    "title": "Foto CTPS - Imagem 1",
+    "doc_type": "gov_docs",
+    "file": "IMG_0307.heic",
+    "file_format": "heic",
+    "tags": ["ctps", "photo"],
+    "full_name": "PAULO FABIO DE REZENDE JUNIOR",
+    "mae": "KAREN ARAUJO COUTINHO",
+    "pai": "PAULO FABIO DE REZENDE",
+    "birth_date": "22/08/1997",
+    "estado_civil": "SOLTEIRO",
+    "naturalidade": "NITERÓI - RJ",
+    "content_type": "CTPS personal data page"
+  },
+  {
+    "title": "Foto CTPS - Imagem 2",
+    "doc_type": "gov_docs",
+    "file": "IMG_0308.heic",
+    "file_format": "heic",
+    "tags": ["ctps", "photo"],
+    "content_type": "CTPS number page",
+    "ctps_number": "4239611/0050"
+  }
+]

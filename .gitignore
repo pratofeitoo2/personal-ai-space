@@ -56,7 +56,6 @@ entities.json
 .slim/
 
 # Runtime data
-self/documents/
 
 # Redundant clones (installed elsewhere)
 oh-my-opencode-slim/

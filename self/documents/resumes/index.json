@@ -1,0 +1,200 @@
+[
+  {
+    "title": "Paulo Rezende - CV General (English)",
+    "doc_type": "professional",
+    "file": "en/Paulo_Rezende_resume.pdf",
+    "file_format": "pdf",
+    "tags": ["resume", "english", "general", "professional"],
+    "language": "en",
+    "focus": "General",
+    "certificate_type": "Professional Resume"
+  },
+  {
+    "title": "Paulo Rezende - Marketing Resume (English)",
+    "doc_type": "professional",
+    "file": "en/Marketing/Paulo_Rezende_mkt_en.pdf",
+    "file_format": "pdf",
+    "tags": ["resume", "english", "marketing", "professional"],
+    "language": "en",
+    "focus": "Marketing",
+    "certificate_type": "Professional Resume"
+  },
+  {
+    "title": "Paulo Rezende - Program Manager CV (English)",
+    "doc_type": "professional",
+    "file": "en/Program Manager/CV - Paulo Rezende - Program Manager.pdf",
+    "file_format": "pdf",
+    "tags": ["resume", "english", "program_manager", "professional"],
+    "language": "en",
+    "focus": "Program Manager",
+    "certificate_type": "Professional Resume"
+  },
+  {
+    "title": "Cover Letter - Vital Strategies (English)",
+    "doc_type": "professional",
+    "file": "en/Program Manager/Cover Letter - Vital Strategies Application.pdf",
+    "file_format": "pdf",
+    "tags": ["cover_letter", "english", "vital_strategies", "professional"],
+    "language": "en",
+    "organization": "Vital Strategies",
+    "position": "Senior Program Manager, Violence Prevention",
+    "date": "March 2026",
+    "certificate_type": "Cover Letter"
+  },
+  {
+    "title": "Paulo Rezende - CV General (Português)",
+    "doc_type": "professional",
+    "file": "pt-BR/paulo_rezende_cv.pdf",
+    "file_format": "pdf",
+    "tags": ["resume", "portuguese", "general", "professional"],
+    "language": "pt-BR",
+    "focus": "General",
+    "certificate_type": "Professional Resume"
+  },
+  {
+    "title": "Paulo Rezende - Marketing CV (Português)",
+    "doc_type": "professional",
+    "file": "pt-BR/Marketing/Paulo_Rezende_mkt_pt.pdf",
+    "file_format": "pdf",
+    "tags": ["resume", "portuguese", "marketing", "professional"],
+    "language": "pt-BR",
+    "focus": "Marketing",
+    "certificate_type": "Professional Resume"
+  },
+  {
+    "title": "Paulo Rezende - RH CV (Português)",
+    "doc_type": "professional",
+    "file": "pt-BR/RH/Paulo_Rezende_RH.pdf",
+    "file_format": "pdf",
+    "tags": ["resume", "portuguese", "rh", "human_resources", "professional"],
+    "language": "pt-BR",
+    "focus": "Recursos Humanos",
+    "certificate_type": "Professional Resume"
+  },
+  {
+    "title": "LinkedIn Profile - Print (Português)",
+    "doc_type": "professional",
+    "file": "pt-BR/LinkedIn Profile.pdf",
+    "file_format": "pdf",
+    "tags": ["linkedin", "profile", "portuguese", "professional"],
+    "language": "pt-BR",
+    "certificate_type": "LinkedIn Profile"
+  },
+  {
+    "title": "LinkedIn CV - English",
+    "doc_type": "professional",
+    "file": "en/LinkedIn CV - English.md",
+    "file_format": "md",
+    "tags": ["linkedin", "cv", "english", "professional"],
+    "language": "en",
+    "certificate_type": "LinkedIn CV"
+  },
+  {
+    "title": "LinkedIn CV - Human Resources Focus",
+    "doc_type": "professional",
+    "file": "en/LinkedIn CV - Human Resources Focus.md",
+    "file_format": "md",
+    "tags": ["linkedin", "cv", "english", "hr", "professional"],
+    "language": "en",
+    "focus": "Human Resources",
+    "certificate_type": "LinkedIn CV"
+  },
+  {
+    "title": "LinkedIn Profile - Education & Certifications (English)",
+    "doc_type": "professional",
+    "file": "en/LinkedIn Profile - Education & Certifications En.md",
+    "file_format": "md",
+    "tags": ["linkedin", "education", "certifications", "english", "professional"],
+    "language": "en",
+    "certificate_type": "LinkedIn Education & Certifications"
+  },
+  {
+    "title": "LinkedIn CV - Marketing Focus (English)",
+    "doc_type": "professional",
+    "file": "en/Marketing/LinkedIn CV - Marketing Focus.md",
+    "file_format": "md",
+    "tags": ["linkedin", "cv", "english", "marketing", "professional"],
+    "language": "en",
+    "focus": "Marketing",
+    "certificate_type": "LinkedIn CV"
+  },
+  {
+    "title": "CV - Program Manager (English)",
+    "doc_type": "professional",
+    "file": "en/Program Manager/CV - Paulo Rezende - Program Manager.md",
+    "file_format": "md",
+    "tags": ["resume", "english", "program_manager", "professional"],
+    "language": "en",
+    "focus": "Program Manager",
+    "certificate_type": "Professional Resume"
+  },
+  {
+    "title": "Cover Letter - Vital Strategies (English, MD)",
+    "doc_type": "professional",
+    "file": "en/Program Manager/Cover Letter - Vital Strategies Application.md",
+    "file_format": "md",
+    "tags": ["cover_letter", "english", "vital_strategies", "professional"],
+    "language": "en",
+    "organization": "Vital Strategies",
+    "position": "Senior Program Manager, Violence Prevention",
+    "certificate_type": "Cover Letter"
+  },
+  {
+    "title": "LinkedIn CV - Português",
+    "doc_type": "professional",
+    "file": "pt-BR/LinkedIn CV pt-br.md",
+    "file_format": "md",
+    "tags": ["linkedin", "cv", "portuguese", "professional"],
+    "language": "pt-BR",
+    "certificate_type": "LinkedIn CV"
+  },
+  {
+    "title": "LinkedIn Profile - Formação e Certificações (Português)",
+    "doc_type": "professional",
+    "file": "pt-BR/LinkedIn Profile - Education & Certifications pt-br.md",
+    "file_format": "md",
+    "tags": ["linkedin", "education", "certifications", "portuguese", "professional"],
+    "language": "pt-BR",
+    "certificate_type": "LinkedIn Education & Certifications"
+  },
+  {
+    "title": "CV - Gerente de Programas (Português)",
+    "doc_type": "professional",
+    "file": "pt-BR/Gerente de Programas/CV   Paulo Rezende   Gerente de Programa.md",
+    "file_format": "md",
+    "tags": ["resume", "portuguese", "program_manager", "professional"],
+    "language": "pt-BR",
+    "focus": "Gerente de Programas",
+    "certificate_type": "Professional Resume"
+  },
+  {
+    "title": "Carta de Apresentação - Vital Strategies (Português)",
+    "doc_type": "professional",
+    "file": "pt-BR/Gerente de Programas/Carta de Apresentação - Vital Strategies.md",
+    "file_format": "md",
+    "tags": ["cover_letter", "portuguese", "vital_strategies", "professional"],
+    "language": "pt-BR",
+    "organization": "Vital Strategies",
+    "certificate_type": "Cover Letter"
+  },
+  {
+    "title": "LinkedIn CV - Foco Marketing (Português)",
+    "doc_type": "professional",
+    "file": "pt-BR/Marketing/LinkedIn CV - Foco Marketing.md",
+    "file_format": "md",
+    "tags": ["linkedin", "cv", "portuguese", "marketing", "professional"],
+    "language": "pt-BR",
+    "focus": "Marketing",
+    "certificate_type": "LinkedIn CV"
+  },
+  {
+    "title": "LinkedIn CV - Foco Recursos Humanos (Português)",
+    "doc_type": "professional",
+    "file": "pt-BR/RH/LinkedIn CV - Foco Recursos Humanos.md",
+    "file_format": "md",
+    "tags": ["linkedin", "cv", "portuguese", "rh", "professional"],
+    "language": "pt-BR",
+    "focus": "Recursos Humanos",
+    "certificate_type": "LinkedIn CV"
+  }
+]
